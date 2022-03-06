@@ -7,7 +7,8 @@ class Inspection(object):
 		self.url    = url
 		self.parsed = None
 
-		self.cms = "N/A"
+		self.cms    = "N/A"
+		self.wp_api = None
 
 	def get_site_details(self):
 		request = self.pm.request('GET', self.url)
@@ -24,12 +25,29 @@ class Inspection(object):
 		}
 
 	def check_wordpress(self):
-		try:
-			is_wp = self.parsed.xpath('/html/head/link[@rel="https://api.w.org/"]')[0].attrib['href']
-		except IndexError:
-			return
-		
-		self.cms = "WordPress"
+		checkpoints = [
+			'/html/head/link[@rel="https://api.w.org/"]',
+			'/html/head/link[@href="//s.w.org"]',
+			'//*[@id="wp-custom-css"]'
+		]
 
-		return
+		is_wp = False
+		for check in checkpoints:
+			hits = self.parsed.xpath(check)
+
+			if len(hits) > 0:
+				is_wp = True
+				break
+		
+		if is_wp:
+			try:
+				self.wp_api = self.parsed.xpath('/html/head/link[@rel="https://api.w.org/"]')[0].attrib['href']
+			except IndexError:
+				pass
+			
+			self.cms = "WordPress"
+
+			return True
+		else:
+			return False
 		
