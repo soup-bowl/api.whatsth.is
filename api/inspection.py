@@ -47,6 +47,21 @@ class Inspection(object):
 					'/html/head/link[@href="//s.w.org"]',
 					'//*[@id="wp-custom-css"]'
 				]
+			},
+			'shopify': {
+				'headers': [],
+				'body': [
+					'/html/head/link[contains(@href,"//cdn.shopify.com")]'
+				]
+			},
+			'squarespace': {
+				'headers': [
+					'server: Squarespace'
+				],
+				'body': [
+					'/html/head/link[@href="https://images.squarespace-cdn.com"]',
+					'/html/head/script[contains(@src,"//assets.squarespace.com")]'
+				]
 			}
 		}
 
@@ -72,3 +87,7 @@ class Inspection(object):
 	def nicename(self, identifier):
 		if identifier == "wordpress":
 			return "WordPress"
+		elif identifier == "shopify":
+			return "Shopify"
+		else:
+			return identifier.capitalize()
