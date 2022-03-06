@@ -11,7 +11,7 @@ class Inspection(object):
 
 		self.cms         = "N/A"
 		self.match_count = 0
-		self.match_sure  = 0
+		self.match_total = 0
 		self.matches     = []
 		self.wp_api      = None
 
@@ -64,6 +64,11 @@ class Inspection(object):
 					self.matches.append(check)
 			
 			if self.match_count > 0:
-				#identitycount = len(cms['body']) + len(cms['headers'])
-				self.cms = "WordPress"
+				self.match_total = len(checkpoints[cms]['body']) + len(checkpoints[cms]['headers'])
+				self.cms         = self.nicename(cms)
+
 				return
+	
+	def nicename(self, identifier):
+		if identifier == "wordpress":
+			return "WordPress"
