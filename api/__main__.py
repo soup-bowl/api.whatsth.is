@@ -1,7 +1,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
+from urllib3.exceptions import MaxRetryError
 import json, os
-from api.inspection import Inspection
+from api.inspection import Inspection, InvalidWebsiteException
 
 hostname = "0.0.0.0"
 port     = 43594
@@ -13,15 +14,21 @@ class Server(BaseHTTPRequestHandler):
 		"""Handles incoming GET requests to the server.
 		"""
 
-		#try:
-		inspector = Inspection(self.path[1:])
-		site_details = inspector.get_site_details()
-		#except Exception as e:
-		#	self.fire_response(200, {
-		#		'success': False,
-		#		'message': str(e)
-		#	})
-		#	return
+		try:
+			inspector = Inspection(self.path[1:])
+			site_details = inspector.get_site_details()
+		except InvalidWebsiteException as e:
+			self.fire_response(200, {
+				'success': False,
+				'message': str(e)
+			})
+			return
+		except MaxRetryError as e:
+			self.fire_response(200, {
+				'success': False,
+				'message': 'Unable to detect website'
+			})
+			return
 
 		self.fire_response(200, {
 			'success': True,

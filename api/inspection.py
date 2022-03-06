@@ -19,7 +19,7 @@ class Inspection(object):
 		request = self.pm.request('GET', self.url, headers={'User-Agent': self.ua})
 
 		if request.status != 200:
-			raise Exception(str(request.status) + " - Site did not respond with a successful connection.")
+			raise InvalidWebsiteException(str(request.status) + " - Site did not respond with a successful connection.")
 
 		self.headers = request.headers
 		self.parsed  = html.fromstring( request.data )#.decode('utf-8') )
@@ -97,3 +97,6 @@ class Inspection(object):
 			return "Shopify"
 		else:
 			return identifier.capitalize()
+
+class InvalidWebsiteException(Exception):
+	pass
