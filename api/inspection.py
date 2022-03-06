@@ -21,7 +21,7 @@ class Inspection(object):
 		if request.status != 200:
 			raise Exception(str(request.status) + " - Site did not respond with a successful connection.")
 
-		self.headers = request.headers 
+		self.headers = request.headers
 		self.parsed  = html.fromstring( request.data )#.decode('utf-8') )
 
 		self.identifty_cms()
@@ -35,7 +35,7 @@ class Inspection(object):
 			'technology': self.cms,
 			'matched_on': self.matches
 		}
-	
+
 	def identifty_cms(self):
 		checkpoints = {
 			'wordpress': {
@@ -54,6 +54,12 @@ class Inspection(object):
 					'/html/head/link[contains(@href,"//cdn.shopify.com")]'
 				]
 			},
+			'wix': {
+				'headers': [],
+				'body': [
+					'/html/head/link[@href="https://www.wix.com"]'
+				]
+			},
 			'squarespace': {
 				'headers': [
 					'server: Squarespace'
@@ -65,7 +71,7 @@ class Inspection(object):
 			}
 		}
 
-		for cms in checkpoints: 
+		for cms in checkpoints:
 			for check in checkpoints[cms]['headers']:
 				key,value = check.split(':', 1)
 				if key in self.headers:
@@ -77,13 +83,13 @@ class Inspection(object):
 				if len(hits) > 0:
 					self.match_count = self.match_count + 1
 					self.matches.append(check)
-			
+
 			if self.match_count > 0:
 				self.match_total = len(checkpoints[cms]['body']) + len(checkpoints[cms]['headers'])
 				self.cms         = self.nicename(cms)
 
 				return
-	
+
 	def nicename(self, identifier):
 		if identifier == "wordpress":
 			return "WordPress"
