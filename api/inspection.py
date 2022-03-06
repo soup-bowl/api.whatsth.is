@@ -6,13 +6,14 @@ class Inspection(object):
 		self.pm     = urllib3.PoolManager()
 		self.url    = url
 		self.parsed = None
+		self.ua     = "Mozilla/5.0 (Macintosh; Intel Mac OS X 12.2; rv:97.0) Gecko/20100101 Firefox/97.0"
 
 		self.cms    = "N/A"
 		self.match  = None
 		self.wp_api = None
 
 	def get_site_details(self):
-		request = self.pm.request('GET', self.url, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 12.2; rv:97.0) Gecko/20100101 Firefox/97.0'})
+		request = self.pm.request('GET', self.url, headers={'User-Agent': self.ua})
 
 		if request.status != 200:
 			raise Exception(str(request.status) + " - Site did not respond with a successful connection.")
@@ -22,7 +23,8 @@ class Inspection(object):
 		self.identifty_cms()
 
 		return {
-			'technology': self.cms
+			'technology': self.cms,
+			'matched_on': self.match
 		}
 	
 	def identifty_cms(self):
