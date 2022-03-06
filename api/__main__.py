@@ -13,8 +13,15 @@ class Server(BaseHTTPRequestHandler):
 		"""Handles incoming GET requests to the server.
 		"""
 
-		inspector = Inspection(self.path[1:])
-		site_details = inspector.get_site_details()
+		try:
+			inspector = Inspection(self.path[1:])
+			site_details = inspector.get_site_details()
+		except Exception as e:
+			self.fire_response(200, {
+				'success': False,
+				'message': str(e)
+			})
+			return
 
 		self.fire_response(200, {
 			'success': True,
