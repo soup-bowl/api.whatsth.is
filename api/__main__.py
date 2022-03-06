@@ -16,7 +16,7 @@ class Server(BaseHTTPRequestHandler):
 		inspector = Inspection(self.path[1:])
 		site_details = inspector.get_site_details()
 
-		self.fire_response(300, {
+		self.fire_response(200, {
 			'success': True,
 			'message': site_details
 		})
