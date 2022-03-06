@@ -18,36 +18,27 @@ class Inspection(object):
 
 		self.parsed = html.fromstring( request.data )#.decode('utf-8') )
 
-		self.check_wordpress()
+		self.identifty_cms()
 
 		return {
 			'technology': self.cms
 		}
+	
+	def identifty_cms(self):
+		checkpoints = {
+			'wordpress': [
+				'/html/head/link[@rel="https://api.w.org/"]',
+				'/html/head/link[@href="//s.w.org"]',
+				'//*[@id="wp-custom-css"]'
+			]
+		}
 
-	def check_wordpress(self):
-		checkpoints = [
-			'/html/head/link[@rel="https://api.w.org/"]',
-			'/html/head/link[@href="//s.w.org"]',
-			'//*[@id="wp-custom-css"]'
-		]
-
-		is_wp = False
-		for check in checkpoints:
+		for check in checkpoints['wordpress']:
 			hits = self.parsed.xpath(check)
-
 			if len(hits) > 0:
-				is_wp = True
-				break
-		
-		if is_wp:
-			try:
-				self.wp_api = self.parsed.xpath('/html/head/link[@rel="https://api.w.org/"]')[0].attrib['href']
-			except IndexError:
-				pass
-			
-			self.cms = "WordPress"
-
-			return True
-		else:
-			return False
-		
+				self.cms = "WordPress"
+				try:
+					self.wp_api = self.parsed.xpath('/html/head/link[@rel="https://api.w.org/"]')[0].attrib['href']
+				except IndexError:
+					pass
+				return
