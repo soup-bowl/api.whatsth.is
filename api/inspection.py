@@ -54,7 +54,7 @@ class Inspection(object):
 			for check in checkpoints[cms]['headers']:
 				key,value = check.split(':', 1)
 				if key in self.headers:
-					if self.headers[key] == value:
+					if self.headers[key] == value.strip():
 						self.match_count = self.match_count + 1
 						self.matches.append(check)
 			for check in checkpoints[cms]['body']:
