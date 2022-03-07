@@ -118,6 +118,8 @@ class Inspection(object):
 		dashes to single dashes. Remove characters that aren't alphanumerics,
 		underscores, or hyphens. Convert to lowercase. Also strip leading and
 		trailing whitespace, dashes, and underscores.
+
+		Code is from Django - https://github.com/django/django/blob/main/django/utils/text.py
 		"""
 		value = str(value)
 		if allow_unicode:
