@@ -2,7 +2,8 @@ import urllib3
 from lxml import html
 
 class Inspection(object):
-	def __init__(self, url):
+	def __init__(self, codes, url):
+		self.codes   = codes
 		self.pm      = urllib3.PoolManager()
 		self.url     = url
 		self.headers = None
@@ -37,47 +38,7 @@ class Inspection(object):
 		}
 
 	def identifty_cms(self):
-		checkpoints = {
-			'wordpress': {
-				'headers': [
-					'x-powered-by: WP Engine'
-				],
-				'body': [
-					'/html/head/link[@rel="https://api.w.org/"]',
-					'/html/head/link[@href="//s.w.org"]',
-					'//*[@id="wp-custom-css"]'
-				]
-			},
-			'shopify': {
-				'headers': [],
-				'body': [
-					'/html/head/link[contains(@href,"//cdn.shopify.com")]'
-				]
-			},
-			'phpbb': {
-				'headers': [],
-				'body': [
-					'/html/body[@id="phpbb"]',
-					'/html/body/script[contains(@src, "prosilver/template/ajax.js")]'
-				]
-			},
-			'wix': {
-				'headers': [],
-				'body': [
-					'/html/head/link[@href="https://www.wix.com"]'
-				]
-			},
-			'squarespace': {
-				'headers': [
-					'server: Squarespace'
-				],
-				'body': [
-					'/html/head/link[@href="https://images.squarespace-cdn.com"]',
-					'/html/head/script[contains(@src,"//assets.squarespace.com")]'
-				]
-			}
-		}
-
+		checkpoints = self.codes.get()
 		for cms in checkpoints:
 			for check in checkpoints[cms]['headers']:
 				key,value = check.split(':', 1)

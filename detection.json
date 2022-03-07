@@ -1,0 +1,40 @@
+{
+	"wordpress": {
+		"headers": [
+			"x-powered-by: WP Engine"
+		],
+		"body": [
+			"/html/head/link[@rel='https://api.w.org/']",
+			"/html/head/link[@href='//s.w.org']",
+			"//*[@id='wp-custom-css']"
+		]
+	},
+	"shopify": {
+		"headers": [],
+		"body": [
+			"/html/head/link[contains(@href,'//cdn.shopify.com')]"
+		]
+	},
+	"phpbb": {
+		"headers": [],
+		"body": [
+			"/html/body[@id='phpbb']",
+			"/html/body/script[contains(@src, 'prosilver/template/ajax.js')]"
+		]
+	},
+	"wix": {
+		"headers": [],
+		"body": [
+			"/html/head/link[@href='https://www.wix.com']"
+		]
+	},
+	"squarespace": {
+		"headers": [
+			"server: Squarespace"
+		],
+		"body": [
+			"/html/head/link[@href='https://images.squarespace-cdn.com']",
+			"/html/head/script[contains(@src,'//assets.squarespace.com')]"
+		]
+	}
+}

@@ -1,11 +1,17 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
 from urllib3.exceptions import MaxRetryError
-import json, os
+import json, os, getopt
+from sys import argv
+from os.path import realpath, exists
+from pathlib import Path
 from api.inspection import Inspection, InvalidWebsiteException
+from api.config import Config
 
 hostname = "0.0.0.0"
 port     = 43594
+
+config = Config()
 
 class Server(BaseHTTPRequestHandler):
 	"""Run a continuously serving HTTP server responding with system information and commands.
@@ -15,7 +21,7 @@ class Server(BaseHTTPRequestHandler):
 		"""
 
 		try:
-			inspector = Inspection(self.path[1:])
+			inspector = Inspection(config, self.path[1:])
 			site_details = inspector.get_site_details()
 		except InvalidWebsiteException as e:
 			self.fire_response(200, {
@@ -58,7 +64,28 @@ class Server(BaseHTTPRequestHandler):
 		self.wfile.write(bytes(json.dumps(respo), "utf-8"))
 
 if __name__ == "__main__":
-	http_server = HTTPServer((hostname, port), Server)
+	try:
+		opts, args = getopt.getopt(
+			argv[1::],
+			"f:",
+			["file="]
+		)
+	except getopt.GetoptError:
+		print("Invalid command.")
+		exit(2)
+	
+	for opt, arg in opts:
+			if opt in ("-f", "--file"):
+				config.load( arg )
+	
+	if config.has_config() == False:
+		if exists( 'detection.json' ):
+			print("No config input specified. Loading local detection.json file.")
+			config.load( realpath( 'detection.json') )
+	
+	if config.has_config() == False:
+		print("No detection specification loaded (no argument or detection.json file available locally).")
+		exit(3)
 
 	print(
 		"What's this? Processor - Server started on %s (ctrl-c to close)." % ('http://' + hostname + ':' + str(port)),
@@ -66,6 +93,8 @@ if __name__ == "__main__":
 		"----",
 		sep=os.linesep
 	)
+
+	http_server = HTTPServer((hostname, port), Server)
 
 	try:
 		http_server.serve_forever()
