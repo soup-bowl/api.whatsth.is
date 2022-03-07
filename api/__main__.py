@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
 from urllib3.exceptions import MaxRetryError
-import json, os, getopt
+import json, os, getopt, tempfile
 from sys import argv
 from os.path import realpath, exists
 from pathlib import Path
@@ -14,7 +14,7 @@ port     = 43594
 config = Config()
 
 class Server(BaseHTTPRequestHandler):
-	"""Run a continuously serving HTTP server responding with system information and commands.
+	"""Run a continuously serving HTTP server.
 	"""
 	def do_GET(self):
 		"""Handles incoming GET requests to the server.
@@ -26,19 +26,22 @@ class Server(BaseHTTPRequestHandler):
 		except InvalidWebsiteException as e:
 			self.fire_response(200, {
 				'success': False,
-				'message': str(e)
+				'message': str(e),
+				'url': self.path[1:]
 			})
 			return
 		except MaxRetryError as e:
 			self.fire_response(200, {
 				'success': False,
-				'message': 'Unable to detect website'
+				'message': 'Unable to detect website',
+				'url': self.path[1:]
 			})
 			return
 
 		self.fire_response(200, {
 			'success': True,
-			'message': site_details
+			'message': site_details,
+			'url': self.path[1:]
 		})
 
 	def set_headers(self, response_code, headers):
@@ -73,16 +76,16 @@ if __name__ == "__main__":
 	except getopt.GetoptError:
 		print("Invalid command.")
 		exit(2)
-	
+
 	for opt, arg in opts:
 			if opt in ("-f", "--file"):
 				config.load( arg )
-	
+
 	if config.has_config() == False:
 		if exists( 'detection.json' ):
 			print("No config input specified. Loading local detection.json file.")
 			config.load( realpath( 'detection.json') )
-	
+
 	if config.has_config() == False:
 		print("No detection specification loaded (no argument or detection.json file available locally).")
 		exit(3)
@@ -90,14 +93,17 @@ if __name__ == "__main__":
 	print(
 		"What's this? Processor - Server started on %s (ctrl-c to close)." % ('http://' + hostname + ':' + str(port)),
 		"source code: https://github.com/soup-bowl/api.whatsth.is",
-		"----",
 		sep=os.linesep
 	)
 
 	http_server = HTTPServer((hostname, port), Server)
 
 	try:
-		http_server.serve_forever()
+		with tempfile.TemporaryDirectory() as td:
+			config.tmpdir = td
+			print("Cache dir: " + config.tmpdir)
+			print("----")
+			http_server.serve_forever()
 	except KeyboardInterrupt:
 		pass
 
