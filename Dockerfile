@@ -10,4 +10,5 @@ COPY api            api
 COPY detection.json detection.json
 
 EXPOSE 43594
-CMD [ "python", "-m", "api" ]
+
+ENTRYPOINT [ "python", "-m", "api" ]
