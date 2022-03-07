@@ -1,8 +1,8 @@
-name: Container - Stable Beta
+name: Container - Edge
 
 on:
   push:
-    branches: [ main ]
+    branches: [ develop ]
 
 jobs:
   test:
@@ -40,4 +40,4 @@ jobs:
       uses: docker/setup-buildx-action@v1
 
     - name: Build and Push image
-      run: docker buildx build --push -t ghcr.io/soup-bowl/whatsthis-api:latest -t ghcr.io/soup-bowl/whatsthis-api:main --platform linux/amd64 .
+      run: docker buildx build --push --tag ghcr.io/soup-bowl/whatsthis-api:edge --platform linux/amd64 .
