@@ -2,9 +2,26 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/soup-bowl/api.whatsth.is/badge)](https://www.codefactor.io/repository/github/soup-bowl/api.whatsth.is)
 
+**:warning: in active development, do not expect stability!**
+
 Counterpart backend API for the [whatsth.is project](https://github.com/soup-bowl/whatsth.is). Feed it a URL, and it returns a bunch of details about the requested site.
 
-The API operates on a detection configuration file.
+Want to quickstart? With **Docker/Podman** installed, Run `docker run -p 43594:43594 ghcr.io/soup-bowl/whatsthis-api:latest` to get going immediately.
+
+Example: `http://localhost:43594/https://wordpress.org` should reply with something like:
+
+```json
+{
+  "success": true,
+  "message": {
+    "technology": "WordPress",
+    "matched_on": [
+      "/html/head/link[@href='//s.w.org']"
+    ]
+  },
+  "url": "https://wordpress.org"
+}
+```
 
 ## Starting up
 
