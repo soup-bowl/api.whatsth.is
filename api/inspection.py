@@ -54,6 +54,13 @@ class Inspection(object):
 					'/html/head/link[contains(@href,"//cdn.shopify.com")]'
 				]
 			},
+			'phpbb': {
+				'headers': [],
+				'body': [
+					'/html/body[@id="phpbb"]',
+					'/html/body/script[contains(@src, "prosilver/template/ajax.js")]'
+				]
+			},
 			'wix': {
 				'headers': [],
 				'body': [
@@ -95,6 +102,8 @@ class Inspection(object):
 			return "WordPress"
 		elif identifier == "shopify":
 			return "Shopify"
+		elif identifier == "phpbb":
+			return "PHPBB"
 		else:
 			return identifier.capitalize()
 
