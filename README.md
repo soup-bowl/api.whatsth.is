@@ -1,5 +1,7 @@
 # What's This? API
 
+[![CodeFactor](https://www.codefactor.io/repository/github/soup-bowl/api.whatsth.is/badge)](https://www.codefactor.io/repository/github/soup-bowl/api.whatsth.is)
+
 Counterpart backend API for the [whatsth.is project](https://github.com/soup-bowl/whatsth.is). Feed it a URL, and it returns a bunch of details about the requested site.
 
 ## Starting up
