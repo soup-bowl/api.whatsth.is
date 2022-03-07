@@ -26,8 +26,7 @@ class Config(object):
 			self.loaded  = True
 
 			return True
-		else:
-			return False
+		return False
 
 	def has_config(self):
 		"""Whether the class has a configuration loaded into memory.

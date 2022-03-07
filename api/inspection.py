@@ -103,7 +103,7 @@ class Inspection(object):
 
 		if identifier == "wordpress":
 			return "WordPress"
-		if identifier == "joomla":
+		elif identifier == "joomla":
 			return "Joomla!"
 		elif identifier == "shopify":
 			return "Shopify"
