@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
-from urllib3.exceptions import MaxRetryError
+from urllib3.exceptions import MaxRetryError, LocationValueError
 import json, os, getopt, tempfile
 from sys import argv
 from os.path import realpath, exists
@@ -31,9 +31,16 @@ class Server(BaseHTTPRequestHandler):
 			})
 			return
 		except MaxRetryError as e:
-			self.fire_response(200, {
+			self.fire_response(400, {
 				'success': False,
-				'message': 'Unable to detect website',
+				'message': 'Invalid URL or permission denied',
+				'url': self.path[1:]
+			})
+			return
+		except LocationValueError as e:
+			self.fire_response(400, {
+				'success': False,
+				'message': 'No URL specified',
 				'url': self.path[1:]
 			})
 			return
