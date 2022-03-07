@@ -4,6 +4,8 @@
 
 Counterpart backend API for the [whatsth.is project](https://github.com/soup-bowl/whatsth.is). Feed it a URL, and it returns a bunch of details about the requested site.
 
+The API operates on a detection configuration file.
+
 ## Starting up
 
 By default, the server will be available at http://localhost:43594.
@@ -23,3 +25,5 @@ pip install -r requirements.txt
 ```
 
 Now the server can begin (when in the virtual env) by running `python -m api`.
+
+To run the unit tests, install `pytest` (`pip install pytest`) and run `pytest`.
