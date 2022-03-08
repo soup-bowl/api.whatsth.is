@@ -47,6 +47,19 @@
 				"/html/head/meta[@content='phpBB']"
 			]
 		},
+		"mediawiki": {
+			"headers": [],
+			"body": [
+				"//a[@href='//www.mediawiki.org/']",
+				"//body[contains(@class, 'mediawiki')]"
+			]
+		},
+		"xenforo": {
+			"headers": [],
+			"body": [
+				"//footer//a[@href='https://xenforo.com']"
+			]
+		},
 		"wix": {
 			"headers": [],
 			"body": [
