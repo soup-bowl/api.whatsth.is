@@ -70,7 +70,8 @@ class Server(BaseHTTPRequestHandler):
 			code (int): HTTP response code, corresponding to https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 			respo (mixed): Dictionary or array to serve as the JSON response.
 		"""
-		self.set_headers(code, {'Content-type': 'application/json', 'Access-Control-Allow-Origin': '*'})
+		cors = os.getenv('WT_CORS_POLICY', '*')
+		self.set_headers(code, {'Content-type': 'application/json', 'Access-Control-Allow-Origin': cors})
 		self.wfile.write(bytes(json.dumps(respo), "utf-8"))
 
 if __name__ == "__main__":
