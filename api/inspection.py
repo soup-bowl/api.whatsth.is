@@ -5,6 +5,8 @@ from pathlib import Path
 from time import time
 from lxml import html
 
+from api.wordpress import WordPress
+
 class Inspection(object):
 	def __init__(self, codes, url):
 		self.codes   = codes
@@ -12,6 +14,7 @@ class Inspection(object):
 		self.url     = url
 		self.headers = None
 		self.parsed  = None
+		# We set a browser-matched user agent as some sites use simple UA match to block the request.
 		self.ua      = "Mozilla/5.0 (Macintosh; Intel Mac OS X 12.2; rv:97.0) Gecko/20100101 Firefox/97.0"
 
 		self.cms         = "Unknown"
@@ -50,15 +53,24 @@ class Inspection(object):
 
 		self.identifty_cms()
 
-		try:
-			self.wp_api = self.parsed.xpath('/html/head/link[@rel="https://api.w.org/"]')[0].attrib['href']
-		except IndexError:
-			pass
+		if self.cms == 'WordPress':
+			try:
+				wp_api_url = self.parsed.xpath('/html/head/link[@rel="https://api.w.org/"]')[0].attrib['href']
+				self.wp_api = WordPress(wp_api_url).get()
+			except IndexError:
+				attempt = self.pm.request('GET', self.url + '/wp-json')
+				if attempt.status == 200:
+					self.wp_api = WordPress(self.url + '/wp-json').get()
+				else:
+					pass
 
 		reply = {
 			'technology': self.cms,
 			'matched_on': self.matches
 		}
+
+		if self.wp_api is not None:
+			reply['wordpress_api'] = self.wp_api
 
 		if len(self.codes.tmpdir) != 0:
 			pppp = self.codes.tmpdir + '/' + self.slugify(self.url) + '.json'
