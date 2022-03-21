@@ -1,10 +1,4 @@
-from pickle import FALSE
-from urllib import response
-import urllib3, unicodedata, re, json
-from os import remove
-from os.path import exists, getmtime
-from pathlib import Path
-from time import time
+import urllib3, json
 
 class WordPress(object):
 	def __init__(self, url):
@@ -79,9 +73,10 @@ class WordPress(object):
 
 	def category_stats(self):
 		response = self.get_from_api(self.url + '/wp/v2/categories')
-		reply = {
-			'count': int(response['headers']['X-WP-Total']),
-		}
+		if response is not None:
+			reply = {
+				'count': int(response['headers']['X-WP-Total']),
+			}
 
 		return reply
 
