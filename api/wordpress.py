@@ -8,9 +8,10 @@ from time import time
 
 class WordPress(object):
 	def __init__(self, url):
-		self.pm       = urllib3.PoolManager()
-		self.url      = url
-		self.response = None
+		self.pm          = urllib3.PoolManager()
+		self.url         = url
+		self.response    = None
+		self.supports_v2 = False
 
 	def get(self):
 		request = self.pm.request('GET', self.url)
@@ -21,14 +22,21 @@ class WordPress(object):
 			}
 
 		self.response = json.loads(request.data.decode('utf-8'))
+		if 'wp/v2' in self.response['namespaces']:
+			self.supports_v2 = True
 
-		return {
+		reply = {
 			'status': 'success',
 			'name': self.response['name'],
 			'tagline': self.response['description'],
 			'timezone': self.response['timezone_string'],
-			'content': self.page_stats()
 		}
+
+		if self.supports_v2:
+			reply['content']    = self.page_stats()
+			reply['categories'] = self.category_stats()
+
+		return reply
 	
 	def page_stats(self):
 		response_posts = self.get_from_api(self.url + '/wp/v2/posts')
@@ -67,6 +75,14 @@ class WordPress(object):
 
 			reply['pages'] = data
 		
+		return reply
+	
+	def category_stats(self):
+		response = self.get_from_api(self.url + '/wp/v2/categories')
+		reply = {
+			'count': int(response['headers']['X-WP-Total']),
+		}
+
 		return reply
 
 		
