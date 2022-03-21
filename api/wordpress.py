@@ -37,7 +37,7 @@ class WordPress(object):
 			reply['categories'] = self.category_stats()
 
 		return reply
-	
+
 	def page_stats(self):
 		response_posts = self.get_from_api(self.url + '/wp/v2/posts')
 		response_pages = self.get_from_api(self.url + '/wp/v2/pages')
@@ -58,7 +58,7 @@ class WordPress(object):
 				data['latest'] = False
 
 			reply['posts'] = data
-		
+
 		if response_pages is not None:
 			data = {
 				'count': int(response_pages['headers']['X-WP-Total']),
@@ -74,9 +74,9 @@ class WordPress(object):
 				data['latest'] = False
 
 			reply['pages'] = data
-		
+
 		return reply
-	
+
 	def category_stats(self):
 		response = self.get_from_api(self.url + '/wp/v2/categories')
 		reply = {
@@ -85,7 +85,7 @@ class WordPress(object):
 
 		return reply
 
-		
+
 	def get_from_api(self, url):
 		request = self.pm.request('GET', url)
 		if request.status != 200:
@@ -93,7 +93,7 @@ class WordPress(object):
 		else:
 			data = {
 				'headers': request.headers,
-				'api': json.loads(request.data.decode('utf-8')) 
+				'api': json.loads(request.data.decode('utf-8'))
 			}
 
 			if len(data['api']) == 0:
