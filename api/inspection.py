@@ -5,7 +5,7 @@ from pathlib import Path
 from time import time
 from lxml import html
 
-from api.wordpress import WordPress
+from api.technology.wordpress import WordPress
 
 class Inspection(object):
 	def __init__(self, codes, url):
