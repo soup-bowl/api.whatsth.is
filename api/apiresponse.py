@@ -31,7 +31,7 @@ class APIResponse(object):
 	
 	@message.setter
 	def message(self, message: str):
-		self.message = message
+		self._message = message
 	
 	@inspection.setter
 	def inspection(self, inspection: InspectionResult = None):
@@ -40,3 +40,10 @@ class APIResponse(object):
 	@url.setter
 	def url(self, url: str):
 		self._url = url
+
+	def asdict(self):
+		return {
+			'success': self.success,
+			'message': self.message if self.inspection is None else self.inspection,
+			'url': self.url,
+		}

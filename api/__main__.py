@@ -5,6 +5,7 @@ import json, os, getopt, tempfile
 from sys import argv
 from os.path import realpath, exists
 from pathlib import Path
+from api.apiresponse import APIResponse
 from api.inspection import Inspection, InvalidWebsiteException
 from api.config import Config
 
@@ -20,36 +21,24 @@ class Server(BaseHTTPRequestHandler):
 		"""Handles incoming GET requests to the server.
 		"""
 
-		try:
-			inspector = Inspection(config, self.path[1:])
-			site_details = inspector.get_site_details()
-		except InvalidWebsiteException as e:
-			self.fire_response(200, {
-				'success': False,
-				'message': str(e),
-				'url': self.path[1:]
-			})
-			return
-		except MaxRetryError as e:
-			self.fire_response(400, {
-				'success': False,
-				'message': 'Invalid URL or permission denied',
-				'url': self.path[1:]
-			})
-			return
-		except LocationValueError as e:
-			self.fire_response(400, {
-				'success': False,
-				'message': 'No URL specified',
-				'url': self.path[1:]
-			})
-			return
+		reply     = APIResponse()
+		reply.url = self.path[1:]
 
-		self.fire_response(200, {
-			'success': True,
-			'message': site_details.asdict(),
-			'url': self.path[1:]
-		})
+		try:
+			inspector        = Inspection(config, self.path[1:])
+			reply.success    = True
+			reply.inspection = inspector.get_site_details().asdict()
+		except InvalidWebsiteException as e:
+			reply.success = False
+			reply.message = str(e)
+		except MaxRetryError as e:
+			reply.success = False
+			reply.message = 'Invalid URL or permission denied'
+		except LocationValueError as e:
+			reply.success = False
+			reply.message = 'No URL specified'
+
+		self.fire_response(reply)
 
 	def set_headers(self, response_code, headers):
 		"""Sets the response headers for the outgoing payload.
@@ -63,16 +52,16 @@ class Server(BaseHTTPRequestHandler):
 			self.send_header(key, value)
 		self.end_headers()
 
-	def fire_response(self, code, respo):
+	def fire_response(self, response: APIResponse):
 		"""Sends off the payload response down the HTTP channel.
 
 		Args:
-			code (int): HTTP response code, corresponding to https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-			respo (mixed): Dictionary or array to serve as the JSON response.
+			response (APIResponse): Response object.
 		"""
+		code = 200 if response.success == True else 400
 		cors = os.getenv('WT_CORS_POLICY', '*')
 		self.set_headers(code, {'Content-type': 'application/json', 'Access-Control-Allow-Origin': cors})
-		self.wfile.write(bytes(json.dumps(respo), "utf-8"))
+		self.wfile.write(bytes(json.dumps(response.asdict()), "utf-8"))
 
 if __name__ == "__main__":
 	try:
