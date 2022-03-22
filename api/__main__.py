@@ -1,10 +1,7 @@
+import json, os, tempfile, urllib3
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from urllib.parse import urlparse, parse_qs
 from urllib3.exceptions import MaxRetryError, LocationValueError
-import json, os, getopt, tempfile
-from sys import argv
-from os.path import realpath, exists
-from pathlib import Path
+
 from api.apiresponse import APIResponse
 from api.inspection import Inspection, InvalidWebsiteException
 from api.config import Config
@@ -64,32 +61,20 @@ class Server(BaseHTTPRequestHandler):
 		self.wfile.write(bytes(json.dumps(response.asdict()), "utf-8"))
 
 if __name__ == "__main__":
-	try:
-		opts, args = getopt.getopt(
-			argv[1::],
-			"f:",
-			["file="]
-		)
-	except getopt.GetoptError:
-		print("Invalid command.")
-		exit(2)
+	def_url  = 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/d58480fed9f31cd0400af1c6704515484ec74d02/definition.json'
+	def_file = urllib3.PoolManager().request('GET', def_url)
 
-	for opt, arg in opts:
-			if opt in ("-f", "--file"):
-				config.load( arg )
-
-	if config.has_config() == False:
-		if exists( 'detection.json' ):
-			print("No config input specified. Loading local detection.json file.")
-			config.load( realpath( 'detection.json') )
-
-	if config.has_config() == False:
-		print("No detection specification loaded (no argument or detection.json file available locally).")
-		exit(3)
+	if def_file.status == 200:
+		print("Loaded latest definition file from GitHub.")
+		config.load_json( def_file.data.decode('utf-8') )
+	else:
+		print("Unable to download definitions file.")
+		exit(1)
 
 	print(
 		"What's this? Processor - Server started on %s (ctrl-c to close)." % ('http://' + hostname + ':' + str(port)),
 		"source code: https://github.com/soup-bowl/api.whatsth.is",
+		"definitions: %s" % def_url,
 		sep=os.linesep
 	)
 

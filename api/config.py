@@ -10,7 +10,7 @@ class Config(object):
 		self.loaded  = False
 		self.tmpdir  = ""
 
-	def load(self, path):
+	def load_file(self, path):
 		"""Load a detection json file into the system.
 
 		Args:
@@ -27,6 +27,10 @@ class Config(object):
 
 			return True
 		return False
+	
+	def load_json(self, jsonfile):
+		self.content = json.loads( jsonfile )
+		self.loaded  = True
 
 	def has_config(self):
 		"""Whether the class has a configuration loaded into memory.
