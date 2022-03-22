@@ -14,7 +14,7 @@ config = Config()
 class Server(BaseHTTPRequestHandler):
 	"""Run a continuously serving HTTP server.
 	"""
-	def do_GET(self):
+	def do_GET(self) -> None:
 		"""Handles incoming GET requests to the server.
 		"""
 
@@ -37,7 +37,7 @@ class Server(BaseHTTPRequestHandler):
 
 		self.fire_response(reply)
 
-	def set_headers(self, response_code, headers):
+	def set_headers(self, response_code: int, headers: dict) -> None:
 		"""Sets the response headers for the outgoing payload.
 
 		Args:
@@ -49,7 +49,7 @@ class Server(BaseHTTPRequestHandler):
 			self.send_header(key, value)
 		self.end_headers()
 
-	def fire_response(self, response: APIResponse):
+	def fire_response(self, response: APIResponse) -> None:
 		"""Sends off the payload response down the HTTP channel.
 
 		Args:

@@ -46,7 +46,7 @@ class Inspection(object):
 		self.headers = request.headers
 		self.parsed  = html.fromstring(request.data)
 
-		self.identifty_cms()
+		self.identify_cms()
 
 		if self.reply.technology == 'WordPress':
 			try:
@@ -67,7 +67,7 @@ class Inspection(object):
 
 		return self.reply
 
-	def identifty_cms(self):
+	def identify_cms(self) -> None:
 		"""Runs a header check & XPath scraping routine to the in-memory XML using the loaded-in detection config.
 		"""
 
@@ -88,7 +88,7 @@ class Inspection(object):
 				self.reply.technology = self.nicename(cms)
 				return
 
-	def nicename(self, identifier):
+	def nicename(self, identifier: str) -> str:
 		"""Returns the proper product identifier based on the detection ID.
 
 		Args:
@@ -108,7 +108,7 @@ class Inspection(object):
 			return "PHPBB"
 		return identifier.capitalize()
 
-	def slugify(self, value, allow_unicode=False):
+	def slugify(self, value: str, allow_unicode: bool = False):
 		"""
 		Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
 		dashes to single dashes. Remove characters that aren't alphanumerics,
@@ -161,31 +161,30 @@ class InspectionResult(object):
 		return self._additional
 
 	@technology.setter
-	def technology(self, technology: str):
+	def technology(self, technology: str) -> None:
 		self._technology = technology
 
 	@matched_on.setter
-	def matched_on(self, matchedon: list):
+	def matched_on(self, matchedon: list) -> None:
 		self._matched_on = matchedon
 
 	@match_count.setter
-	def match_count(self, count: int):
+	def match_count(self, count: int) -> None:
 		self._match_count = count
 
 	@match_total.setter
-	def match_total(self, count: int):
+	def match_total(self, count: int) -> None:
 		self._match_total = count
 
 	@additional.setter
-	def additional(self, additional):
+	def additional(self, additional) -> None:
 		self._additional = additional
 
-	def add_match(self, match_string):
+	def add_match(self, match_string) -> None:
 		self._matched_on.append(match_string)
 		self._match_count = self._match_count + 1
-		return self
 
-	def asdict(self):
+	def asdict(self) -> dict:
 		return {
 			'technology': self.technology,
 			'matched_on': self.matched_on,

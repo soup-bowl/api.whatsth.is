@@ -1,4 +1,4 @@
-from time import time
+from typing import Optional
 import urllib3, json
 
 class WordPressIdentifier(object):
@@ -10,6 +10,11 @@ class WordPressIdentifier(object):
 		self.supports_v2 = False
 
 	def get(self):
+		"""Creates a collection of information scraped form the WordPress REST API.
+
+		Returns:
+			WordPress: Returns a WordPress object constructed from the class-defined URL.
+		"""
 		request = self.pm.request('GET', self.url)
 
 		if request.status != 200:
@@ -30,7 +35,9 @@ class WordPressIdentifier(object):
 
 		return self.reply
 
-	def page_stats(self):
+	def page_stats(self) -> None:
+		"""Collects information about the WordPress site posts and pages.
+		"""
 		response_posts = self.get_from_api(self.url + '/wp/v2/posts')
 		response_pages = self.get_from_api(self.url + '/wp/v2/pages')
 
@@ -56,14 +63,24 @@ class WordPressIdentifier(object):
 
 				self.reply.latest_page = page
 
-	def category_stats(self):
+	def category_stats(self) -> None:
+		"""Collects information about the site categories.
+		"""
 		response = self.get_from_api(self.url + '/wp/v2/categories')
 
 		if response is not None:
 			self.reply.cat_count = int(response['headers']['X-WP-Total'])
 
 
-	def get_from_api(self, url):
+	def get_from_api(self, url: str) -> Optional[dict]:
+		"""Contacts a WordPress REST API endpoint, and returns header and data responses.
+
+		Args:
+			url (str): URL to request (ignores self.url since this is for sub-requests).
+
+		Returns:
+			Optional[dict]: 'headers' is a list of headers, and 'api' is JSON content. None if an error occurs.
+		"""
 		request = self.pm.request('GET', url)
 		if request.status != 200:
 			return None
@@ -127,42 +144,42 @@ class WordPress(object):
 		return self._latest_page
 
 	@success.setter
-	def success(self, state):
+	def success(self, state) -> None:
 		self._success = state
 
 	@name.setter
-	def name(self, name):
+	def name(self, name: str) -> None:
 		self._name = name
 
 	@tagline.setter
-	def tagline(self, tagline):
+	def tagline(self, tagline: str) -> None:
 		self._tagline = tagline
 
 	@timezone.setter
-	def timezone(self, timezone):
+	def timezone(self, timezone: str) -> None:
 		self._timezone = timezone
 
 	@post_count.setter
-	def post_count(self, count):
+	def post_count(self, count: int) -> None:
 		self._post_count = count
 
 	@page_count.setter
-	def page_count(self, count):
+	def page_count(self, count: int) -> None:
 		self._page_count = count
 
 	@cat_count.setter
-	def cat_count(self, count):
+	def cat_count(self, count: int) -> None:
 		self._cat_count = count
 
 	@latest_post.setter
-	def latest_post(self, post):
+	def latest_post(self, post) -> None:
 		self._latest_post = post
 
 	@latest_page.setter
-	def latest_page(self, page):
+	def latest_page(self, page) -> None:
 		self._latest_page = page
 
-	def asdict(self):
+	def asdict(self) -> dict:
 		return {
 			'success': self.success,
 			'name': self.name,
@@ -194,18 +211,18 @@ class Post(object):
 		return self._url
 
 	@title.setter
-	def title(self, title):
+	def title(self, title: str) -> None:
 		self._title = title
 
 	@date.setter
-	def date(self, date):
+	def date(self, date: str) -> None:
 		self._date = date
 
 	@url.setter
-	def url(self, url):
+	def url(self, url: str) -> None:
 		self._url = url
 
-	def asdict(self):
+	def asdict(self) -> dict:
 		return {
 			'title': self.title,
 			'date': self.date,
