@@ -1,5 +1,6 @@
 from typing import Optional
-from api.objects.inspectionresult import InspectionResult
+
+from api.inspection import InspectionResult
 
 class APIResponse(object):
 	def __init__(self):
@@ -27,19 +28,15 @@ class APIResponse(object):
 	@success.setter
 	def success(self, success: bool):
 		self._success = success
-		return self
 	
 	@message.setter
 	def message(self, message: str):
 		self.message = message
-		return self
 	
 	@inspection.setter
 	def inspection(self, inspection: InspectionResult = None):
 		self._inspection = inspection
-		return self
 
 	@url.setter
 	def url(self, url: str):
 		self._url = url
-		return self

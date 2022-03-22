@@ -1,7 +1,9 @@
+from time import time
 import urllib3, json
 
-class WordPress(object):
+class WordPressIdentifier(object):
 	def __init__(self, url):
+		self.reply       = WordPress()
 		self.pm          = urllib3.PoolManager()
 		self.url         = url
 		self.response    = None
@@ -11,26 +13,22 @@ class WordPress(object):
 		request = self.pm.request('GET', self.url)
 
 		if request.status != 200:
-			return {
-				'status': 'fail',
-			}
+			return self.reply
 
 		self.response = json.loads(request.data.decode('utf-8'))
 		if 'wp/v2' in self.response['namespaces']:
 			self.supports_v2 = True
 
-		reply = {
-			'status': 'success',
-			'name': self.response['name'],
-			'tagline': self.response['description'],
-			'timezone': self.response['timezone_string'],
-		}
+		self.reply.success  = True
+		self.reply.name     = self.response['name']
+		self.reply.tagline  = self.response['description']
+		self.reply.timezone = self.response['timezone_string']
 
-		if self.supports_v2:
-			reply['content']    = self.page_stats()
-			reply['categories'] = self.category_stats()
+		#if self.supports_v2:
+		#	reply['content']    = self.page_stats()
+		#	reply['categories'] = self.category_stats()
 
-		return reply
+		return self.reply
 
 	def page_stats(self):
 		response_posts = self.get_from_api(self.url + '/wp/v2/posts')
@@ -95,3 +93,80 @@ class WordPress(object):
 				return None
 
 			return data
+
+class WordPress(object):
+	def __init__(self):
+		self._success    = False
+		self._name       = ''
+		self._tagline    = ''
+		self._timezone   = ''
+		self._post_count = -1
+		self._page_count = -1
+		self._cat_count  = -1
+
+	@property
+	def success(self) -> bool:
+		return self._success
+
+	@property
+	def name(self) -> str:
+		return self._name
+
+	@property
+	def tagline(self) -> str:
+		return self._tagline
+
+	@property
+	def timezone(self) -> str:
+		return self._timezone
+
+	@property
+	def post_count(self) -> int:
+		return self._post_count
+
+	@property
+	def page_count(self) -> int:
+		return self._page_count
+
+	@property
+	def cat_count(self) -> int:
+		return self._cat_count
+
+	@success.setter
+	def success(self, state):
+		self._success = state
+
+	@name.setter
+	def name(self, name):
+		self._name = name
+
+	@tagline.setter
+	def tagline(self, tagline):
+		self._tagline = tagline
+
+	@timezone.setter
+	def timezone(self, timezone):
+		self._timezone = timezone
+
+	@post_count.setter
+	def post_count(self, count):
+		self._post_count = count
+
+	@page_count.setter
+	def page_count(self, count):
+		self._page_count = count
+
+	@cat_count.setter
+	def cat_count(self, count):
+		self._cat_count = count
+
+	def asdict(self):
+		return {
+			'success': self.success,
+			'name': self.name,
+			'tagline': self.tagline,
+			'timezone': self.timezone,
+			'post_count': self.post_count,
+			'page_count': self.page_count,
+			'cat_count': self.cat_count,
+		}

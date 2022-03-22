@@ -5,8 +5,7 @@ from pathlib import Path
 from time import time
 from lxml import html
 
-from api.objects.inspectionresult import InspectionResult
-from api.technology.wordpress import WordPress
+from api.technology.wordpress import WordPressIdentifier
 
 class Inspection(object):
 	def __init__(self, codes, url):
@@ -52,11 +51,11 @@ class Inspection(object):
 		if self.reply.technology == 'WordPress':
 			try:
 				wp_api_url = self.parsed.xpath('/html/head/link[@rel="https://api.w.org/"]')[0].attrib['href']
-				self.reply.additional = WordPress(wp_api_url).get()
+				self.reply.additional = WordPressIdentifier(wp_api_url).get()
 			except IndexError:
 				attempt = self.pm.request('GET', self.url + '/wp-json')
 				if attempt.status == 200:
-					self.reply.additional = WordPress(self.url + '/wp-json').get()
+					self.reply.additional = WordPressIdentifier(self.url + '/wp-json').get()
 				else:
 					pass
 
@@ -131,3 +130,68 @@ class Inspection(object):
 
 class InvalidWebsiteException(Exception):
 	pass
+
+class InspectionResult(object):
+	def __init__(self):
+		self._technology  = 'Unknown'
+		self._matched_on  = []
+		self._match_count = 0
+		self._match_total = 0
+		self._additional  = None
+	
+	@property
+	def technology(self) -> str:
+		return self._technology
+	
+	@property
+	def matched_on(self) -> list:
+		return self._matched_on
+	
+	@property
+	def match_count(self) -> int:
+		return self._match_count
+	
+	@property
+	def match_total(self) -> int:
+		return self._match_total
+	
+	@property
+	def additional(self):
+		return self._additional
+	
+	@technology.setter
+	def technology(self, technology: str):
+		self._technology = technology
+	
+	@matched_on.setter
+	def matched_on(self, matchedon: list):
+		self._matched_on = matchedon
+	
+	@match_count.setter
+	def match_count(self, count: int):
+		self._match_count = count
+	
+	@match_total.setter
+	def match_total(self, count: int):
+		self._match_total = count
+	
+	@additional.setter
+	def additional(self, additional):
+		self._additional = additional
+	
+	def add_match(self, match_string):
+		self._matched_on.append(match_string)
+		self._match_count = self._match_count + 1
+		return self
+	
+	def asdict(self):
+		obj = {
+			'technology': self.technology,
+			'matched_on': self.matched_on,
+			'additional': self.additional,
+		}
+
+		if self.additional is not None:
+			obj['additional'] = self.additional.asdict()
+		
+		return obj
