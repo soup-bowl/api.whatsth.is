@@ -61,7 +61,7 @@ class Server(BaseHTTPRequestHandler):
 		self.wfile.write(bytes(json.dumps(response.asdict()), "utf-8"))
 
 if __name__ == "__main__":
-	def_url  = 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/d58480fed9f31cd0400af1c6704515484ec74d02/definition.json'
+	def_url  = 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definition.json'
 	def_file = urllib3.PoolManager().request('GET', def_url)
 
 	if def_file.status == 200:
