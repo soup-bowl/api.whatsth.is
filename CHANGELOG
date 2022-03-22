@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Further WP information scraped from the WordPress REST API, where applicable.
 
+### Changed
+- Objects in-use in the background to enforce standardisation.
+- Temporary cache now uses Pickle for now instead of JSON.
+
 ## [0.1.0] (pre-release) - 2022-03-14
 ### Added
 - Everything (initial release).
