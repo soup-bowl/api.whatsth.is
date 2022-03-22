@@ -47,7 +47,7 @@ class Server(BaseHTTPRequestHandler):
 
 		self.fire_response(200, {
 			'success': True,
-			'message': site_details,
+			'message': site_details.asdict(),
 			'url': self.path[1:]
 		})
 

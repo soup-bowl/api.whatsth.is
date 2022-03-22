@@ -5,10 +5,12 @@ from pathlib import Path
 from time import time
 from lxml import html
 
+from api.objects.inspectionresult import InspectionResult
 from api.technology.wordpress import WordPress
 
 class Inspection(object):
 	def __init__(self, codes, url):
+		self.reply   = InspectionResult()
 		self.codes   = codes
 		self.pm      = urllib3.PoolManager()
 		self.url     = url
@@ -16,12 +18,6 @@ class Inspection(object):
 		self.parsed  = None
 		# We set a browser-matched user agent as some sites use simple UA match to block the request.
 		self.ua      = "Mozilla/5.0 (Macintosh; Intel Mac OS X 12.2; rv:97.0) Gecko/20100101 Firefox/97.0"
-
-		self.cms         = "Unknown"
-		self.match_count = 0
-		self.match_total = 0
-		self.matches     = []
-		self.wp_api      = None
 
 	def get_site_details(self):
 		"""Gets top-level website information by scraping the specified site HTML.
@@ -53,31 +49,23 @@ class Inspection(object):
 
 		self.identifty_cms()
 
-		if self.cms == 'WordPress':
+		if self.reply.technology == 'WordPress':
 			try:
 				wp_api_url = self.parsed.xpath('/html/head/link[@rel="https://api.w.org/"]')[0].attrib['href']
-				self.wp_api = WordPress(wp_api_url).get()
+				self.reply.additional = WordPress(wp_api_url).get()
 			except IndexError:
 				attempt = self.pm.request('GET', self.url + '/wp-json')
 				if attempt.status == 200:
-					self.wp_api = WordPress(self.url + '/wp-json').get()
+					self.reply.additional = WordPress(self.url + '/wp-json').get()
 				else:
 					pass
 
-		reply = {
-			'technology': self.cms,
-			'matched_on': self.matches
-		}
-
-		if self.wp_api is not None:
-			reply['wordpress_api'] = self.wp_api
-
 		if len(self.codes.tmpdir) != 0:
 			pppp = self.codes.tmpdir + '/' + self.slugify(self.url) + '.json'
-			with open(pppp, 'a') as f:
-				f.write(json.dumps(reply, ensure_ascii=False))
+			#with open(pppp, 'a') as f:
+			#	f.write(json.dumps(self.reply, ensure_ascii=False))
 
-		return reply
+		return self.reply
 
 	def identifty_cms(self):
 		"""Runs a header check & XPath scraping routine to the in-memory XML using the loaded-in detection config.
@@ -89,18 +77,15 @@ class Inspection(object):
 				key,value = check.split(':', 1)
 				if key in self.headers:
 					if self.headers[key] == value.strip():
-						self.match_count = self.match_count + 1
-						self.matches.append(check)
+						self.reply.add_match(check)
 			for check in checkpoints[cms]['body']:
 				hits = self.parsed.xpath(check)
 				if len(hits) > 0:
-					self.match_count = self.match_count + 1
-					self.matches.append(check)
+					self.reply.add_match(check)
 
-			if self.match_count > 0:
-				self.match_total = len(checkpoints[cms]['body']) + len(checkpoints[cms]['headers'])
-				self.cms         = self.nicename(cms)
-
+			if self.reply.match_count > 0:
+				self.reply.match_total = len(checkpoints[cms]['body']) + len(checkpoints[cms]['headers'])
+				self.reply.technology = self.nicename(cms)
 				return
 
 	def nicename(self, identifier):
