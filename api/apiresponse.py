@@ -12,7 +12,7 @@ class APIResponse(object):
 	@property
 	def success(self) -> bool:
 		return self._success
-	
+
 	@property
 	def message(self) -> str:
 		return self._message
@@ -20,19 +20,19 @@ class APIResponse(object):
 	@property
 	def inspection(self) -> Optional[InspectionResult]:
 		return self._inspection
-	
+
 	@property
 	def url(self) -> str:
 		return self._url
-	
+
 	@success.setter
 	def success(self, success: bool):
 		self._success = success
-	
+
 	@message.setter
 	def message(self, message: str):
 		self._message = message
-	
+
 	@inspection.setter
 	def inspection(self, inspection: InspectionResult = None):
 		self._inspection = inspection
