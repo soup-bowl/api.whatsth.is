@@ -1,4 +1,4 @@
-import urllib3, unicodedata, re, json
+import urllib3, unicodedata, re, pickle
 from os import remove
 from os.path import exists, getmtime
 from pathlib import Path
@@ -29,14 +29,14 @@ class Inspection(object):
 		"""
 
 		if len(self.codes.tmpdir) != 0:
-			cachename = self.codes.tmpdir + '/' + self.slugify(self.url) + '.json'
+			cachename = self.codes.tmpdir + '/' + self.slugify(self.url) + '.cache'
 			if exists(cachename):
 				print(time() - getmtime(cachename))
 				if (time() - getmtime(cachename)) > 2629743:
 					remove(cachename)
 				else:
 					print( "'%s' found in cache (%s left before expiry)." % (self.url, ( 2629743 - (time() - getmtime(cachename)) )) )
-					return json.loads( Path( cachename ).read_text() )
+					return pickle.load( Path( cachename ).open('rb') )
 
 		request = self.pm.request('GET', self.url, headers={'User-Agent': self.ua})
 
@@ -60,9 +60,10 @@ class Inspection(object):
 					pass
 
 		if len(self.codes.tmpdir) != 0:
-			pppp = self.codes.tmpdir + '/' + self.slugify(self.url) + '.json'
-			#with open(pppp, 'a') as f:
-			#	f.write(json.dumps(self.reply, ensure_ascii=False))
+			pppp = self.codes.tmpdir + '/' + self.slugify(self.url) + '.cache'
+			with open(pppp, 'wb') as f:
+				# I turned myself into a pickle Mortyyyyyy!
+				pickle.dump(self.reply, f, pickle.HIGHEST_PROTOCOL)
 
 		return self.reply
 
