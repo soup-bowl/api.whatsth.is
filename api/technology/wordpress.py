@@ -46,7 +46,7 @@ class WordPressIdentifier(object):
 				self.reply.latest_post = post
 
 		if response_pages is not None:
-			self.reply.post_count = int(response_pages['headers']['X-WP-Total'])
+			self.reply.page_count = int(response_pages['headers']['X-WP-Total'])
 
 			if len(response_pages['api'][0]) > 0:
 				page = Post()
@@ -58,12 +58,9 @@ class WordPressIdentifier(object):
 
 	def category_stats(self):
 		response = self.get_from_api(self.url + '/wp/v2/categories')
-		if response is not None:
-			reply = {
-				'count': int(response['headers']['X-WP-Total']),
-			}
 
-		return reply
+		if response is not None:
+			self.reply.cat_count = int(response['headers']['X-WP-Total'])
 
 
 	def get_from_api(self, url):
