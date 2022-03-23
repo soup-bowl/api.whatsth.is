@@ -1,5 +1,5 @@
-from typing import Optional
 import urllib3, json
+from typing import Optional
 
 class WordPressIdentifier(object):
 	def __init__(self, url):

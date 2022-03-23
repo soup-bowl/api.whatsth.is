@@ -1,10 +1,8 @@
-import json, os, tempfile, urllib3, falcon
-from http.server import BaseHTTPRequestHandler, HTTPServer
+import falcon
 from urllib3.exceptions import MaxRetryError, LocationValueError
 
 from api.apiresponse import APIResponse
 from api.inspection import Inspection, InvalidWebsiteException
-from api.config import Config
 
 class Server:
 	def __init__(self, config):

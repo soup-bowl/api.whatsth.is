@@ -1,4 +1,4 @@
-import json, os, tempfile, urllib3, falcon
+import os, tempfile, urllib3, falcon
 from wsgiref.simple_server import make_server
 
 from api.config import Config

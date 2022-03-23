@@ -1,6 +1,6 @@
+import json
 from os.path import exists
 from pathlib import Path
-import json
 
 class Config(object):
 	def __init__(self):
