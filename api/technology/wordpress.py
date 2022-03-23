@@ -84,16 +84,16 @@ class WordPressIdentifier(object):
 		request = self.pm.request('GET', url)
 		if request.status != 200:
 			return None
-		else:
-			data = {
-				'headers': request.headers,
-				'api': json.loads(request.data.decode('utf-8'))
-			}
 
-			if len(data['api']) == 0:
-				return None
+		data = {
+			'headers': request.headers,
+			'api': json.loads(request.data.decode('utf-8'))
+		}
 
-			return data
+		if len(data['api']) == 0:
+			return None
+
+		return data
 
 class WordPress(object):
 	def __init__(self):

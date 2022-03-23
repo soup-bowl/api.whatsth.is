@@ -106,6 +106,7 @@ class Inspection(object):
 			return "Shopify"
 		elif identifier == "phpbb":
 			return "PHPBB"
+
 		return identifier.capitalize()
 
 	def slugify(self, value: str, allow_unicode: bool = False):
