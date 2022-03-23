@@ -1,5 +1,6 @@
-import os, tempfile, urllib3, falcon
+import os, tempfile, urllib3
 from wsgiref.simple_server import make_server
+from falcon import App, CORSMiddleware
 
 from api.config import Config
 from api.server import Server
@@ -27,7 +28,7 @@ if __name__ == "__main__":
 		sep=os.linesep
 	)
 
-	app = falcon.App(middleware=falcon.CORSMiddleware(allow_origins=os.getenv('WT_CORS_POLICY', '*')))
+	app = App(middleware=CORSMiddleware(allow_origins=os.getenv('WT_CORS_POLICY', '*')))
 	app.add_sink(Server(config=config).on_get, prefix='/')
 
 	try:
