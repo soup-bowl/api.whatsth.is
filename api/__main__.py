@@ -27,7 +27,7 @@ if __name__ == "__main__":
 		sep=os.linesep
 	)
 
-	app = falcon.App()
+	app = falcon.App(middleware=falcon.CORSMiddleware(allow_origins=os.getenv('WT_CORS_POLICY', '*')))
 	app.add_sink(Server(config=config).on_get, prefix='/')
 
 	try:
