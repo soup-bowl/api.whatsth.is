@@ -4,8 +4,68 @@ from os.path import exists, getmtime
 from pathlib import Path
 from time import time
 from lxml import html
+from typing import Any
 
 from api.technology.wordpress import WordPressIdentifier
+
+class InspectionResult(object):
+	def __init__(self):
+		self._technology  = 'Unknown'
+		self._matched_on  = []
+		self._match_count = 0
+		self._match_total = 0
+		self._additional  = None
+
+	@property
+	def technology(self) -> str:
+		return self._technology
+
+	@property
+	def matched_on(self) -> list:
+		return self._matched_on
+
+	@property
+	def match_count(self) -> int:
+		return self._match_count
+
+	@property
+	def match_total(self) -> int:
+		return self._match_total
+
+	@property
+	def additional(self) -> Any:
+		return self._additional
+
+	@technology.setter
+	def technology(self, technology: str) -> None:
+		self._technology = technology
+
+	@matched_on.setter
+	def matched_on(self, matchedon: list) -> None:
+		self._matched_on = matchedon
+
+	@match_count.setter
+	def match_count(self, count: int) -> None:
+		self._match_count = count
+
+	@match_total.setter
+	def match_total(self, count: int) -> None:
+		self._match_total = count
+
+	@additional.setter
+	def additional(self, additional) -> None:
+		self._additional = additional
+
+	def add_match(self, match_string) -> None:
+		self._matched_on.append(match_string)
+		self._match_count = self._match_count + 1
+
+	def asdict(self) -> dict:
+		return {
+			'technology': self.technology,
+			'matched_on': self.matched_on,
+			'additional': self.additional.asdict() if self.additional is not None else None,
+		}
 
 class Inspection(object):
 	def __init__(self, codes, url):
@@ -18,14 +78,14 @@ class Inspection(object):
 		# We set a browser-matched user agent as some sites use simple UA match to block the request.
 		self.ua      = "Mozilla/5.0 (Macintosh; Intel Mac OS X 12.2; rv:97.0) Gecko/20100101 Firefox/97.0"
 
-	def get_site_details(self):
+	def get_site_details(self) -> InspectionResult:
 		"""Gets top-level website information by scraping the specified site HTML.
 
 		Raises:
 			InvalidWebsiteException: The given URL has caused a problem, typically either non-existent or access denied.
 
 		Returns:
-			object: Detection results.
+			InspectionResult: Detection results.
 		"""
 
 		if len(self.codes.tmpdir) != 0:
@@ -109,7 +169,7 @@ class Inspection(object):
 
 		return identifier.capitalize()
 
-	def slugify(self, value: str, allow_unicode: bool = False):
+	def slugify(self, value: str, allow_unicode: bool = False) -> str:
 		"""
 		Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
 		dashes to single dashes. Remove characters that aren't alphanumerics,
@@ -132,62 +192,3 @@ class Inspection(object):
 
 class InvalidWebsiteException(Exception):
 	pass
-
-class InspectionResult(object):
-	def __init__(self):
-		self._technology  = 'Unknown'
-		self._matched_on  = []
-		self._match_count = 0
-		self._match_total = 0
-		self._additional  = None
-
-	@property
-	def technology(self) -> str:
-		return self._technology
-
-	@property
-	def matched_on(self) -> list:
-		return self._matched_on
-
-	@property
-	def match_count(self) -> int:
-		return self._match_count
-
-	@property
-	def match_total(self) -> int:
-		return self._match_total
-
-	@property
-	def additional(self):
-		return self._additional
-
-	@technology.setter
-	def technology(self, technology: str) -> None:
-		self._technology = technology
-
-	@matched_on.setter
-	def matched_on(self, matchedon: list) -> None:
-		self._matched_on = matchedon
-
-	@match_count.setter
-	def match_count(self, count: int) -> None:
-		self._match_count = count
-
-	@match_total.setter
-	def match_total(self, count: int) -> None:
-		self._match_total = count
-
-	@additional.setter
-	def additional(self, additional) -> None:
-		self._additional = additional
-
-	def add_match(self, match_string) -> None:
-		self._matched_on.append(match_string)
-		self._match_count = self._match_count + 1
-
-	def asdict(self) -> dict:
-		return {
-			'technology': self.technology,
-			'matched_on': self.matched_on,
-			'additional': self.additional.asdict() if self.additional is not None else None,
-		}

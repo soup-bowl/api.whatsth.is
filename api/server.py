@@ -1,4 +1,5 @@
 import falcon
+
 from urllib3.exceptions import MaxRetryError, LocationValueError
 
 from api.apiresponse import APIResponse
@@ -8,10 +9,12 @@ class Server:
 	def __init__(self, config):
 		self.config = config
 
-	"""Run a continuously serving HTTP server.
-	"""
-	def on_get(self, request, response):
+	def on_get(self, request: falcon.Request, response: falcon.Response) -> None:
 		"""Handles incoming GET requests to the server.
+
+		Args:
+			request (falcon.Request): Context coming in from the connection.
+			response (falcon.Response): Object to populate with response criteria.
 		"""
 
 		reply     = APIResponse()
@@ -37,4 +40,3 @@ class Server:
 			response.status = falcon.HTTP_400
 
 		response.media = reply.asdict()
-
