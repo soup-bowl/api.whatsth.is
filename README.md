@@ -4,7 +4,7 @@
 
 **:warning: in active development, do not expect stability!**
 
-Counterpart backend API for the [whatsth.is project](https://github.com/soup-bowl/whatsth.is). Feed it a URL, and it returns a bunch of details about the requested site.
+Counterpart backend API for the [whatsth.is project](https://github.com/soup-bowl/whatsth.is). Feed it a URL, and it returns a bunch of details about the requested site. Upon execution, the [latest definitions file is downloaded](https://gist.github.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1) from GitHub.
 
 Want to quickstart? With **Docker/Podman** installed, Run `docker run -p 43594:43594 ghcr.io/soup-bowl/whatsthis-api:latest` to get going immediately.
 

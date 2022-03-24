@@ -1,0 +1,24 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+### Added
+- Further WP information scraped from the WordPress REST API, where applicable.
+
+### Changed
+- Using [Falcon](https://falconframework.org/) instead of Python HTTP server.
+
+### Changed
+- Definitions are now downloaded on start-up from GitHub rather than expected locally.
+- Objects in-use in the background to enforce standardisation.
+- Temporary cache now uses Pickle for now instead of JSON.
+
+## [0.1.0] (pre-release) - 2022-03-14
+### Added
+- Everything (initial release).
+
+[unrld]: https://github.com/soup-bowl/api.whatsth.is/compare/v0.1.0...HEAD
+[0.0.1]: https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.1.0

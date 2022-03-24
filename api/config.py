@@ -1,7 +1,6 @@
-from sys import argv
-from os.path import realpath, exists
+import json
+from os.path import exists
 from pathlib import Path
-import json, os, getopt
 
 class Config(object):
 	def __init__(self):
@@ -10,7 +9,7 @@ class Config(object):
 		self.loaded  = False
 		self.tmpdir  = ""
 
-	def load(self, path):
+	def load_file(self, path: str) -> bool:
 		"""Load a detection json file into the system.
 
 		Args:
@@ -28,7 +27,11 @@ class Config(object):
 			return True
 		return False
 
-	def has_config(self):
+	def load_json(self, jsonfile:str) -> None:
+		self.content = json.loads( jsonfile )
+		self.loaded  = True
+
+	def has_config(self) -> bool:
 		"""Whether the class has a configuration loaded into memory.
 
 		Returns:
