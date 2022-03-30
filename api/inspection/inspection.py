@@ -1,4 +1,5 @@
 import urllib3, unicodedata, re, pickle
+import api.main
 from os import remove
 from os.path import exists, getmtime
 from pathlib import Path
@@ -88,15 +89,9 @@ class Inspection(object):
 			InspectionResult: Detection results.
 		"""
 
-		if len(self.codes.tmpdir) != 0:
-			cachename = self.codes.tmpdir + '/' + self.slugify(self.url) + '.cache'
-			if exists(cachename):
-				print(time() - getmtime(cachename))
-				if (time() - getmtime(cachename)) > 2629743:
-					remove(cachename)
-				else:
-					print( "'%s' found in cache (%s left before expiry)." % (self.url, ( 2629743 - (time() - getmtime(cachename)) )) )
-					return pickle.load( Path( cachename ).open('rb') )
+		cacheReply = api.main.cache.get(self.url)
+		if cacheReply is not None:
+			return cacheReply
 
 		request = self.pm.request('GET', self.url, headers={'User-Agent': self.ua})
 
@@ -119,11 +114,7 @@ class Inspection(object):
 				else:
 					pass
 
-		if len(self.codes.tmpdir) != 0:
-			pppp = self.codes.tmpdir + '/' + self.slugify(self.url) + '.cache'
-			with open(pppp, 'wb') as f:
-				# I turned myself into a pickle Mortyyyyyy!
-				pickle.dump(self.reply, f, pickle.HIGHEST_PROTOCOL)
+		api.main.cache.store(self.url, self.reply)
 
 		return self.reply
 
@@ -168,27 +159,6 @@ class Inspection(object):
 			return "PHPBB"
 
 		return identifier.capitalize()
-
-	def slugify(self, value: str, allow_unicode: bool = False) -> str:
-		"""
-		Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
-		dashes to single dashes. Remove characters that aren't alphanumerics,
-		underscores, or hyphens. Convert to lowercase. Also strip leading and
-		trailing whitespace, dashes, and underscores.
-
-		Code is from Django - https://github.com/django/django/blob/main/django/utils/text.py
-		"""
-		value = str(value)
-		if allow_unicode:
-			value = unicodedata.normalize("NFKC", value)
-		else:
-			value = (
-				unicodedata.normalize("NFKD", value)
-				.encode("ascii", "ignore")
-				.decode("ascii")
-			)
-		value = re.sub(r"[^\w\s-]", "", value.lower())
-		return re.sub(r"[-\s]+", "-", value).strip("-_")
 
 class InvalidWebsiteException(Exception):
 	pass
