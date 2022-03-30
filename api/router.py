@@ -8,7 +8,20 @@ from api.inspection.inspection import Inspection, InvalidWebsiteException
 router = APIRouter()
 
 @router.get("/inspect/{site_url:path}", tags=["inspection"])
-async def inspect_site(site_url: str, response: Response):
+async def inspect_site(site_url: str, response: Response) -> dict:
+    """The specified URL will be in-turn called by the system. The system will then perform various inspections on the
+    response data and the connection to calculate what technology the website is running. In certain conditions, if the
+    site is detected to be using a known REST API, useful data will also be harvested from their endpoint.
+
+    This is request-intensive, and results in a slow repsonse currently. To counter this, a caching engine is used to
+    serve repeat requests with the same data.
+
+    Args:
+        site_url (str): A URL-encoded string to a website to inspect.
+
+    Returns:
+        dict: Returns an API object.
+    """
     reply     = APIResponse()
     reply.url = site_url
 
