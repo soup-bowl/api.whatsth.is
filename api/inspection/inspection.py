@@ -6,7 +6,7 @@ from time import time
 from lxml import html
 from typing import Any
 
-from api.technology.wordpress import WordPressIdentifier
+from api.inspection.technology.wordpress import WordPressIdentifier
 
 class InspectionResult(object):
 	def __init__(self):

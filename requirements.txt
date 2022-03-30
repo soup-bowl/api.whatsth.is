@@ -1,3 +1,4 @@
-falcon==3.0.1
 lxml==4.8.0
 urllib3==1.26.8
+fastapi==0.75.0
+uvicorn==0.17.6

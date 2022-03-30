@@ -1,6 +1,6 @@
 from typing import Optional
 
-from api.inspection import InspectionResult
+from api.inspection.inspection import InspectionResult
 
 class APIResponse(object):
 	def __init__(self):
