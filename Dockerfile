@@ -10,4 +10,4 @@ COPY api api
 
 EXPOSE 43594
 
-ENTRYPOINT [ "python", "-m", "api" ]
+ENTRYPOINT [ "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "43594" ]
