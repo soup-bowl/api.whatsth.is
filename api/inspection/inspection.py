@@ -1,9 +1,5 @@
-import urllib3, unicodedata, re, pickle
+import urllib3
 import api.main
-from os import remove
-from os.path import exists, getmtime
-from pathlib import Path
-from time import time
 from lxml import html
 from typing import Any
 

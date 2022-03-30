@@ -1,5 +1,5 @@
 import urllib3
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 
 from api import router
 from api.cache import Cache
