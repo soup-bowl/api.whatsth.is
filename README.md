@@ -8,7 +8,7 @@ Counterpart backend API for the [whatsth.is project](https://github.com/soup-bow
 
 Want to quickstart? With **Docker/Podman** installed, Run `docker run -p 43594:43594 ghcr.io/soup-bowl/whatsthis-api:latest` to get going immediately.
 
-Example: `http://localhost:8000/https://wordpress.org` should reply with something like:
+Example: `http://localhost:43594/https://wordpress.org` should reply with something like:
 
 ```json
 {
@@ -31,11 +31,11 @@ Use **Uvicorn** to run the server asynchronously. This is achieved by running th
 uvicorn api.main:app --reload
 ```
 
-By default, the server will be available at http://localhost:8000 and auto API docs on http://localhost:8000/docs.
+By default, the server will be available at http://localhost:8000 and auto API docs on http://localhost:8000/docs. Stack is built to expect port 43594, so you would benefit from adding `--port 43594` to your Uvicorn run statement.
 
 ### Docker
 
-Run `docker-compose up --build` to start the server locally.
+Run `docker-compose up --build` to start the server locally (runs on port 43594).
 
 ### Native
 
