@@ -8,7 +8,7 @@ Counterpart backend API for the [whatsth.is project](https://github.com/soup-bow
 
 Want to quickstart? With **Docker/Podman** installed, Run `docker run -p 43594:43594 ghcr.io/soup-bowl/whatsthis-api:latest` to get going immediately.
 
-Example: `http://localhost:43594/https://wordpress.org` should reply with something like:
+Example: `http://localhost:8000/https://wordpress.org` should reply with something like:
 
 ```json
 {
@@ -25,7 +25,13 @@ Example: `http://localhost:43594/https://wordpress.org` should reply with someth
 
 ## Starting up
 
-By default, the server will be available at http://localhost:43594.
+Use **Uvicorn** to run the server asynchronously. This is achieved by running the following (post depedency installation - see below):
+
+```bash
+uvicorn api.main:app --reload
+```
+
+By default, the server will be available at http://localhost:8000 and auto API docs on http://localhost:8000/docs.
 
 ### Docker
 
@@ -41,6 +47,6 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-Now the server can begin (when in the virtual env) by running `python -m api`.
+Now the server can begin (when in the virtual env) by running `uvicorn api.main:app --reload`.
 
 To run the unit tests, install `pytest` (`pip install pytest`) and run `pytest`.
