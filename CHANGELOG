@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased][unrld]
 ### Changed
 - Switched to [FastAPI](https://fastapi.tiangolo.com/) using [Uvicorn](https://www.uvicorn.org/).
+- Definitions file input now YAML instead of JSON (both should be fine).
 
 ## [0.1.1] (pre-release) - 2022-03-24
 ### Added

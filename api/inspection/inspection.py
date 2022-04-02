@@ -120,18 +120,23 @@ class Inspection(object):
 
 		checkpoints = self.codes.get()['cms']
 		for cms in checkpoints:
-			for check in checkpoints[cms]['headers']:
-				key,value = check.split(':', 1)
-				if key in self.headers:
-					if self.headers[key] == value.strip():
+			if 'headers' in checkpoints[cms]:
+				for check in checkpoints[cms]['headers']:
+					key,value = check.split(':', 1)
+					if key in self.headers:
+						if self.headers[key] == value.strip():
+							self.reply.add_match(check)
+			if 'body' in checkpoints[cms]:
+				for check in checkpoints[cms]['body']:
+					hits = self.parsed.xpath(check)
+					if len(hits) > 0:
 						self.reply.add_match(check)
-			for check in checkpoints[cms]['body']:
-				hits = self.parsed.xpath(check)
-				if len(hits) > 0:
-					self.reply.add_match(check)
 
 			if self.reply.match_count > 0:
-				self.reply.match_total = len(checkpoints[cms]['body']) + len(checkpoints[cms]['headers'])
+				self.reply.match_total = (
+					len(checkpoints[cms]['body']) if 'body' in checkpoints[cms] else 0 + \
+					len(checkpoints[cms]['headers']) if 'headers' in checkpoints[cms] else 0
+				)
 				self.reply.technology = self.nicename(cms)
 				return
 
