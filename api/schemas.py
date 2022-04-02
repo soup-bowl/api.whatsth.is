@@ -14,7 +14,7 @@ class inspectionSchema(BaseModel):
 class invalidRequestSchema(BaseModel):
 	success: bool = False
 	message: str = "No URL specified"
-	url: str
+	url: Optional[str]
 
 class InfoCountSchema(BaseModel):
 	week: int
