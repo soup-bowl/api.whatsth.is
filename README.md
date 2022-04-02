@@ -4,7 +4,7 @@
 
 **:warning: in active development, do not expect stability!**
 
-Counterpart backend API for the [whatsth.is project](https://github.com/soup-bowl/whatsth.is). Feed it a URL, and it returns a bunch of details about the requested site. Upon execution, the [latest definitions file is downloaded](https://gist.github.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1) from GitHub.
+Counterpart backend API for the [whatsth.is project][fnt]. Feed it a URL, and it returns a bunch of details about the requested site. Upon execution, the [latest definitions file is downloaded][def] from GitHub.
 
 Want to quickstart? With **Docker/Podman** installed, Run `docker run -p 43594:43594 ghcr.io/soup-bowl/whatsthis-api:latest` to get going immediately.
 
@@ -27,10 +27,10 @@ Example: `http://localhost:43594/https://wordpress.org` should reply with someth
 
 You can over-ride the default API settings using environmental variables.
 
-Environmental Key      | Default                 | Purpose
------------------------|-------------------------|--------
-`WTAPI_DEFINITION_URL` | [Latest definitions][d] | Can provide a different YAML or JSON source for the detection definitions.
-`WTAPI_CORS_POLICY`    | `*`                     | Define a forced origin. Only supports **1 origin** at the moment.
+Environmental Key      | Default                   | Purpose
+-----------------------|---------------------------|--------
+`WTAPI_DEFINITION_URL` | [Latest definitions][def] | Can provide a different YAML or JSON source for the detection definitions.
+`WTAPI_CORS_POLICY`    | `*`                       | Define a forced origin. Only supports **1 origin** at the moment.
 
 ## Starting up
 
@@ -60,4 +60,5 @@ Now the server can begin (when in the virtual env) by running `uvicorn api.main:
 
 To run the unit tests, install `pytest` (`pip install pytest`) and run `pytest`.
 
-[d]: https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml
+[fnt]: https://github.com/soup-bowl/whatsth.is
+[def]: https://gist.github.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1#file-definitions-yml
