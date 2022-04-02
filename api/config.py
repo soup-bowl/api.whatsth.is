@@ -1,4 +1,4 @@
-import json
+import json, yaml
 from os.path import exists
 from pathlib import Path
 
@@ -30,6 +30,10 @@ class Config(object):
 	def load_json(self, jsonfile:str) -> None:
 		self.content = json.loads( jsonfile )
 		self.loaded  = True
+
+	def load_yml(self, ymlfile:str) -> None:
+		self.content = yaml.load( ymlfile, Loader=yaml.CLoader )
+		self.loaded = True
 
 	def has_config(self) -> bool:
 		"""Whether the class has a configuration loaded into memory.

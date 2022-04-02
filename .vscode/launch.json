@@ -5,10 +5,11 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Python: Run Webserver",
+			"name": "Python: Run Debug Webserver",
 			"type": "python",
 			"request": "launch",
-			"module": "api"
+			"module": "uvicorn",
+			"args": ["api.main:app", "--reload"]
 		}
 	]
 }
