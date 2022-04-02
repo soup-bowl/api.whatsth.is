@@ -5,6 +5,7 @@ from api.cache import Cache
 from api.config import Config
 
 from api.inspection.technology.wordpress import WordPressIdentifier
+from api.models import RequestCacheService
 
 class InspectionResult(object):
 	def __init__(self):
@@ -66,7 +67,7 @@ class InspectionResult(object):
 		}
 
 class Inspection(object):
-	def __init__(self, url: str, config: Config, cache: Cache = None):
+	def __init__(self, url: str, cache: Any, config: Config):
 		self.reply   = InspectionResult()
 		self.config  = config
 		self.cache   = cache
@@ -87,10 +88,9 @@ class Inspection(object):
 			InspectionResult: Detection results.
 		"""
 
-		if self.cache is not None:
-			cacheReply = self.cache.get(self.url)
-			if cacheReply is not None:
-				return cacheReply
+		cacheReply = self.cache.getCachedInspection(self.url)
+		if cacheReply is not None:
+			return cacheReply
 
 		request = self.pm.request('GET', self.url, headers={'User-Agent': self.ua})
 
@@ -113,8 +113,7 @@ class Inspection(object):
 				else:
 					pass
 
-		if self.cache is not None:
-			self.cache.store(self.url, self.reply)
+		self.cache.setCachedInspection(self.url, self.reply)
 
 		return self.reply
 

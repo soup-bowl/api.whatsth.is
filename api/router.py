@@ -1,12 +1,21 @@
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Depends, Response, status
 from urllib3.exceptions import MaxRetryError, LocationValueError
 
 import api.main
 from api.inspection.technology.response import APIResponse
 from api.inspection.inspection import Inspection, InvalidWebsiteException
+from api.database import SessionLocal
+from api.models import RequestCacheService
 from api.schemas import inspectionSchema, inspectionErrorSchema, invalidRequestSchema
 
 router = APIRouter()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @router.get("/", response_model=invalidRequestSchema)
 async def root():
@@ -16,7 +25,7 @@ async def root():
     }
 
 @router.get("/inspect/{site_url:path}", tags=["inspection"], response_model=inspectionSchema, responses={400: {"model": inspectionErrorSchema}})
-async def inspect_site(site_url: str, response: Response) -> dict:
+async def inspect_site(site_url: str, response: Response, db: SessionLocal = Depends(get_db)) -> dict:
     """The specified URL will be in-turn called by the system. The system will then perform various inspections on the
     response data and the connection to calculate what technology the website is running. In certain conditions, if the
     site is detected to be using a known REST API, useful data will also be harvested from their endpoint.
@@ -34,7 +43,7 @@ async def inspect_site(site_url: str, response: Response) -> dict:
     reply.url = site_url
 
     try:
-        inspector        = Inspection(reply.url, api.main.config, api.main.cache)
+        inspector        = Inspection(reply.url, RequestCacheService(db), api.main.config)
         reply.success    = True
         reply.inspection = inspector.get_site_details().asdict()
     except InvalidWebsiteException as e:

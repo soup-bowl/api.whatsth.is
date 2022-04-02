@@ -1,5 +1,6 @@
 lxml==4.8.0
 PyYAML==6.0
+SQLAlchemy==1.4.34
 urllib3==1.26.8
 fastapi==0.75.0
 uvicorn==0.17.6
