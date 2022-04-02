@@ -1,12 +1,10 @@
-import hashlib
-import pickle
-from time import time
+import hashlib, pickle
 from datetime import datetime, timedelta
 from typing import Any
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, BLOB
-from sqlalchemy.orm import relationship, Session
+from sqlalchemy import Column, Integer, String, DateTime, BLOB
+from sqlalchemy.orm import Session
 
-from api.database import Base, SessionLocal
+from api.database import Base
 
 class RequestCache(Base):
 	__tablename__ = "requestcache"
@@ -17,15 +15,22 @@ class RequestCache(Base):
 	expiry    = Column(DateTime)
 
 class RequestCacheService(object):
-	def __init__(self, db):
+	def __init__(self, db: Session):
 		self.db = db
 
 	def getCachedInspection(self, reference: str):
 		check    = hashlib.md5(reference.encode('utf-8')).hexdigest()
-		response = self.db.query(RequestCache).filter(RequestCache.reference == check).filter(RequestCache.expiry > datetime.now()).first()
+		response = self.db.query(RequestCache).filter(RequestCache.reference == check).first()
 
 		if response is not None:
 			decoded = pickle.loads(response.cache)
+
+			if datetime.now() > response.expiry:
+				self.db.query(RequestCache).filter(RequestCache.id == response.id).delete()
+				self.db.commit()
+
+				return None
+
 			return decoded
 
 		return None
