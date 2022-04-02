@@ -25,9 +25,8 @@ class Cache(object):
 			if (time() - getmtime(cachename)) > self.cachetime:
 				remove(cachename)
 				return None
-			else:
-				#print( "'%s' found in cache (%s left before expiry)." % (reference, ( self.cachetime - (time() - getmtime(cachename)) )) )
-				return pickle.load( Path( cachename ).open('rb') )
+			#print( "'%s' found in cache (%s left before expiry)." % (reference, ( self.cachetime - (time() - getmtime(cachename)) )) )
+			return pickle.load( Path( cachename ).open('rb') )
 		else:
 			return None
 

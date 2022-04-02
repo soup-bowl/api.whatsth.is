@@ -4,10 +4,9 @@ WORKDIR /usr/src/app
 
 COPY requirements.txt ./
 
-RUN apk add --no-cache yaml-dev
-
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir gunicorn
+RUN apk add --no-cache yaml-dev \
+	pip install --no-cache-dir -r requirements.txt \
+	pip install --no-cache-dir gunicorn
 
 COPY api api
 
