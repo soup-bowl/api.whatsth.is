@@ -1,9 +1,10 @@
+from typing import Optional
 from pydantic import BaseModel
 
 class DetectionSchema(BaseModel):
     technology: str
     matched_on: list
-    addditional: dict
+    additional: Optional[dict]
 
 class inspectionSchema(BaseModel):
     success: bool = True
