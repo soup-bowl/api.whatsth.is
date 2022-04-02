@@ -26,7 +26,7 @@ async def inspect_site(site_url: str, response: Response) -> dict:
     reply.url = site_url
 
     try:
-        inspector        = Inspection(api.main.config, reply.url)
+        inspector        = Inspection(reply.url, api.main.config, api.main.cache)
         reply.success    = True
         reply.inspection = inspector.get_site_details().asdict()
     except InvalidWebsiteException as e:

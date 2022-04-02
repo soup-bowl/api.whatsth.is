@@ -1,7 +1,8 @@
 import urllib3
-import api.main
 from lxml import html
 from typing import Any
+from api.cache import Cache
+from api.config import Config
 
 from api.inspection.technology.wordpress import WordPressIdentifier
 
@@ -65,9 +66,10 @@ class InspectionResult(object):
 		}
 
 class Inspection(object):
-	def __init__(self, codes, url):
+	def __init__(self, url: str, config: Config, cache: Cache = None):
 		self.reply   = InspectionResult()
-		self.codes   = codes
+		self.config  = config
+		self.cache   = cache
 		self.pm      = urllib3.PoolManager()
 		self.url     = url
 		self.headers = None
@@ -85,9 +87,10 @@ class Inspection(object):
 			InspectionResult: Detection results.
 		"""
 
-		cacheReply = api.main.cache.get(self.url)
-		if cacheReply is not None:
-			return cacheReply
+		if self.cache is not None:
+			cacheReply = self.cache.get(self.url)
+			if cacheReply is not None:
+				return cacheReply
 
 		request = self.pm.request('GET', self.url, headers={'User-Agent': self.ua})
 
@@ -110,7 +113,8 @@ class Inspection(object):
 				else:
 					pass
 
-		api.main.cache.store(self.url, self.reply)
+		if self.cache is not None:
+			self.cache.store(self.url, self.reply)
 
 		return self.reply
 
@@ -118,7 +122,7 @@ class Inspection(object):
 		"""Runs a header check & XPath scraping routine to the in-memory XML using the loaded-in detection config.
 		"""
 
-		checkpoints = self.codes.get()['cms']
+		checkpoints = self.config.get()['cms']
 		for cms in checkpoints:
 			if 'headers' in checkpoints[cms]:
 				for check in checkpoints[cms]['headers']:

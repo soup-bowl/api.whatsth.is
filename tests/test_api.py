@@ -1,4 +1,4 @@
-from api.inspection import Inspection, InvalidWebsiteException
+from api.inspection.inspection import Inspection, InvalidWebsiteException
 from api.config import Config
 
 import unittest, os
@@ -14,16 +14,17 @@ class StatChecks(unittest.TestCase):
 	def test_generic_detections(self):
 		"""Checks the definitions of the checks.
 		"""
+		
 		# WordPress
-		inspector = Inspection(self.config, 'https://wordpress.org/').get_site_details()
+		inspector = Inspection('https://wordpress.org/', self.config).get_site_details()
 		self.assertEqual(inspector.technology, 'WordPress')
 		# Unknown, but exists.
-		inspector = Inspection(self.config, 'https://example.com/').get_site_details()
+		inspector = Inspection('https://example.com/', self.config).get_site_details()
 		self.assertEqual(inspector.technology, 'Unknown')
 
 	def test_nicename(self):
 		"""Check the nice name generator uses the in-built values, and capitalises unknown ones.
 		"""
-		inspector = Inspection(self.config, 'dummy')
+		inspector = Inspection('dummy', self.config)
 		self.assertEqual(inspector.nicename('wordpress'), 'WordPress')
 		self.assertEqual(inspector.nicename('madeupcms'), 'Madeupcms')
