@@ -23,6 +23,15 @@ Example: `http://localhost:43594/https://wordpress.org` should reply with someth
 }
 ```
 
+## Overrides
+
+You can over-ride the default API settings using environmental variables.
+
+Environmental Key      | Default                 | Purpose
+-----------------------|-------------------------|--------
+`WTAPI_DEFINITION_URL` | [Latest definitions][d] | Can provide a different YAML or JSON source for the detection definitions.
+`WTAPI_CORS_POLICY`    | `*`                     | Define a forced origin. Only supports **1 origin** at the moment.
+
 ## Starting up
 
 Use **Uvicorn** to run the server asynchronously. This is achieved by running the following (post depedency installation - see below):
@@ -50,3 +59,5 @@ pip install -r requirements.txt
 Now the server can begin (when in the virtual env) by running `uvicorn api.main:app --reload`.
 
 To run the unit tests, install `pytest` (`pip install pytest`) and run `pytest`.
+
+[d]: https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml

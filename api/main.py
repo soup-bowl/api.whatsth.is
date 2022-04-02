@@ -1,4 +1,4 @@
-import urllib3, api.models.requestcache
+import urllib3, os, api.models.requestcache
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -6,7 +6,7 @@ from api import router
 from api.models.database import engine
 from api.config import Config
 
-def_url  = 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml'
+def_url  = os.getenv('WTAPI_DEFINITION_URL', 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml')
 def_file = urllib3.PoolManager().request('GET', def_url)
 
 config = Config()
@@ -37,7 +37,7 @@ app = FastAPI(
 
 app.add_middleware(
 	CORSMiddleware,
-	allow_origins=["*"],
+	allow_origins=[os.getenv('WTAPI_CORS_POLICY', "*")],
 	allow_credentials=True,
 	allow_methods=["*"],
 	allow_headers=["*"],
