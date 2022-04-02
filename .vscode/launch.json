@@ -5,11 +5,17 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Python: Run Debug Webserver",
+			"name": "Python: Debug Webserver",
 			"type": "python",
 			"request": "launch",
 			"module": "uvicorn",
 			"args": ["api.main:app", "--reload"]
+		},
+		{
+			"name": "Python: Debug Tests",
+			"type": "python",
+			"request": "launch",
+			"module": "pytest"
 		}
 	]
 }
