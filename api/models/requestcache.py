@@ -4,7 +4,7 @@ from typing import Any
 from sqlalchemy import Column, Integer, String, DateTime, BLOB
 from sqlalchemy.orm import Session
 
-from api.database import Base
+from api.models.database import Base
 
 class RequestCache(Base):
 	__tablename__ = "requestcache"

@@ -5,8 +5,8 @@ from urllib3.exceptions import MaxRetryError, LocationValueError
 import api.main
 from api.inspection.technology.response import APIResponse
 from api.inspection.inspection import Inspection, InvalidWebsiteException
-from api.database import SessionLocal
-from api.models import RequestCacheService
+from api.models.database import SessionLocal
+from api.models.requestcache import RequestCacheService
 from api.schemas import inspectionSchema, invalidRequestSchema
 
 router = APIRouter()

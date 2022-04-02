@@ -4,7 +4,7 @@ from typing import Any
 from api.config import Config
 
 from api.inspection.technology.wordpress import WordPressIdentifier
-from api.models import RequestCacheService
+from api.models.requestcache import RequestCacheService
 
 class InspectionResult(object):
 	def __init__(self):
