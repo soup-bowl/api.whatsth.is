@@ -1,6 +1,6 @@
 import hashlib, pickle
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Any, Optional
 from sqlalchemy import Column, Integer, String, DateTime, BLOB
 from sqlalchemy.orm import Session
 
@@ -18,7 +18,7 @@ class RequestCacheService(object):
 	def __init__(self, db: Session):
 		self.db = db
 
-	def getCachedInspection(self, reference: str):
+	def getCachedInspection(self, reference: str) -> Optional[RequestCache]:
 		check    = hashlib.md5(reference.encode('utf-8')).hexdigest()
 		response = self.db.query(RequestCache).filter(RequestCache.reference == check).first()
 
@@ -35,7 +35,7 @@ class RequestCacheService(object):
 
 		return None
 
-	def setCachedInspection(self, reference: str, contents: Any):
+	def setCachedInspection(self, reference: str, contents: Any) -> RequestCache:
 		pickled = pickle.dumps(contents, pickle.HIGHEST_PROTOCOL)
 		check   = hashlib.md5(reference.encode('utf-8')).hexdigest()
 		cache   = RequestCache(reference=check, cache=pickled, expiry=(datetime.now() + timedelta(days=30)))

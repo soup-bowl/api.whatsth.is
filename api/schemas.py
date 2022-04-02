@@ -15,3 +15,13 @@ class invalidRequestSchema(BaseModel):
 	success: bool = False
 	message: str = "No URL specified"
 	url: str
+
+class InfoCountSchema(BaseModel):
+	week: int
+	month: int
+	quarter: int
+	year: int
+
+class infoSchema(BaseModel):
+	success: bool = True
+	counts: InfoCountSchema
