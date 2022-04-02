@@ -30,10 +30,3 @@ app.add_middleware(
 )
 
 app.include_router(router.router)
-
-@app.get("/")
-async def root():
-    return {
-        "success": False,
-        "message": "No URL specified"
-    }

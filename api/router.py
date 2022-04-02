@@ -4,10 +4,18 @@ from urllib3.exceptions import MaxRetryError, LocationValueError
 import api.main
 from api.inspection.technology.response import APIResponse
 from api.inspection.inspection import Inspection, InvalidWebsiteException
+from api.schemas import inspectionSchema, inspectionErrorSchema, invalidRequestSchema
 
 router = APIRouter()
 
-@router.get("/inspect/{site_url:path}", tags=["inspection"])
+@router.get("/", response_model=invalidRequestSchema)
+async def root():
+    return {
+        "success": False,
+        "message": "No URL specified"
+    }
+
+@router.get("/inspect/{site_url:path}", tags=["inspection"], response_model=inspectionSchema, responses={400: {"model": inspectionErrorSchema}})
 async def inspect_site(site_url: str, response: Response) -> dict:
     """The specified URL will be in-turn called by the system. The system will then perform various inspections on the
     response data and the connection to calculate what technology the website is running. In certain conditions, if the
