@@ -1,20 +1,20 @@
-from api.inspection.inspection import Inspection, InvalidWebsiteException
+from api.inspection.inspection import Inspection
 from api.config import Config
 
-import unittest, os
+import unittest
 
 class StatChecks(unittest.TestCase):
 	@classmethod
 	def setUpClass(self):
 		self.config = Config()
 		self.config.load_json(
-			'{"cms":{"wordpress":{"headers":["x-powered-by: WP Engine"],"body":["/html/head/link[@href=\'//s.w.org\']"]}}}'
+			'{"cms":{"wordpress":{"body":["/html/head/link[@href=\'//s.w.org\']"]}}}'
 		)
 
 	def test_generic_detections(self):
 		"""Checks the definitions of the checks.
 		"""
-		
+
 		# WordPress
 		inspector = Inspection('https://wordpress.org/', self.config).get_site_details()
 		self.assertEqual(inspector.technology, 'WordPress')
