@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Response, status
+from fastapi.responses import JSONResponse
 from urllib3.exceptions import MaxRetryError, LocationValueError
 
 import api.main
@@ -6,7 +7,7 @@ from api.inspection.technology.response import APIResponse
 from api.inspection.inspection import Inspection, InvalidWebsiteException
 from api.database import SessionLocal
 from api.models import RequestCacheService
-from api.schemas import inspectionSchema, inspectionErrorSchema, invalidRequestSchema
+from api.schemas import inspectionSchema, invalidRequestSchema
 
 router = APIRouter()
 
@@ -24,7 +25,7 @@ async def root():
         "message": "No URL specified"
     }
 
-@router.get("/inspect/{site_url:path}", tags=["inspection"], response_model=inspectionSchema, responses={400: {"model": inspectionErrorSchema}})
+@router.get("/inspect/{site_url:path}", tags=["inspection"], response_model=inspectionSchema, responses={400: {"model": invalidRequestSchema}})
 async def inspect_site(site_url: str, response: Response, db: SessionLocal = Depends(get_db)) -> dict:
     """The specified URL will be in-turn called by the system. The system will then perform various inspections on the
     response data and the connection to calculate what technology the website is running. In certain conditions, if the
@@ -57,8 +58,6 @@ async def inspect_site(site_url: str, response: Response, db: SessionLocal = Dep
         reply.message = 'No URL specified'
 
     if reply.success == True:
-        response.status_code = status.HTTP_200_OK
+        return reply.asdict()
     else:
-        response.status_code = status.HTTP_400_BAD_REQUEST
-
-    return reply.asdict()
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=reply.asdict())
