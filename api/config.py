@@ -32,7 +32,7 @@ class Config(object):
 		self.loaded  = True
 
 	def load_yml(self, ymlfile:str) -> None:
-		self.content = yaml.load( ymlfile, Loader=yaml.CLoader )
+		self.content = yaml.load( ymlfile, Loader=yaml.Loader )
 		self.loaded = True
 
 	def has_config(self) -> bool:
