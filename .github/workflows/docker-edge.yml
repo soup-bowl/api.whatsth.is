@@ -2,7 +2,11 @@ name: Container - Edge
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+    - develop
+    paths-ignore:
+    - '.github/**'
+    - '.vscode/**'
 
 jobs:
   test:
