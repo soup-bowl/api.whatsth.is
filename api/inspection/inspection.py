@@ -1,6 +1,6 @@
 import urllib3
 from lxml import html
-from typing import Any
+from typing import Any, Optional
 from api.config import Config
 
 from api.inspection.technology.wordpress import WordPressIdentifier
@@ -66,7 +66,7 @@ class InspectionResult(object):
 		}
 
 class Inspection(object):
-	def __init__(self, url: str, cache: RequestCacheService, config: Config):
+	def __init__(self, url: str, config: Config, cache: Optional[RequestCacheService] = None):
 		self.reply   = InspectionResult()
 		self.config  = config
 		self.cache   = cache
@@ -87,9 +87,10 @@ class Inspection(object):
 			InspectionResult: Detection results.
 		"""
 
-		cacheReply = self.cache.getCachedInspection(self.url)
-		if cacheReply is not None:
-			return cacheReply
+		if self.cache is not None:
+			cacheReply = self.cache.getCachedInspection(self.url)
+			if cacheReply is not None:
+				return cacheReply
 
 		request = self.pm.request('GET', self.url, headers={'User-Agent': self.ua})
 
@@ -112,7 +113,8 @@ class Inspection(object):
 				else:
 					pass
 
-		self.cache.setCachedInspection(self.url, self.reply)
+		if self.cache is not None:
+			self.cache.setCachedInspection(self.url, self.reply)
 
 		return self.reply
 

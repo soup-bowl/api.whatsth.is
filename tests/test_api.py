@@ -16,15 +16,15 @@ class StatChecks(unittest.TestCase):
 		"""
 
 		# WordPress
-		inspector = Inspection('https://wordpress.org/', self.config).get_site_details()
+		inspector = Inspection(url='https://wordpress.org/', config=self.config).get_site_details()
 		self.assertEqual(inspector.technology, 'WordPress')
 		# Unknown, but exists.
-		inspector = Inspection('https://example.com/', self.config).get_site_details()
+		inspector = Inspection(url='https://example.com/', config=self.config).get_site_details()
 		self.assertEqual(inspector.technology, 'Unknown')
 
 	def test_nicename(self):
 		"""Check the nice name generator uses the in-built values, and capitalises unknown ones.
 		"""
-		inspector = Inspection('dummy', self.config)
+		inspector = Inspection(url='dummy', config=self.config)
 		self.assertEqual(inspector.nicename('wordpress'), 'WordPress')
 		self.assertEqual(inspector.nicename('madeupcms'), 'Madeupcms')

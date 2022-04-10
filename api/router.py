@@ -48,7 +48,7 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 	reply.url = site_url
 
 	try:
-		inspector        = Inspection(reply.url, RequestCacheService(db), api.main.config)
+		inspector        = Inspection(url=reply.url, cache=RequestCacheService(db), config=api.main.config)
 		reply.success    = True
 		reply.inspection = inspector.get_site_details().asdict()
 	except InvalidWebsiteException as e:
