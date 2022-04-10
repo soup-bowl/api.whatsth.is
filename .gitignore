@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 thunderActivity.json
+thunderEnvironment.json
 data.db
