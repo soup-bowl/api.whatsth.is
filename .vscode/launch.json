@@ -16,7 +16,10 @@
 			"type": "python",
 			"request": "launch",
 			"module": "uvicorn",
-			"args": ["WTAPI_NO_CACHE=1", "api.main:app", "--reload", "--port", "43594"]
+			"args": ["api.main:app", "--reload", "--port", "43594"],
+			"env": {
+				"WTAPI_NO_CACHE": "1"
+			}
 		},
 		{
 			"name": "Python: Debug Tests",

@@ -2,6 +2,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 class DetectionSchema(BaseModel):
+	name: str
 	technology: str
 	matched_on: list
 	additional: Optional[dict] = None

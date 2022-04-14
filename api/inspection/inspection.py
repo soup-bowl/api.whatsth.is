@@ -1,4 +1,4 @@
-import urllib3
+import urllib3, os
 from lxml import html
 from typing import Any, Optional
 from api.config import Config
@@ -8,11 +8,16 @@ from api.models.requestcache import RequestCacheService
 
 class InspectionResult(object):
 	def __init__(self):
+		self._name        = ''
 		self._technology  = 'Unknown'
 		self._matched_on  = []
 		self._match_count = 0
 		self._match_total = 0
 		self._additional  = None
+
+	@property
+	def name(self) -> str:
+		return self._name
 
 	@property
 	def technology(self) -> str:
@@ -33,6 +38,10 @@ class InspectionResult(object):
 	@property
 	def additional(self) -> Any:
 		return self._additional
+
+	@name.setter
+	def name(self, name: str) -> None:
+		self._name = name
 
 	@technology.setter
 	def technology(self, technology: str) -> None:
@@ -60,6 +69,7 @@ class InspectionResult(object):
 
 	def asdict(self) -> dict:
 		return {
+			'name': self.name,
 			'technology': self.technology,
 			'matched_on': self.matched_on,
 			'additional': self.additional.asdict() if self.additional is not None else None,
@@ -69,7 +79,7 @@ class Inspection(object):
 	def __init__(self, url: str, config: Config, cache: Optional[RequestCacheService] = None):
 		self.reply   = InspectionResult()
 		self.config  = config
-		self.cache   = cache
+		self.cache   = cache if os.getenv('WTAPI_NO_CACHE', '0') == '0' else None
 		self.pm      = urllib3.PoolManager()
 		self.url     = url
 		self.headers = None
@@ -100,6 +110,7 @@ class Inspection(object):
 		self.headers = request.headers
 		self.parsed  = html.fromstring(request.data)
 
+		self.get_title()
 		self.identify_cms()
 
 		if self.reply.technology == 'WordPress':
@@ -117,6 +128,12 @@ class Inspection(object):
 			self.cache.setCachedInspection(self.url, self.reply)
 
 		return self.reply
+
+	def get_title(self) -> None:
+		"""Sets the page title.
+		"""
+
+		self.reply.name = self.parsed.xpath('/html/head/title')[0].text
 
 	def identify_cms(self) -> None:
 		"""Runs a header check & XPath scraping routine to the in-memory XML using the loaded-in detection config.
