@@ -1,5 +1,7 @@
+import re
 from fastapi import APIRouter, Depends, Response, Header, status
 from fastapi.responses import JSONResponse
+from urllib.parse import unquote
 from urllib3.exceptions import MaxRetryError, LocationValueError
 
 import api.main
@@ -44,8 +46,10 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 	This is request-intensive, and results in a slow repsonse currently. To counter this, a caching engine is used to
 	serve repeat requests with the same data.
 	"""
+	site_url = unquote(site_url)
+
 	reply     = APIResponse()
-	reply.url = site_url
+	reply.url = site_url if bool(re.search('^https?://.*', site_url)) else 'https://' + site_url
 
 	try:
 		inspector        = Inspection(url=reply.url, cache=RequestCacheService(db), config=api.main.config)
