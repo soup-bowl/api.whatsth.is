@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
 
 class DetectionSchema(BaseModel):
@@ -27,11 +27,20 @@ class infoSchema(BaseModel):
 	success: bool = True
 	counts: InfoCountSchema
 
+class dnsProbeRecordSchema(BaseModel):
+	address: Optional[str]
+	priority: Optional[int]
+	text: Optional[tuple]
+
 class dnsProbeSchema(BaseModel):
 	success: bool = True
 	url: str
-	records: list
+	records: List[dnsProbeRecordSchema]
+
+class dnsAcceptedItemsSchema(BaseModel):
+	type: str
+	name: str
 
 class dnsAcceptedSchema(BaseModel):
 	success: bool = True
-	records: list
+	records: List[dnsAcceptedItemsSchema]
