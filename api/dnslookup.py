@@ -32,11 +32,15 @@ class DNSResult(object):
 		self._text = text
 
 	def asdict(self) -> dict:
-		return {
-			'address': self.address,
-			'priority': self.priority,
-			'text': self.text
-		}
+		rtn = {}
+		if len(self.address) > 0:
+			rtn['address'] = self.address
+		if self.priority > 0:
+			rtn['priority'] = self.priority
+		if len(self.text) > 0:
+			rtn['text'] = self.text
+		
+		return rtn
 
 class DNSResponse(object):
 	def __init__(self):
