@@ -3,14 +3,16 @@ from fastapi import APIRouter, Depends, Response, Header, status
 from fastapi.responses import JSONResponse
 from urllib.parse import unquote
 from urllib3.exceptions import MaxRetryError, LocationValueError
+from dns.rdatatype import UnknownRdatatype
 
 import api.main
 from api.inspection.technology.response import APIResponse
 from api.inspection.inspection import Inspection, InvalidWebsiteException
+from api.dnslookup import DNSLookup
 from api.models.database import SessionLocal
 from api.models.requestcache import RequestCacheService
 from api.models.requests import RequestsService
-from api.schemas import infoSchema, inspectionSchema, invalidRequestSchema
+from api.schemas import infoSchema, inspectionSchema, dnsProbeSchema, dnsAcceptedSchema, invalidRequestSchema
 
 router = APIRouter()
 
@@ -71,3 +73,34 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 		return reply.asdict()
 
 	return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=reply.asdict())
+
+@router.get("/dns/{protocol}/{site_url:path}", tags=["dns"], response_model=dnsProbeSchema, responses={400: {"model": invalidRequestSchema}})
+async def dns_prober(protocol: str, site_url: str, response: Response) -> dict:
+	"""This endpoint will run a DNS check on the specified URL, and return the information collected from the lookup.
+	"""
+	success = True
+	message = ''
+
+	try:
+		probelook = DNSLookup().probe(protocol, site_url)
+	except UnknownRdatatype as e:
+		success = False
+		message = "The specified RR '%s' is either unsupported or does not exist." % protocol
+
+	if success == False:
+		return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"message": message})
+
+	if probelook.success == True:
+		return probelook.asdict()
+
+@router.get("/dns/protocols", tags=["dns"], response_model=dnsAcceptedSchema)
+async def dns_probe_option() -> dict:
+	"""Returns a list of supported protocol types that the API will accept.
+	"""
+	return {
+		'records': [
+			'A',
+			'CNAME',
+			'MX'
+		]
+	}

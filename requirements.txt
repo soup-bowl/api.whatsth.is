@@ -4,3 +4,4 @@ SQLAlchemy==1.4.34
 urllib3==1.26.8
 fastapi==0.75.0
 uvicorn==0.17.6
+dnspython==2.2.1

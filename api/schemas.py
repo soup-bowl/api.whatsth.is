@@ -26,3 +26,12 @@ class InfoCountSchema(BaseModel):
 class infoSchema(BaseModel):
 	success: bool = True
 	counts: InfoCountSchema
+
+class dnsProbeSchema(BaseModel):
+	success: bool = True
+	url: str
+	records: list
+
+class dnsAcceptedSchema(BaseModel):
+	success: bool = True
+	records: list
