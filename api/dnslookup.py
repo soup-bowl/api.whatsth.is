@@ -5,6 +5,7 @@ class DNSResult(object):
 	def __init__(self):
 		self._address = ''
 		self._priority = 0
+		self._text = []
 	
 	@property
 	def address(self) -> str:
@@ -14,6 +15,10 @@ class DNSResult(object):
 	def priority(self) -> int:
 		return self._priority
 	
+	@property
+	def text(self) -> tuple:
+		return self._text
+	
 	@address.setter
 	def address(self, address: str) -> None:
 		self._address = address
@@ -21,11 +26,16 @@ class DNSResult(object):
 	@priority.setter
 	def priority(self, p: int) -> None:
 		self._priority = p
+	
+	@text.setter
+	def text(self, text: tuple) -> None:
+		self._text = text
 
 	def asdict(self) -> dict:
 		return {
 			'address': self.address,
-			'priority': self.priority
+			'priority': self.priority,
+			'text': self.text
 		}
 
 class DNSResponse(object):
@@ -87,9 +97,13 @@ class DNSLookup(object):
 				# Definition for these - https://dnspython.readthedocs.io/en/latest/rdata-subclasses.html
 				if (protocol == 'A' or protocol == 'AAAA'):
 					segment.address = data.address
+				if (protocol == 'CNAME'):
+					segment.address = str(data.target)
 				elif (protocol == 'MX'):
 					segment.address  = str(data.exchange)
-					segment.priority = data.preference 
+					segment.priority = data.preference
+				elif (protocol == 'TXT'):
+					segment.text = data.strings
 				
 				respo.records.append(segment)
 
