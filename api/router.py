@@ -99,10 +99,11 @@ async def dns_probe_option() -> dict:
 	"""
 	return {
 		'records': [
-			'A',
-			'AAAA',
-			'CNAME',
-			'MX',
-			'TXT'
+			{ 'type': 'A',     'name': 'Address (IPv4)' },
+			{ 'type': 'AAAA',  'name': 'Address (IPv6)' },
+			{ 'type': 'CNAME', 'name': 'Canonical Name' },
+			{ 'type': 'MX',    'name': 'Mail Exchange' },
+			{ 'type': 'NS',    'name': 'Name Server' },
+			{ 'type': 'TXT',   'name': 'Text' }
 		]
 	}

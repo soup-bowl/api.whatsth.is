@@ -106,6 +106,8 @@ class DNSLookup(object):
 				elif (protocol == 'MX'):
 					segment.address  = str(data.exchange)
 					segment.priority = data.preference
+				elif (protocol == 'NS'):
+					segment.address = str(data.target)
 				elif (protocol == 'TXT'):
 					segment.text = data.strings
 

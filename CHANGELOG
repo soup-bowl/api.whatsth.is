@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Added
-- DNS lookup mode, with support for A, AAAA, CNAME, MX & TXT.
+- DNS lookup mode, with support for A, AAAA, CNAME, NS, MX & TXT.
 
 ## [0.2.2] (pre-release) - 2022-04-19
 ### Added
