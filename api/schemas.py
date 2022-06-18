@@ -35,6 +35,7 @@ class dnsProbeRecordSchema(BaseModel):
 class dnsProbeSchema(BaseModel):
 	success: bool = True
 	url: str
+	type: str
 	records: List[dnsProbeRecordSchema]
 
 class dnsAcceptedItemsSchema(BaseModel):

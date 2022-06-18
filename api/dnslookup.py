@@ -47,6 +47,7 @@ class DNSResponse(object):
 	def __init__(self):
 		self._success = False
 		self._url     = ''
+		self._type    = ''
 		self._records = []
 
 	@property
@@ -56,6 +57,10 @@ class DNSResponse(object):
 	@property
 	def url(self) -> str:
 		return self._url
+	
+	@property
+	def type(self) -> str:
+		return self._type
 
 	@property
 	def records(self) -> [DNSResult]:
@@ -68,6 +73,10 @@ class DNSResponse(object):
 	@url.setter
 	def url(self, url: str) -> None:
 		self._url = url
+	
+	@type.setter
+	def type(self, type: str) -> None:
+		self._type = type
 
 	@records.setter
 	def records(self, records: [DNSResult]) -> None:
@@ -81,13 +90,15 @@ class DNSResponse(object):
 		return {
 			'success': self.success,
 			'url': self.url,
+			'type': self.type,
 			'records': r,
 		}
 
 class DNSLookup(object):
 	def probe(self, protocol:str, url:str) -> DNSResponse:
 		respo = DNSResponse()
-		respo.url = parse_url(url).netloc
+		respo.url  = parse_url(url).netloc
+		respo.type = protocol
 
 		none_found = False
 		try:
