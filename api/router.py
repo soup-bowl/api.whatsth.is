@@ -66,7 +66,7 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 	except LocationValueError as e:
 		reply.success = False
 		reply.message = 'No URL specified'
-	
+
 	RequestsService(db).setInfo(reply.url)
 
 	if reply.success == True:

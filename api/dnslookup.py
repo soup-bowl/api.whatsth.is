@@ -6,27 +6,27 @@ class DNSResult(object):
 		self._address = ''
 		self._priority = 0
 		self._text = []
-	
+
 	@property
 	def address(self) -> str:
 		return self._address
-	
+
 	@property
 	def priority(self) -> int:
 		return self._priority
-	
+
 	@property
 	def text(self) -> tuple:
 		return self._text
-	
+
 	@address.setter
 	def address(self, address: str) -> None:
 		self._address = address
-	
+
 	@priority.setter
 	def priority(self, p: int) -> None:
 		self._priority = p
-	
+
 	@text.setter
 	def text(self, text: tuple) -> None:
 		self._text = text
@@ -43,11 +43,11 @@ class DNSResponse(object):
 		self._success = False
 		self._url     = ''
 		self._records = []
-	
+
 	@property
 	def success(self) -> bool:
 		return self._success
-	
+
 	@property
 	def url(self) -> str:
 		return self._url
@@ -89,8 +89,8 @@ class DNSLookup(object):
 			lookup = dns.resolver.resolve(url, protocol)
 		except NoAnswer:
 			none_found = True
-		
-		if not none_found: 
+
+		if not none_found:
 			for data in lookup:
 				segment = DNSResult()
 
@@ -104,7 +104,7 @@ class DNSLookup(object):
 					segment.priority = data.preference
 				elif (protocol == 'TXT'):
 					segment.text = data.strings
-				
+
 				respo.records.append(segment)
 
 		respo.success = True
