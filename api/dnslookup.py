@@ -57,7 +57,7 @@ class DNSResponse(object):
 	@property
 	def url(self) -> str:
 		return self._url
-	
+
 	@property
 	def type(self) -> str:
 		return self._type
@@ -73,7 +73,7 @@ class DNSResponse(object):
 	@url.setter
 	def url(self, url: str) -> None:
 		self._url = url
-	
+
 	@type.setter
 	def type(self, type: str) -> None:
 		self._type = type
