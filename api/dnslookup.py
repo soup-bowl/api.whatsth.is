@@ -1,4 +1,5 @@
 import dns.resolver
+from urllib3.util import parse_url
 from dns.resolver import NoAnswer
 
 class DNSResult(object):
@@ -39,7 +40,7 @@ class DNSResult(object):
 			rtn['priority'] = self.priority
 		if len(self.text) > 0:
 			rtn['text'] = self.text
-		
+
 		return rtn
 
 class DNSResponse(object):
@@ -86,11 +87,11 @@ class DNSResponse(object):
 class DNSLookup(object):
 	def probe(self, protocol:str, url:str) -> DNSResponse:
 		respo = DNSResponse()
-		respo.url = url
+		respo.url = parse_url(url).netloc
 
 		none_found = False
 		try:
-			lookup = dns.resolver.resolve(url, protocol)
+			lookup = dns.resolver.resolve(respo.url, protocol)
 		except NoAnswer:
 			none_found = True
 

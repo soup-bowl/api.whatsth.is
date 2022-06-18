@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from urllib.parse import unquote
 from urllib3.exceptions import MaxRetryError, LocationValueError
 from dns.rdatatype import UnknownRdatatype
+from dns.resolver import NXDOMAIN
 
 import api.main
 from api.inspection.technology.response import APIResponse
@@ -86,9 +87,12 @@ async def dns_prober(protocol: str, site_url: str, response: Response) -> dict:
 	except UnknownRdatatype as e:
 		success = False
 		message = "The specified RR '%s' is either unsupported or does not exist." % protocol
+	except NXDOMAIN as e:
+		success = False
+		message = "The requested URL does not exist."
 
 	if success == False:
-		return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"message": message})
+		return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"success": False, "message": message})
 
 	if probelook.success == True:
 		return probelook.asdict()
