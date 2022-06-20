@@ -32,7 +32,7 @@ app = FastAPI(
 		"name": "MIT",
 		"url": "https://github.com/soup-bowl/api.whatsth.is/blob/main/LICENSE",
 	},
-	version="0.2.2"
+	version="0.2.3"
 )
 
 app.add_middleware(
