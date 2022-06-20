@@ -103,11 +103,11 @@ async def dns_probe_option() -> dict:
 	"""
 	return {
 		'records': [
-			{ 'type': 'A',     'name': 'Address (IPv4)' },
-			{ 'type': 'AAAA',  'name': 'Address (IPv6)' },
+			{ 'type': 'A', 'name': 'Address (IPv4)' },
+			{ 'type': 'AAAA', 'name': 'Address (IPv6)' },
 			{ 'type': 'CNAME', 'name': 'Canonical Name' },
-			{ 'type': 'MX',    'name': 'Mail Exchange' },
-			{ 'type': 'NS',    'name': 'Name Server' },
-			{ 'type': 'TXT',   'name': 'Text' }
+			{ 'type': 'MX', 'name': 'Mail Exchange' },
+			{ 'type': 'NS', 'name': 'Name Server' },
+			{ 'type': 'TXT', 'name': 'Text' }
 		]
 	}

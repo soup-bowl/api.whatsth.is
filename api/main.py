@@ -6,7 +6,7 @@ from api import router
 from api.models.database import engine
 from api.config import Config
 
-def_url  = os.getenv('WTAPI_DEFINITION_URL', 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml')
+def_url = os.getenv('WTAPI_DEFINITION_URL', 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml')
 def_file = urllib3.PoolManager().request('GET', def_url)
 
 config = Config()
