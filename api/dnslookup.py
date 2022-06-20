@@ -46,8 +46,8 @@ class DNSResult(object):
 class DNSResponse(object):
 	def __init__(self):
 		self._success = False
-		self._url     = ''
-		self._type    = ''
+		self._url = ''
+		self._type = ''
 		self._records = []
 
 	@property
@@ -97,7 +97,7 @@ class DNSResponse(object):
 class DNSLookup(object):
 	def probe(self, protocol:str, url:str) -> DNSResponse:
 		respo = DNSResponse()
-		respo.url  = parse_url(url).netloc
+		respo.url = parse_url(url).netloc
 		respo.type = protocol
 
 		none_found = False

@@ -4,10 +4,10 @@ from api.inspection.inspection import InspectionResult
 
 class APIResponse(object):
 	def __init__(self):
-		self._success    = False
-		self._message    = ''
+		self._success = False
+		self._message = ''
 		self._inspection = None
-		self._url        = ''
+		self._url = ''
 
 	@property
 	def success(self) -> bool:

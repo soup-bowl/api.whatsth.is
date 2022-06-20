@@ -51,12 +51,12 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 	"""
 	site_url = unquote(site_url)
 
-	reply     = APIResponse()
+	reply = APIResponse()
 	reply.url = site_url if bool(re.search('^https?://.*', site_url)) else 'https://' + site_url
 
 	try:
-		inspector        = Inspection(url=reply.url, cache=RequestCacheService(db), config=api.main.config)
-		reply.success    = True
+		inspector = Inspection(url=reply.url, cache=RequestCacheService(db), config=api.main.config)
+		reply.success = True
 		reply.inspection = inspector.get_site_details().asdict()
 	except InvalidWebsiteException as e:
 		reply.success = False

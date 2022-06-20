@@ -3,10 +3,10 @@ from typing import Optional
 
 class WordPressIdentifier(object):
 	def __init__(self, url):
-		self.reply       = WordPress()
-		self.pm          = urllib3.PoolManager()
-		self.url         = url
-		self.response    = None
+		self.reply = WordPress()
+		self.pm = urllib3.PoolManager()
+		self.url = url
+		self.response = None
 		self.supports_v2 = False
 
 	def get(self):
@@ -24,9 +24,9 @@ class WordPressIdentifier(object):
 		if 'wp/v2' in self.response['namespaces']:
 			self.supports_v2 = True
 
-		self.reply.success  = True
-		self.reply.name     = self.response['name']
-		self.reply.tagline  = self.response['description']
+		self.reply.success = True
+		self.reply.name = self.response['name']
+		self.reply.tagline = self.response['description']
 		self.reply.timezone = self.response['timezone_string']
 
 		if self.supports_v2:
@@ -47,8 +47,8 @@ class WordPressIdentifier(object):
 			if len(response_posts['api'][0]) > 0:
 				post = Post()
 				post.title = response_posts['api'][0]['title']['rendered']
-				post.date  = response_posts['api'][0]['date']
-				post.url   = response_posts['api'][0]['link']
+				post.date = response_posts['api'][0]['date']
+				post.url = response_posts['api'][0]['link']
 
 				self.reply.latest_post = post
 
@@ -58,8 +58,8 @@ class WordPressIdentifier(object):
 			if len(response_pages['api'][0]) > 0:
 				page = Post()
 				page.title = response_pages['api'][0]['title']['rendered']
-				page.date  = response_pages['api'][0]['date']
-				page.url   = response_pages['api'][0]['link']
+				page.date = response_pages['api'][0]['date']
+				page.url = response_pages['api'][0]['link']
 
 				self.reply.latest_page = page
 
@@ -97,13 +97,13 @@ class WordPressIdentifier(object):
 
 class WordPress(object):
 	def __init__(self):
-		self._success     = False
-		self._name        = ''
-		self._tagline     = ''
-		self._timezone    = ''
-		self._post_count  = -1
-		self._page_count  = -1
-		self._cat_count   = -1
+		self._success = False
+		self._name = ''
+		self._tagline = ''
+		self._timezone = ''
+		self._post_count = -1
+		self._page_count = -1
+		self._cat_count = -1
 		self._latest_post = None
 		self._latest_page = None
 
@@ -195,8 +195,8 @@ class WordPress(object):
 class Post(object):
 	def __init__(self):
 		self._title = ''
-		self._date  = ''
-		self._url   = ''
+		self._date = ''
+		self._url = ''
 
 	@property
 	def title(self) -> str:

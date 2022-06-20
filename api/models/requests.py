@@ -7,10 +7,10 @@ from api.models.database import Base
 class Requests(Base):
 	__tablename__ = "requests"
 
-	id     = Column(Integer, primary_key=True, index=True)
+	id = Column(Integer, primary_key=True, index=True)
 	ipaddr = Column(String)
-	url    = Column(String)
-	time   = Column(DateTime)
+	url = Column(String)
+	time = Column(DateTime)
 
 class RequestsService(object):
 	def __init__(self, db: Session):
@@ -18,10 +18,10 @@ class RequestsService(object):
 	
 	def getRequestFrequency(self) -> dict:
 		return {
-			"week":    self.db.query(Requests).filter(Requests.time >= (datetime.now() - timedelta(days=7))  ).count(),
-			"month":   self.db.query(Requests).filter(Requests.time >= (datetime.now() - timedelta(days=30)) ).count(),
+			"week": self.db.query(Requests).filter(Requests.time >= (datetime.now() - timedelta(days=7))  ).count(),
+			"month": self.db.query(Requests).filter(Requests.time >= (datetime.now() - timedelta(days=30)) ).count(),
 			"quarter": self.db.query(Requests).filter(Requests.time >= (datetime.now() - timedelta(days=90)) ).count(),
-			"year":    self.db.query(Requests).filter(Requests.time >= (datetime.now() - timedelta(days=365))).count(),
+			"year": self.db.query(Requests).filter(Requests.time >= (datetime.now() - timedelta(days=365))).count(),
 		}
 
 	def setInfo(self, url: str) -> Requests:

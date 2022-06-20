@@ -4,10 +4,10 @@ from pathlib import Path
 
 class Config(object):
 	def __init__(self):
-		self.path    = None
+		self.path = None
 		self.content = None
-		self.loaded  = False
-		self.tmpdir  = ""
+		self.loaded = False
+		self.tmpdir = ""
 
 	def load_file(self, path: str) -> bool:
 		"""Load a detection json file into the system.
@@ -20,16 +20,16 @@ class Config(object):
 		"""
 
 		if exists( path ):
-			self.path    = path
+			self.path = path
 			self.content = json.loads( Path( path ).read_text() )
-			self.loaded  = True
+			self.loaded = True
 
 			return True
 		return False
 
 	def load_json(self, jsonfile:str) -> None:
 		self.content = json.loads( jsonfile )
-		self.loaded  = True
+		self.loaded = True
 
 	def load_yml(self, ymlfile:str) -> None:
 		self.content = yaml.safe_load( ymlfile )

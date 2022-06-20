@@ -8,12 +8,12 @@ from api.models.requestcache import RequestCacheService
 
 class InspectionResult(object):
 	def __init__(self):
-		self._name        = ''
-		self._technology  = 'Unknown'
-		self._matched_on  = []
+		self._name = ''
+		self._technology = 'Unknown'
+		self._matched_on = []
 		self._match_count = 0
 		self._match_total = 0
-		self._additional  = None
+		self._additional = None
 
 	@property
 	def name(self) -> str:
@@ -77,15 +77,15 @@ class InspectionResult(object):
 
 class Inspection(object):
 	def __init__(self, url: str, config: Config, cache: Optional[RequestCacheService] = None):
-		self.reply   = InspectionResult()
-		self.config  = config
-		self.cache   = cache if os.getenv('WTAPI_NO_CACHE', '0') == '0' else None
-		self.pm      = urllib3.PoolManager()
-		self.url     = url
+		self.reply = InspectionResult()
+		self.config = config
+		self.cache = cache if os.getenv('WTAPI_NO_CACHE', '0') == '0' else None
+		self.pm = urllib3.PoolManager()
+		self.url = url
 		self.headers = None
-		self.parsed  = None
+		self.parsed = None
 		# We set a browser-matched user agent as some sites use simple UA match to block the request.
-		self.ua      = "Mozilla/5.0 (Macintosh; Intel Mac OS X 12.2; rv:97.0) Gecko/20100101 Firefox/97.0"
+		self.ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 12.2; rv:97.0) Gecko/20100101 Firefox/97.0"
 
 	def get_site_details(self) -> InspectionResult:
 		"""Gets top-level website information by scraping the specified site HTML.
@@ -108,7 +108,7 @@ class Inspection(object):
 			raise InvalidWebsiteException(str(request.status) + " - Site did not respond with a successful connection.")
 
 		self.headers = request.headers
-		self.parsed  = html.fromstring(request.data)
+		self.parsed = html.fromstring(request.data)
 
 		self.get_title()
 		self.identify_cms()
@@ -155,7 +155,7 @@ class Inspection(object):
 
 			if self.reply.match_count > 0:
 				self.reply.match_total = (
-					len(checkpoints[cms]['body']) if 'body' in checkpoints[cms] else 0 + \
+					len(checkpoints[cms]['body']) if 'body' in checkpoints[cms] else 0 +
 					len(checkpoints[cms]['headers']) if 'headers' in checkpoints[cms] else 0
 				)
 				self.reply.technology = self.nicename(cms)
