@@ -1,6 +1,7 @@
 # What's This? API
 
 [![CodeFactor](https://www.codefactor.io/repository/github/soup-bowl/api.whatsth.is/badge)](https://www.codefactor.io/repository/github/soup-bowl/api.whatsth.is)
+[![GitPod](https://img.shields.io/badge/open%20in-GitPod-orange?logo=gitpod&logoColor=white)](https://gitpod.io/#https://github.com/soup-bowl/whatsth.is)
 
 **:warning: in active development, do not expect stability!**
 
