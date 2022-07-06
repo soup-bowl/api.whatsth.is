@@ -25,7 +25,8 @@ class InfoCountSchema(BaseModel):
 
 class infoSchema(BaseModel):
 	success: bool = True
-	counts: InfoCountSchema
+	api_version: str
+	inspection_usage: InfoCountSchema
 
 class dnsProbeRecordSchema(BaseModel):
 	address: Optional[str]

@@ -1,5 +1,5 @@
 import re
-from fastapi import APIRouter, Depends, Response, Header, status
+from fastapi import APIRouter, Depends, Response, Header, status, Request
 from fastapi.responses import JSONResponse
 from urllib.parse import unquote
 from urllib3.exceptions import MaxRetryError, LocationValueError
@@ -32,12 +32,13 @@ async def root():
 	}
 
 @router.get("/info", response_model=infoSchema)
-async def information(db: SessionLocal = Depends(get_db)):
-	"""Returns some rudimentary, anonymous usage data that the tool has collected for general interest.
+async def information(request: Request, db: SessionLocal = Depends(get_db)):
+	"""Returns some rudimentary server information, and anonymous usage data that the tool has collected for general interest.
 	"""
 	return {
 		"success": True,
-		"counts": RequestsService(db).getRequestFrequency(),
+		"api_version": request.app.version,
+		"inspection_usage": RequestsService(db).getRequestFrequency(),
 	}
 
 @router.get("/inspect/{site_url:path}", tags=["inspection"], response_model=inspectionSchema, responses={400: {"model": invalidRequestSchema}})
