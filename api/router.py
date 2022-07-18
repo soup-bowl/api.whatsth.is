@@ -12,7 +12,6 @@ from api.inspection.inspection import Inspection, InvalidWebsiteException
 from api.dnslookup import DNSLookup
 from api.models.database import SessionLocal
 from api.models.requestcache import RequestCacheService
-from api.models.requests import RequestsService
 from api.schemas import infoSchema, inspectionSchema, dnsProbeSchema, dnsAcceptedSchema, invalidRequestSchema
 
 router = APIRouter()
@@ -38,7 +37,6 @@ async def information(request: Request, db: SessionLocal = Depends(get_db)):
 	return {
 		"success": True,
 		"api_version": request.app.version,
-		"inspection_usage": RequestsService(db).getRequestFrequency(),
 	}
 
 @router.get("/inspect/{site_url:path}", tags=["inspection"], response_model=inspectionSchema, responses={400: {"model": invalidRequestSchema}})
@@ -68,8 +66,6 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 	except LocationValueError as e:
 		reply.success = False
 		reply.message = 'No URL specified'
-
-	RequestsService(db).setInfo(reply.url)
 
 	if reply.success == True:
 		return reply.asdict()

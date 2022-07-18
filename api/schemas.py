@@ -17,16 +17,9 @@ class invalidRequestSchema(BaseModel):
 	message: str = "No URL specified"
 	url: Optional[str]
 
-class InfoCountSchema(BaseModel):
-	week: int
-	month: int
-	quarter: int
-	year: int
-
 class infoSchema(BaseModel):
 	success: bool = True
 	api_version: str
-	inspection_usage: InfoCountSchema
 
 class dnsProbeRecordSchema(BaseModel):
 	address: Optional[str]
