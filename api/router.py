@@ -31,8 +31,8 @@ async def root():
 	}
 
 @router.get("/info", response_model=infoSchema)
-async def information(request: Request, db: SessionLocal = Depends(get_db)):
-	"""Returns some rudimentary server information, and anonymous usage data that the tool has collected for general interest.
+async def information(request: Request):
+	"""Returns some rudimentary server information.
 	"""
 	return {
 		"success": True,
