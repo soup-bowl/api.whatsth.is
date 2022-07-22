@@ -96,6 +96,7 @@ class DNSResponse(object):
 
 class DNSLookup(object):
 	def probe(self, protocol:str, url:str) -> DNSResponse:
+		protocol = protocol.upper()
 		respo = DNSResponse()
 		respo.url = parse_url(url).netloc
 		respo.type = protocol
