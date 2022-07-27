@@ -4,7 +4,6 @@ from typing import Any, Optional
 from api.config import Config
 
 from api.inspection.technology.wordpress import WordPressIdentifier
-from api.models.requestcache import RequestCacheService
 
 class InspectionResult(object):
 	def __init__(self):
@@ -76,10 +75,9 @@ class InspectionResult(object):
 		}
 
 class Inspection(object):
-	def __init__(self, url: str, config: Config, cache: Optional[RequestCacheService] = None):
+	def __init__(self, url: str, config: Config):
 		self.reply = InspectionResult()
 		self.config = config
-		self.cache = cache if os.getenv('WTAPI_NO_CACHE', '0') == '0' else None
 		self.pm = urllib3.PoolManager()
 		self.url = url
 		self.headers = None
@@ -96,11 +94,6 @@ class Inspection(object):
 		Returns:
 			InspectionResult: Detection results.
 		"""
-
-		if self.cache is not None:
-			cacheReply = self.cache.getCachedInspection(self.url)
-			if cacheReply is not None:
-				return cacheReply
 
 		request = self.pm.request('GET', self.url, headers={'User-Agent': self.ua})
 
@@ -123,9 +116,6 @@ class Inspection(object):
 					self.reply.additional = WordPressIdentifier(self.url + '/wp-json').get()
 				else:
 					pass
-
-		if self.cache is not None:
-			self.cache.setCachedInspection(self.url, self.reply)
 
 		return self.reply
 

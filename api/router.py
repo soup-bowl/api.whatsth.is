@@ -1,6 +1,8 @@
-import re
+import re, redis
+from typing import Optional
 from fastapi import APIRouter, Depends, Response, Header, status, Request
 from fastapi.responses import JSONResponse
+from os import getenv
 from urllib.parse import unquote
 from urllib3.exceptions import MaxRetryError, LocationValueError
 from dns.rdatatype import UnknownRdatatype
@@ -10,18 +12,9 @@ import api.main
 from api.inspection.technology.response import APIResponse
 from api.inspection.inspection import Inspection, InvalidWebsiteException
 from api.dnslookup import DNSLookup
-from api.models.database import SessionLocal
-from api.models.requestcache import RequestCacheService
 from api.schemas import infoSchema, inspectionSchema, dnsProbeSchema, dnsAcceptedSchema, invalidRequestSchema
 
 router = APIRouter()
-
-def get_db():
-	db = SessionLocal()
-	try:
-		yield db
-	finally:
-		db.close()
 
 @router.get("/", response_model=invalidRequestSchema)
 async def root():
@@ -40,7 +33,7 @@ async def information(request: Request):
 	}
 
 @router.get("/inspect/{site_url:path}", tags=["inspection"], response_model=inspectionSchema, responses={400: {"model": invalidRequestSchema}})
-async def inspect_site(site_url: str, response: Response, req_ip: str = Header(None, alias='X-Real-IP'), db: SessionLocal = Depends(get_db)) -> dict:
+async def inspect_site(site_url: str, response: Response, req_ip: str = Header(None, alias='X-Real-IP')) -> dict:
 	"""The specified URL will be in-turn called by the system. The system will then perform various inspections on the
 	response data and the connection to calculate what technology the website is running. In certain conditions, if the
 	site is detected to be using a known REST API, useful data will also be harvested from their endpoint.
@@ -54,7 +47,7 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 	reply.url = site_url if bool(re.search('^https?://.*', site_url)) else 'https://' + site_url
 
 	try:
-		inspector = Inspection(url=reply.url, cache=RequestCacheService(db), config=api.main.config)
+		inspector = Inspection(url=reply.url, config=api.main.config)
 		reply.success = True
 		reply.inspection = inspector.get_site_details().asdict()
 	except InvalidWebsiteException as e:

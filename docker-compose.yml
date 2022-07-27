@@ -1,5 +1,9 @@
 version: '3.6'
 services:
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+    - 8001:8001
   apiserver:
     build:
       context: .
@@ -7,3 +11,4 @@ services:
     - 43594:43594
     environment:
       WTAPI_CORS_POLICY: http://localhost:3000
+      REDIS_HOST: redis

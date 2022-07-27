@@ -1,9 +1,8 @@
-import urllib3, os, api.models.requestcache
+import urllib3, os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api import router
-from api.models.database import engine
 from api.config import Config
 
 def_url = os.getenv('WTAPI_DEFINITION_URL', 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml')
@@ -17,8 +16,6 @@ if def_file.status == 200:
 else:
 	print("Unable to download definitions file.")
 	exit(1)
-
-api.models.requestcache.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
 	title="What's This? API",
