@@ -1,7 +1,6 @@
 import urllib3, os
 from lxml import html
 from typing import Any, Optional
-from api.config import Config
 
 from api.inspection.technology.wordpress import WordPressIdentifier
 
@@ -75,7 +74,7 @@ class InspectionResult(object):
 		}
 
 class Inspection(object):
-	def __init__(self, url: str, config: Config):
+	def __init__(self, url: str, config: dict):
 		self.reply = InspectionResult()
 		self.config = config
 		self.pm = urllib3.PoolManager()
@@ -129,7 +128,7 @@ class Inspection(object):
 		"""Runs a header check & XPath scraping routine to the in-memory XML using the loaded-in detection config.
 		"""
 
-		checkpoints = self.config.get()['cms']
+		checkpoints = self.config['cms']
 		for cms in checkpoints:
 			if 'headers' in checkpoints[cms]:
 				for check in checkpoints[cms]['headers']:

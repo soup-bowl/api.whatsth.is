@@ -1,4 +1,4 @@
-import re, redis, json
+import re, redis, json, yaml, urllib3
 from typing import Optional
 from fastapi import APIRouter, Depends, Response, Header, status, Request
 from fastapi.responses import JSONResponse
@@ -42,8 +42,26 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 	This is request-intensive, and results in a slow repsonse currently. To counter this, a caching engine is used to
 	serve repeat requests with the same data.
 	"""
+
+	# Check for inspection instructions, and reloads them if they've expired.
+	defs = None
+	has_defs = await main.app.state.rcache.get_value('InspectionDefs')
+	if has_defs is None:
+		def_url = getenv('WTAPI_DEFINITION_URL', 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml')
+		def_file = urllib3.PoolManager().request('GET', def_url)
+		if def_file.status == 200:
+			print("Loaded latest definition file from GitHub.")
+			resp = def_file.data.decode('utf-8')
+			defs = yaml.safe_load(resp)
+			await main.app.state.rcache.set_value('InspectionDefs', resp, 2629800)
+		else:
+			print("Unable to download definitions file.")
+	else:
+		defs = yaml.safe_load(has_defs)
+	
 	site_url = unquote(site_url)
 
+	# Check for an existing cached version and return that.
 	cache_contents = await main.app.state.rcache.get_value('InspectionCache-' + site_url)
 	if cache_contents is not None:
 		return json.loads(cache_contents)
@@ -52,7 +70,7 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 		reply.url = site_url if bool(re.search('^https?://.*', site_url)) else 'https://' + site_url
 
 		try:
-			inspector = Inspection(url=reply.url, config=main.config)
+			inspector = Inspection(url=reply.url, config=defs)
 			reply.success = True
 			reply.inspection = inspector.get_site_details().asdict()
 		except InvalidWebsiteException as e:

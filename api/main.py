@@ -1,22 +1,9 @@
-import urllib3, os
+from os import getenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api import router
-from api.config import Config
 from api.redis import init_redis_pool, CacheService
-
-def_url = os.getenv('WTAPI_DEFINITION_URL', 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml')
-def_file = urllib3.PoolManager().request('GET', def_url)
-
-config = Config()
-
-if def_file.status == 200:
-	print("Loaded latest definition file from GitHub.")
-	config.load_yml( def_file.data.decode('utf-8') )
-else:
-	print("Unable to download definitions file.")
-	exit(1)
 
 app = FastAPI(
 	title="What's This? API",
@@ -35,7 +22,7 @@ app = FastAPI(
 
 app.add_middleware(
 	CORSMiddleware,
-	allow_origins=[os.getenv('WTAPI_CORS_POLICY', "*")],
+	allow_origins=[getenv('WTAPI_CORS_POLICY', "*")],
 	allow_credentials=True,
 	allow_methods=["*"],
 	allow_headers=["*"],
