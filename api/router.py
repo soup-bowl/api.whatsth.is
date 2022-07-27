@@ -1,4 +1,4 @@
-import re, redis
+import re, redis, json
 from typing import Optional
 from fastapi import APIRouter, Depends, Response, Header, status, Request
 from fastapi.responses import JSONResponse
@@ -8,7 +8,7 @@ from urllib3.exceptions import MaxRetryError, LocationValueError
 from dns.rdatatype import UnknownRdatatype
 from dns.resolver import NXDOMAIN
 
-import api.main
+from api import main
 from api.inspection.technology.response import APIResponse
 from api.inspection.inspection import Inspection, InvalidWebsiteException
 from api.dnslookup import DNSLookup
@@ -27,6 +27,7 @@ async def root():
 async def information(request: Request):
 	"""Returns some rudimentary server information.
 	"""
+	print()
 	return {
 		"success": True,
 		"api_version": request.app.version,
@@ -43,27 +44,33 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 	"""
 	site_url = unquote(site_url)
 
-	reply = APIResponse()
-	reply.url = site_url if bool(re.search('^https?://.*', site_url)) else 'https://' + site_url
+	cache_contents = await main.app.state.rcache.get_value('InspectionCache-' + site_url)
+	if cache_contents is not None:
+		return json.loads(cache_contents)
+	else:
+		reply = APIResponse()
+		reply.url = site_url if bool(re.search('^https?://.*', site_url)) else 'https://' + site_url
 
-	try:
-		inspector = Inspection(url=reply.url, config=api.main.config)
-		reply.success = True
-		reply.inspection = inspector.get_site_details().asdict()
-	except InvalidWebsiteException as e:
-		reply.success = False
-		reply.message = str(e)
-	except MaxRetryError as e:
-		reply.success = False
-		reply.message = 'Invalid URL or permission denied'
-	except LocationValueError as e:
-		reply.success = False
-		reply.message = 'No URL specified'
+		try:
+			inspector = Inspection(url=reply.url, config=main.config)
+			reply.success = True
+			reply.inspection = inspector.get_site_details().asdict()
+		except InvalidWebsiteException as e:
+			reply.success = False
+			reply.message = str(e)
+		except MaxRetryError as e:
+			reply.success = False
+			reply.message = 'Invalid URL or permission denied'
+		except LocationValueError as e:
+			reply.success = False
+			reply.message = 'No URL specified'
 
-	if reply.success == True:
-		return reply.asdict()
+		if reply.success == True:
+			cache_contents = await main.app.state.rcache.set_value('InspectionCache-' + site_url, json.dumps(reply.asdict()))
+			return reply.asdict()
+		
 
-	return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=reply.asdict())
+		return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=reply.asdict())
 
 @router.get("/dns/{protocol}/{site_url:path}", tags=["dns"], response_model=dnsProbeSchema, responses={400: {"model": invalidRequestSchema}})
 async def dns_prober(protocol: str, site_url: str, response: Response) -> dict:

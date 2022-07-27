@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api import router
 from api.config import Config
+from api.redis import init_redis_pool, CacheService
 
 def_url = os.getenv('WTAPI_DEFINITION_URL', 'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml')
 def_file = urllib3.PoolManager().request('GET', def_url)
@@ -41,3 +42,12 @@ app.add_middleware(
 )
 
 app.include_router(router.router)
+
+@app.on_event("startup")
+async def startup_event():
+	app.state.redis = await init_redis_pool()
+	app.state.rcache = CacheService(app.state.redis)
+
+@app.on_event("shutdown")
+async def shutdown_event():
+	await app.state.redis.close()
