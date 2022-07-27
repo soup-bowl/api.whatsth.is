@@ -66,7 +66,7 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 			reply.message = 'No URL specified'
 
 		if reply.success == True:
-			cache_contents = await main.app.state.rcache.set_value('InspectionCache-' + site_url, json.dumps(reply.asdict()))
+			cache_contents = await main.app.state.rcache.set_value('InspectionCache-' + site_url, json.dumps(reply.asdict()), 86400)
 			return reply.asdict()
 		
 
@@ -76,23 +76,29 @@ async def inspect_site(site_url: str, response: Response, req_ip: str = Header(N
 async def dns_prober(protocol: str, site_url: str, response: Response) -> dict:
 	"""This endpoint will run a DNS check on the specified URL, and return the information collected from the lookup.
 	"""
-	success = True
-	message = ''
 
-	try:
-		probelook = DNSLookup().probe(protocol, site_url)
-	except UnknownRdatatype as e:
-		success = False
-		message = "The specified RR '%s' is either unsupported or does not exist." % protocol
-	except NXDOMAIN as e:
-		success = False
-		message = "The requested URL does not exist."
+	cache_contents = await main.app.state.rcache.get_value('DnsCache-' + site_url)
+	if cache_contents is not None:
+		return json.loads(cache_contents)
+	else:
+		success = True
+		message = ''
 
-	if success == False:
-		return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"success": False, "message": message})
+		try:
+			probelook = DNSLookup().probe(protocol, site_url)
+		except UnknownRdatatype as e:
+			success = False
+			message = "The specified RR '%s' is either unsupported or does not exist." % protocol
+		except NXDOMAIN as e:
+			success = False
+			message = "The requested URL does not exist."
 
-	if probelook.success == True:
-		return probelook.asdict()
+		if success == False:
+			return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"success": False, "message": message})
+
+		if probelook.success == True:
+			cache_contents = await main.app.state.rcache.set_value('DnsCache-' + site_url, json.dumps(probelook.asdict()))
+			return probelook.asdict()
 
 @router.get("/dns/protocols", tags=["dns"], response_model=dnsAcceptedSchema)
 async def dns_probe_option() -> dict:

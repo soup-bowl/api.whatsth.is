@@ -1,4 +1,5 @@
 from os import getenv
+from typing import Optional
 import redis.asyncio as redis
 
 async def init_redis_pool() -> redis.Redis:
@@ -17,5 +18,5 @@ class CacheService:
 	async def get_value(self, key: str):
 		return await self._redis.get(key)
 	
-	async def set_value(self, key: str, value: str, timeout: int = 2592000):
+	async def set_value(self, key: str, value: str, timeout: Optional[int] = None):
 		return await self._redis.set(key, value, ex=timeout)
