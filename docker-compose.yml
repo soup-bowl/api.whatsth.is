@@ -11,4 +11,4 @@ services:
     - 43594:43594
     environment:
       WTAPI_CORS_POLICY: http://localhost:3000
-      REDIS_HOST: redis
+      REDIS_URL: redis://redis
