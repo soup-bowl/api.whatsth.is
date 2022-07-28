@@ -30,6 +30,7 @@ You can over-ride the default API settings using environmental variables.
 
 Environmental Key      | Default                   | Purpose
 -----------------------|---------------------------|--------
+`REDIS_URL`            | *None (required)*         | Caching & storage agent. 
 `WTAPI_DEFINITION_URL` | [Latest definitions][def] | Can provide a different YAML or JSON source for the detection definitions.
 `WTAPI_CORS_POLICY`    | `*`                       | Define a forced origin. Only supports **1 origin** at the moment.
 `WTAPI_NO_CACHE`       | 0                         | When set to 1, the cache is bypassed & disabled.
