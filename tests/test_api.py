@@ -1,15 +1,10 @@
+import unittest, json
 from api.inspection.inspection import Inspection
-from api.config import Config
-
-import unittest
 
 class StatChecks(unittest.TestCase):
 	@classmethod
 	def setUpClass(self):
-		self.config = Config()
-		self.config.load_json(
-			'{"cms":{"wordpress":{"body":["/html/head/link[@href=\'//s.w.org\']"]}}}'
-		)
+		self.config = json.loads('{"cms":{"wordpress":{"body":["/html/head/link[@href=\'//s.w.org\']"]}}}')
 
 	def test_generic_detections(self):
 		"""Checks the definitions of the checks.
