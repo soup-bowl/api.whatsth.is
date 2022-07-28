@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Latest
 ### Changed
-- Redis cache replaces SQLite to speed up repetitive requests.
+- Redis cache used for caching responses and the inspection ruleset.
 
 ### Fixed
 - Lowercase method to DNS endpoint no longer returns null data.
