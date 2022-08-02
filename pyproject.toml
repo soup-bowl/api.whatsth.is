@@ -1,0 +1,11 @@
+[tool.pylint.format]
+indent-string = "\t"
+max-line-length = 120
+
+[tool.pylint.design]
+max-attributes = 10
+
+[tool.pylint.logging]
+# E0401 - Doesn't seem to work for me.
+# R0902-R0903 - I don't understand why this is 'bad'?
+disable = ["E0401", "R0902", "R0903"]

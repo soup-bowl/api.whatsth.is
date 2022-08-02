@@ -1,10 +1,16 @@
-import urllib3, json
-from typing import Optional
+"""Additional inspection capabilites for WordPress instances.
+"""
 
-class WordPressIdentifier(object):
+import json
+from typing import Optional
+import urllib3
+
+class WordPressIdentifier():
+	"""Wordpress-specific interaction functionality.
+	"""
 	def __init__(self, url):
 		self.reply = WordPress()
-		self.pm = urllib3.PoolManager()
+		self.pool_manager = urllib3.PoolManager()
 		self.url = url
 		self.response = None
 		self.supports_v2 = False
@@ -15,7 +21,7 @@ class WordPressIdentifier(object):
 		Returns:
 			WordPress: Returns a WordPress object constructed from the class-defined URL.
 		"""
-		request = self.pm.request('GET', self.url)
+		request = self.pool_manager.request('GET', self.url)
 
 		if request.status != 200:
 			return self.reply
@@ -81,7 +87,7 @@ class WordPressIdentifier(object):
 		Returns:
 			Optional[dict]: 'headers' is a list of headers, and 'api' is JSON content. None if an error occurs.
 		"""
-		request = self.pm.request('GET', url)
+		request = self.pool_manager.request('GET', url)
 		if request.status != 200:
 			return None
 
@@ -95,7 +101,9 @@ class WordPressIdentifier(object):
 
 		return data
 
-class WordPress(object):
+class WordPress():
+	"""WordPress object
+	"""
 	def __init__(self):
 		self._success = False
 		self._name = ''
@@ -109,77 +117,172 @@ class WordPress(object):
 
 	@property
 	def success(self) -> bool:
+		"""Success property.
+
+		Returns:
+			[bool]: Returns the success.
+		"""
 		return self._success
 
 	@property
 	def name(self) -> str:
+		"""Name property.
+
+		Returns:
+			[str]: Returns the name.
+		"""
 		return self._name
 
 	@property
 	def tagline(self) -> str:
+		"""Tagline property.
+
+		Returns:
+			[str]: Returns the tagline.
+		"""
 		return self._tagline
 
 	@property
 	def timezone(self) -> str:
+		"""Time zone property.
+
+		Returns:
+			[str]: Returns the time zone.
+		"""
 		return self._timezone
 
 	@property
 	def post_count(self) -> int:
+		"""Post count property.
+
+		Returns:
+			[int]: Returns the post count.
+		"""
 		return self._post_count
 
 	@property
 	def page_count(self) -> int:
+		"""page count property.
+
+		Returns:
+			[int]: Returns the page count.
+		"""
 		return self._page_count
 
 	@property
 	def cat_count(self) -> int:
+		"""Category count property.
+
+		Returns:
+			[int]: Returns the category count.
+		"""
 		return self._cat_count
 
 	@property
 	def latest_post(self):
+		"""Latest post property.
+
+		Returns:
+			[Post]: Returns the latest post.
+		"""
 		return self._latest_post
 
 	@property
 	def latest_page(self):
+		"""Latest page property.
+
+		Returns:
+			[Post]: Returns the latest page.
+		"""
 		return self._latest_page
 
 	@success.setter
 	def success(self, state) -> None:
+		"""Success property.
+
+		Args:
+			success (bool): Sets the success.
+		"""
 		self._success = state
 
 	@name.setter
 	def name(self, name: str) -> None:
+		"""Name property.
+
+		Args:
+			name (str): Sets the name.
+		"""
 		self._name = name
 
 	@tagline.setter
 	def tagline(self, tagline: str) -> None:
+		"""Tagline property.
+
+		Args:
+			tagline (str): Sets the tag line.
+		"""
 		self._tagline = tagline
 
 	@timezone.setter
 	def timezone(self, timezone: str) -> None:
+		"""Time zone property.
+
+		Args:
+			timezone (str): Sets the timezone.
+		"""
 		self._timezone = timezone
 
 	@post_count.setter
 	def post_count(self, count: int) -> None:
+		"""Post count property.
+
+		Args:
+			count (str): Sets the post count.
+		"""
 		self._post_count = count
 
 	@page_count.setter
 	def page_count(self, count: int) -> None:
+		"""Page count property.
+
+		Args:
+			count (str): Sets the page count.
+		"""
 		self._page_count = count
 
 	@cat_count.setter
 	def cat_count(self, count: int) -> None:
+		"""Category count property.
+
+		Args:
+			count (str): Sets the post category.
+		"""
 		self._cat_count = count
 
 	@latest_post.setter
 	def latest_post(self, post) -> None:
+		"""Post property.
+
+		Args:
+			post (Post): Sets the post.
+		"""
 		self._latest_post = post
 
 	@latest_page.setter
 	def latest_page(self, page) -> None:
+		"""Page property.
+
+		Args:
+			page (Post): Sets the page.
+		"""
 		self._latest_page = page
 
 	def asdict(self) -> dict:
+		"""Converts the Python object into a generic dictionary.
+
+		Returns:
+			[dict]: Generic dictionary representation.
+		"""
 		return {
 			'success': self.success,
 			'name': self.name,
@@ -192,7 +295,9 @@ class WordPress(object):
 			'latest_page': self.latest_page.asdict() if self.latest_page is not None else None,
 		}
 
-class Post(object):
+class Post():
+	"""WordPress post object.
+	"""
 	def __init__(self):
 		self._title = ''
 		self._date = ''
@@ -200,29 +305,64 @@ class Post(object):
 
 	@property
 	def title(self) -> str:
+		"""Title property.
+
+		Returns:
+			[str]: Returns the title.
+		"""
 		return self._title
 
 	@property
 	def date(self) -> str:
+		"""Date property.
+
+		Returns:
+			[str]: Returns the date.
+		"""
 		return self._date
 
 	@property
 	def url(self) -> str:
+		"""URL property.
+
+		Returns:
+			[str]: Returns the URL.
+		"""
 		return self._url
 
 	@title.setter
 	def title(self, title: str) -> None:
+		"""Title property.
+
+		Args:
+			title (str): Sets the title.
+		"""
 		self._title = title
 
 	@date.setter
 	def date(self, date: str) -> None:
+		"""Date property.
+
+		Args:
+			date (str): Sets the date.
+		"""
 		self._date = date
 
 	@url.setter
 	def url(self, url: str) -> None:
+		"""URL property.
+
+		Args:
+			url (str): Sets the URL.
+		"""
 		self._url = url
 
 	def asdict(self) -> dict:
+		"""Converts the Python object into a generic dictionary.
+
+		Returns:
+			[dict]: Generic dictionary representation.
+		"""
 		return {
 			'title': self.title,
 			'date': self.date,

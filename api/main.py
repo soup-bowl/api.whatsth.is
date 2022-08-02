@@ -1,3 +1,6 @@
+"""Main FastAPI runner.
+"""
+
 from os import getenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,9 +35,13 @@ app.include_router(router.router)
 
 @app.on_event("startup")
 async def startup_event():
+	"""Events to initiate on the beginning of the API.
+	"""
 	app.state.redis = await init_redis_pool()
 	app.state.rcache = CacheService(app.state.redis)
 
 @app.on_event("shutdown")
 async def shutdown_event():
+	"""Disposal events after the API goes down.
+	"""
 	await app.state.redis.close()

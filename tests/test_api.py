@@ -1,9 +1,15 @@
-import unittest, json
+"""tests
+"""
+
+import json
+import unittest
 from api.inspection.inspection import Inspection
 
 class StatChecks(unittest.TestCase):
 	@classmethod
 	def setUpClass(self):
+		"""Temp.
+		"""
 		self.config = json.loads('{"cms":{"wordpress":{"body":["/html/head/link[@href=\'//s.w.org\']"]}}}')
 
 	def test_generic_detections(self):

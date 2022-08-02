@@ -63,5 +63,7 @@ Now the server can begin (when in the virtual env) by running `uvicorn api.main:
 
 To run the unit tests, install `pytest` (`pip install pytest`) and run `pytest`.
 
+To lint the codebase, run `pylint` (`pip install pylint`) by executing `pylint --recursive=y api`.
+
 [fnt]: https://github.com/soup-bowl/whatsth.is
 [def]: https://gist.github.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1#file-definitions-yml
