@@ -1,14 +1,20 @@
-FROM python:3-alpine
+FROM python:3-slim
+
+LABEL org.opencontainers.image.title="What's This API"
+LABEL org.opencontainers.image.authors="code@soupbowl.io"
+LABEL org.opencontainers.image.source="https://github.com/soup-bowl/api.whatsth.is"
+LABEL org.opencontainers.image.licenses="MIT"
 
 WORKDIR /usr/src/app
 
-COPY requirements.txt ./
+RUN pip install --no-cache-dir poetry
 
-RUN apk add --no-cache yaml-dev && \
-	pip install --no-cache-dir -r requirements.txt && \
-	pip install --no-cache-dir gunicorn
+COPY pyproject.toml pyproject.toml
+COPY poetry.lock    poetry.lock
+COPY api            api
 
-COPY api api
+RUN poetry config virtualenvs.create false \
+	&& poetry install --no-dev --no-interaction --no-ansi
 
 EXPOSE 43594
 
