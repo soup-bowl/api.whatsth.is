@@ -13,9 +13,8 @@ COPY pyproject.toml pyproject.toml
 COPY poetry.lock    poetry.lock
 COPY api            api
 
-RUN poetry config virtualenvs.create false \
-	&& poetry install --no-dev --no-interaction --no-ansi
+RUN poetry install --no-dev --no-interaction --no-ansi
 
 EXPOSE 43594
 
-ENTRYPOINT ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:43594", "api.main:app"]
+ENTRYPOINT ["poetry", "run", "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:43594", "api.main:app"]
