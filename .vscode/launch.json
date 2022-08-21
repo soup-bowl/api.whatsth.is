@@ -12,16 +12,6 @@
 			"args": ["api.main:app", "--reload", "--port", "43594"]
 		},
 		{
-			"name": "Python: Debug Webserver (no cache)",
-			"type": "python",
-			"request": "launch",
-			"module": "uvicorn",
-			"args": ["api.main:app", "--reload", "--port", "43594"],
-			"env": {
-				"WTAPI_NO_CACHE": "1"
-			}
-		},
-		{
 			"name": "Python: Debug Tests",
 			"type": "python",
 			"request": "launch",
