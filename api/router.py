@@ -132,7 +132,7 @@ async def dns_prober(protocol: str, site_url: str) -> dict:
 		cache_contents = await main.app.state.rcache.set_value(
 			f"DnsCache-[{protocol}]{site_url}",
 			json.dumps(probelook.asdict()),
-			86400
+			1800
 		)
 
 		return probelook.asdict()
