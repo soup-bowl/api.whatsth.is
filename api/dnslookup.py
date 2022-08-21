@@ -98,7 +98,9 @@ class DNSResult():
 		if self.priority > 0:
 			rtn['priority'] = self.priority
 		if len(self.text) > 0:
-			rtn['text'] = self.text
+			rtn['text'] = []
+			for text in self.text:
+				rtn['text'].append(text.decode('UTF-8'))
 		rtn['ttl'] = self.ttl
 
 		return rtn
