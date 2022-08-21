@@ -71,7 +71,7 @@ async def inspect_site(site_url: str) -> dict:
 	site_url = unquote(site_url)
 
 	# Check for an existing cached version and return that.
-	cache_contents = await main.app.state.rcache.get_value('InspectionCache-' + site_url)
+	cache_contents = await main.app.state.rcache.get_value(f"InspectionCache-{site_url}".lower())
 	if cache_contents is not None:
 		return json.loads(cache_contents)
 
@@ -94,7 +94,7 @@ async def inspect_site(site_url: str) -> dict:
 
 	if reply.success is True:
 		cache_contents = await main.app.state.rcache.set_value(
-			'InspectionCache-' + site_url,
+			f"InspectionCache-{site_url}".lower(),
 			json.dumps(reply.asdict()),
 			86400
 		)
@@ -109,7 +109,7 @@ async def dns_prober(protocol: str, site_url: str) -> dict:
 	"""This endpoint will run a DNS check on the specified URL, and return the information collected from the lookup.
 	"""
 
-	cache_contents = await main.app.state.rcache.get_value(f"DnsCache-[{protocol}]{site_url}")
+	cache_contents = await main.app.state.rcache.get_value(f"DnsCache-[{protocol}]{site_url}".lower())
 	if cache_contents is not None:
 		return json.loads(cache_contents)
 
@@ -130,7 +130,7 @@ async def dns_prober(protocol: str, site_url: str) -> dict:
 
 	if probelook.success is True:
 		cache_contents = await main.app.state.rcache.set_value(
-			f"DnsCache-[{protocol}]{site_url}",
+			f"DnsCache-[{protocol}]{site_url}".lower(),
 			json.dumps(probelook.asdict()),
 			1800
 		)

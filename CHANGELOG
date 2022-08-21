@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Expiry time set for redis DNS values.
 - Distinction for DNS redis to stop protocol caches interfering.
+- Redis key changes to avoid double-caching.
 
 ## [0.2.5] - 2022-07-28
 Due to human error, this version identifies as 0.2.4 in the released API.
