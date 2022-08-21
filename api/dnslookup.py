@@ -226,27 +226,49 @@ class DNSLookup():
 
 		if not none_found:
 			for data in lookup:
-				segment = DNSResult()
+				segment = self._segment_response(protocol, data)
 				segment.ttl = lookup.ttl
-
-				# Definition for these - https://dnspython.readthedocs.io/en/latest/rdata-subclasses.html
-				if protocol in ('A', 'AAAA'):
-					segment.address = data.address
-				elif protocol in ('CNAME', 'NS'):
-					segment.address = str(data.target)
-				elif protocol == 'MX':
-					segment.address = str(data.exchange)
-					segment.priority = data.preference
-				elif protocol == 'TXT':
-					segment.text = data.strings
 
 				respo.records.append(segment)
 
 		respo.success = True
 
 		return respo
+	
+	def _segment_response(self, protocol:str, data) -> DNSResult:
+		"""Stores the response DNS data into the relevant data fields.
+
+		Args:
+			protocol (str): DNS Record type to lookup.
+			data (any): Data from the dnspython lookup.
+		
+		Returns:
+			DNSResult: DNS result object.
+		"""
+		segment = DNSResult()
+
+		# Definition for these - https://dnspython.readthedocs.io/en/latest/rdata-subclasses.html
+		if protocol in ('A', 'AAAA'):
+			segment.address = data.address
+		elif protocol in ('CNAME', 'NS'):
+			segment.address = str(data.target)
+		elif protocol == 'MX':
+			segment.address = str(data.exchange)
+			segment.priority = data.preference
+		elif protocol == 'TXT':
+			segment.text = data.strings
+			
+		return segment
 
 	def _discover_nameserver(self, url:str) -> list:
+		"""Discover the nameserver of a domain.
+
+		Args:
+			url (str): Domain to check the records of.
+		
+		Returns:
+			list: List of nameservers.
+		"""
 		topdom = '.'.join(url.split('.')[-2:])
 
-		return dns.resolver.query(topdom,'NS')
+		return dns.resolver.query(topdom, 'NS')
