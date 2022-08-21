@@ -12,6 +12,7 @@ class DNSResult():
 		self._address = ''
 		self._priority = 0
 		self._text = []
+		self._ttl = 0
 
 	@property
 	def address(self) -> str:
@@ -40,6 +41,15 @@ class DNSResult():
 		"""
 		return self._text
 
+	@property
+	def ttl(self) -> int:
+		"""ttl (time to live) property.
+
+		Returns:
+			[int]: Returns the time to live.
+		"""
+		return self._ttl
+
 	@address.setter
 	def address(self, address: str) -> None:
 		"""Address property.
@@ -67,6 +77,15 @@ class DNSResult():
 		"""
 		self._text = text
 
+	@ttl.setter
+	def ttl(self, ttl: int) -> None:
+		"""ttl (time to live) property.
+
+		Args:
+			ttl (int): Sets the ttl.
+		"""
+		self._ttl = ttl
+
 	def asdict(self) -> dict:
 		"""Converts the Python object into a generic dictionary.
 
@@ -80,6 +99,7 @@ class DNSResult():
 			rtn['priority'] = self.priority
 		if len(self.text) > 0:
 			rtn['text'] = self.text
+		rtn['ttl'] = self.ttl
 
 		return rtn
 
@@ -207,6 +227,7 @@ class DNSLookup():
 		if not none_found:
 			for data in lookup:
 				segment = DNSResult()
+				segment.ttl = lookup.ttl
 
 				# Definition for these - https://dnspython.readthedocs.io/en/latest/rdata-subclasses.html
 				if protocol in ('A', 'AAAA'):
@@ -224,3 +245,8 @@ class DNSLookup():
 		respo.success = True
 
 		return respo
+
+	def _discover_nameserver(self, url:str) -> list:
+		topdom = '.'.join(url.split('.')[-2:])
+
+		return dns.resolver.query(topdom,'NS')

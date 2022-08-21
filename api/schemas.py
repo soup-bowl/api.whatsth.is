@@ -43,6 +43,7 @@ class DNSProbeRecordSchema(BaseModel):
 	address: Optional[str]
 	priority: Optional[int]
 	text: Optional[tuple]
+	ttl: Optional[int]
 
 class DNSProbeSchema(BaseModel):
 	"""DNS API schema.

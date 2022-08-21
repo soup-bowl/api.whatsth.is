@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Latest
+### Changed
+- DNS lookup now attempts to show time to live (TTL) stat.
+
 ### Fixed
 - Expiry time set for redis DNS values.
 - Distinction for DNS redis to stop protocol caches interfering.
