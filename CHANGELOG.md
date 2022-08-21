@@ -76,9 +76,12 @@ Due to human error, this version identifies as 0.2.4 in the released API.
 ### Added
 - Everything (initial release).
 
-[unrld]: https://github.com/soup-bowl/api.whatsth.is/compare/v0.1.0...HEAD
-[0.2.2]: https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.2.2
-[0.2.1]: https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.2.1
-[0.2.0]: https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.2.0
-[0.1.1]: https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.1.1
-[0.1.0]: https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.1.0
+[0.2.5]:   https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.2.5
+[0.2.4]:   https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.2.4
+[0.2.3]:   https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.2.3
+[0.2.2]:   https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.2.2
+[0.2.1.1]: https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.2.1.1
+[0.2.1]:   https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.2.1
+[0.2.0]:   https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.2.0
+[0.1.1]:   https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.1.1
+[0.1.0]:   https://github.com/soup-bowl/api.whatsth.is/releases/tag/0.1.0
