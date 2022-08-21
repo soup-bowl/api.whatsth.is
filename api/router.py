@@ -109,7 +109,7 @@ async def dns_prober(protocol: str, site_url: str) -> dict:
 	"""This endpoint will run a DNS check on the specified URL, and return the information collected from the lookup.
 	"""
 
-	cache_contents = await main.app.state.rcache.get_value('DnsCache-' + site_url)
+	cache_contents = await main.app.state.rcache.get_value(f"DnsCache-[{protocol}]{site_url}")
 	if cache_contents is not None:
 		return json.loads(cache_contents)
 
@@ -130,8 +130,9 @@ async def dns_prober(protocol: str, site_url: str) -> dict:
 
 	if probelook.success is True:
 		cache_contents = await main.app.state.rcache.set_value(
-			'DnsCache-' + site_url,
-			json.dumps(probelook.asdict())
+			f"DnsCache-[{protocol}]{site_url}",
+			json.dumps(probelook.asdict()),
+			86400
 		)
 
 		return probelook.asdict()
