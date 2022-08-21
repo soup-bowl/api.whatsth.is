@@ -10,7 +10,7 @@ class StatChecks(unittest.TestCase):
 	def setUpClass(self):
 		"""Temp.
 		"""
-		self.config = json.loads('{"cms":{"wordpress":{"body":["/html/head/link[@href=\'//s.w.org\']"]}}}')
+		self.config = json.loads('{"cms":{"wordpress":{"body":["/html/head/link[@href=\'//v0.wordpress.com\']"]}}}')
 
 	def test_generic_detections(self):
 		"""Checks the definitions of the checks.
