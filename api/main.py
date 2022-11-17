@@ -31,7 +31,7 @@ app = FastAPI(
 		"syntaxHighlight.theme": "monokai"
 	},
 	redoc_url=None,
-	version="0.2.7"
+	version="0.2.7.1"
 )
 
 app.add_middleware(

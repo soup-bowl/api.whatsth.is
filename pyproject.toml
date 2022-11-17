@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "api.whatsth.is"
-version = "0.2.7"
+version = "0.2.7.1"
 description = "Website inspector backend built in Python."
 authors = ["soup-bowl <code@soupbowl.io>"]
 license = "MIT"
