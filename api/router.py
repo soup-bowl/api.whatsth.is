@@ -141,10 +141,22 @@ async def whois_lookup(site_url: str) -> dict:
 	contact-level information is no longer useful. Instead this provides info such as registration and expiration dates,
 	and registrar used.
 	"""
+
+	# Check for an existing cached version and return that.
+	cache_contents = await main.app.state.rcache.get_value(f"WhoisCache-{site_url}".lower())
+	if cache_contents is not None:
+		return json.loads(cache_contents)
+
 	lookup_result = WhoisLookup().lookup(site_url)
 	if isinstance(lookup_result, WhoisResult):
 		response = lookup_result.asdict()
 		response['success'] = True
+
+		cache_contents = await main.app.state.rcache.set_value(
+			f"WhoisCache-{site_url}".lower(),
+			json.dumps(response),
+			86400
+		)
 
 		return response
 
