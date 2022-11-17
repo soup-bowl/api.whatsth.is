@@ -29,13 +29,6 @@ class InvalidRequestSchema(BaseModel):
 	message: str = "No URL specified"
 	url: Optional[str]
 
-class InfoSchema(BaseModel):
-	"""API information schema.
-	"""
-
-	success: bool = True
-	api_version: str
-
 class DNSProbeRecordSchema(BaseModel):
 	"""Indvidual DNS response schema.
 	"""
@@ -67,3 +60,16 @@ class DNSAcceptedSchema(BaseModel):
 
 	success: bool = True
 	records: List[DNSAcceptedItemsSchema]
+
+class WhoisSchema(BaseModel):
+	"""whois lookup schema.
+	"""
+
+	success: bool = True
+	domain: str = "EXAMPLE.DOMAIN"
+	registrar: str = "Contoso Ltd."
+	whois_operator: Optional[str] = "whois.example.lookup"
+	nameservers: List[str] = ["ns1.example.lookup", "ns2.example.lookup", "ns3.example.lookup"]
+	date_created: str = "1998-02-12T10:11:12"
+	date_updated: str = "2022-02-12T10:11:12"
+	date_expires: str = "2033-02-12T10:11:12"

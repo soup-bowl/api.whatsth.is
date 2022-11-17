@@ -206,6 +206,23 @@ class DNSResponse():
 class DNSLookup():
 	"""Service class to interact with DNS functionality.
 	"""
+
+	@staticmethod
+	def supported_protocols() -> list:
+		"""Supported protocols by the DNS lookup utility.
+
+		Returns:
+			[list]: Returns a dict list of 'type' and 'name'.
+		"""
+		return [
+			{ 'type': 'A', 'name': 'Address (IPv4)' },
+			{ 'type': 'AAAA', 'name': 'Address (IPv6)' },
+			{ 'type': 'CNAME', 'name': 'Canonical Name' },
+			{ 'type': 'MX', 'name': 'Mail Exchange' },
+			{ 'type': 'NS', 'name': 'Name Server' },
+			{ 'type': 'TXT', 'name': 'Text' }
+		]
+
 	def probe(self, protocol:str, url:str) -> DNSResponse:
 		"""
 		Args:

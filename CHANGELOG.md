@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Latest
+### Added
+- WHOIS lookup.
+
+### Changed
+- Docs URL moved to home, blank API disabled, and redoc disabled.
+
+### Removed
+- Info API removed - the OpenAPI JSON fufills this purpose already.
+
+## [0.2.6] - 2022-08-22
 ### Changed
 - DNS lookup now attempts to show time to live (TTL) stat.
 - TXT lookup now stores in str to support being stored in Redis.

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "api.whatsth.is"
-version = "0.2.4"
+version = "0.2.7"
 description = "Website inspector backend built in Python."
 authors = ["soup-bowl <code@soupbowl.io>"]
 license = "MIT"
@@ -16,6 +16,7 @@ fastapi = "^0.79.0"
 uvicorn = "^0.18.2"
 dnspython = "^2.2.1"
 gunicorn = "^20.1.0"
+python-whois = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.14.5"
@@ -36,3 +37,6 @@ max-attributes = 10
 # E0401 - Doesn't seem to work for me.
 # R0902-R0903 - I don't understand why this is 'bad'?
 disable = ["E0401", "R0902", "R0903"]
+
+[tool.pylint.'MESSAGES CONTROL']
+extension-pkg-whitelist = "pydantic" # Schemas conflict.

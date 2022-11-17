@@ -16,31 +16,14 @@ from dns.resolver import NXDOMAIN
 from api import main
 from api.inspection.technology.response import APIResponse
 from api.inspection.inspection import Inspection, InvalidWebsiteException
-from api.dnslookup import DNSLookup
-from api.schemas import InfoSchema, InspectionSchema, DNSProbeSchema, DNSAcceptedSchema, InvalidRequestSchema
+from api.dns.dnslookup import DNSLookup
+from api.dns.whois import WhoisLookup, WhoisResult
+from api.schemas import InspectionSchema, DNSProbeSchema, \
+	DNSAcceptedSchema, WhoisSchema, InvalidRequestSchema
 
 router = APIRouter()
 
-@router.get("/", response_model=InvalidRequestSchema)
-async def root():
-	"""Fallback API if the requested API does not exist.
-	"""
-	return {
-		"success": False,
-		"message": "No URL specified"
-	}
-
-@router.get("/info", response_model=InfoSchema)
-async def information(request: Request):
-	"""Returns some rudimentary server information.
-	"""
-	print()
-	return {
-		"success": True,
-		"api_version": request.app.version,
-	}
-
-@router.get("/inspect/{site_url:path}", tags=["inspection"], response_model=InspectionSchema,
+@router.get("/inspect/{site_url:path}", tags=["Inspection"], response_model=InspectionSchema,
 responses={400: {"model": InvalidRequestSchema}})
 async def inspect_site(site_url: str) -> dict:
 	"""The specified URL will be in-turn called by the system. The system will then perform various inspections on the
@@ -103,7 +86,7 @@ async def inspect_site(site_url: str) -> dict:
 
 	return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=reply.asdict())
 
-@router.get("/dns/{protocol}/{site_url:path}", tags=["dns"], response_model=DNSProbeSchema,
+@router.get("/dns/{protocol}/{site_url:path}", tags=["DNS"], response_model=DNSProbeSchema,
 responses={400: {"model": InvalidRequestSchema}})
 async def dns_prober(protocol: str, site_url: str) -> dict:
 	"""This endpoint will run a DNS check on the specified URL, and return the information collected from the lookup.
@@ -126,7 +109,9 @@ async def dns_prober(protocol: str, site_url: str) -> dict:
 		message = "The requested URL does not exist."
 
 	if success is False:
-		return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"success": False, "message": message})
+		return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={
+			"success": False, "message": message
+		})
 
 	if probelook.success is True:
 		cache_contents = await main.app.state.rcache.set_value(
@@ -137,17 +122,33 @@ async def dns_prober(protocol: str, site_url: str) -> dict:
 
 		return probelook.asdict()
 
-@router.get("/dns/protocols", tags=["dns"], response_model=DNSAcceptedSchema)
+@router.get("/dns/protocols", tags=["DNS"], response_model=DNSAcceptedSchema)
 async def dns_probe_option() -> dict:
 	"""Returns a list of supported protocol types that the API will accept.
 	"""
 	return {
-		'records': [
-			{ 'type': 'A', 'name': 'Address (IPv4)' },
-			{ 'type': 'AAAA', 'name': 'Address (IPv6)' },
-			{ 'type': 'CNAME', 'name': 'Canonical Name' },
-			{ 'type': 'MX', 'name': 'Mail Exchange' },
-			{ 'type': 'NS', 'name': 'Name Server' },
-			{ 'type': 'TXT', 'name': 'Text' }
-		]
+		'records': DNSLookup.supported_protocols()
 	}
+
+@router.get("/whois/{site_url:path}", tags=["DNS"], response_model=WhoisSchema,
+responses={400: {"model": InvalidRequestSchema}})
+async def whois_lookup(site_url: str) -> dict:
+	"""Performs a WHOIS lookup on the URL specified. This helps to ascertain ownership information at a high level.
+
+	For more info, see: https://en.wikipedia.org/wiki/WHOIS
+
+	This does not aim to provide full WHOIS information. This is due to the rise of WHOIS information protection, the
+	contact-level information is no longer useful. Instead this provides info such as registration and expiration dates,
+	and registrar used.
+	"""
+	lookup_result = WhoisLookup().lookup(site_url)
+	if isinstance(lookup_result, WhoisResult):
+		response = lookup_result.asdict()
+		response['success'] = True
+
+		return response
+
+	return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={
+		'success': False,
+		'message': lookup_result
+	})

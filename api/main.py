@@ -4,13 +4,18 @@
 from os import getenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.docs import (
+    get_redoc_html,
+    get_swagger_ui_html,
+    get_swagger_ui_oauth2_redirect_html,
+)
 
 from api import router
 from api.redis import init_redis_pool, CacheService
 
 app = FastAPI(
 	title="What's This? API",
-	description="Inspection application that detects web technologies and informs the user of them.",
+	description="Inspection application that detects web technologies and informs the user of them - https://whatsth.is",
 	contact={
 		"name": "Soupbowl",
 		"email": "code@soupbowl.io",
@@ -20,7 +25,13 @@ app = FastAPI(
 		"name": "MIT",
 		"url": "https://github.com/soup-bowl/api.whatsth.is/blob/main/LICENSE",
 	},
-	version="0.2.6"
+	# https://fastapi.tiangolo.com/advanced/extending-openapi/#configuring-swagger-ui
+	docs_url="/",
+	swagger_ui_parameters={
+		"syntaxHighlight.theme": "monokai"
+	},
+	redoc_url=None,
+	version="0.2.7"
 )
 
 app.add_middleware(
