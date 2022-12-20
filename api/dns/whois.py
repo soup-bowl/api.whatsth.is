@@ -171,7 +171,7 @@ class WhoisLookup():
 		o.domain = r.domain_name if not isinstance(r.domain_name, list) else r.domain_name[0]
 		o.registrar = r.registrar
 		o.whois_operator = r.whois_server
-		o.nameservers = r.name_servers
+		o.nameservers = r.name_servers if isinstance(r.name_servers, list) else [r.name_servers]
 		o.date_created = r.creation_date if not isinstance(r.creation_date, list) else r.creation_date[0]
 		o.date_updated = r.updated_date if not isinstance(r.updated_date, list) else r.updated_date[0]
 		o.date_expires = r.expiration_date if not isinstance(r.expiration_date, list) else r.expiration_date[0]

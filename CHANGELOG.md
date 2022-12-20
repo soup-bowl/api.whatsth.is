@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Latest
 ### Fixed
+- Checking for certain WHOIS TLDs (specifically .co.uk) caused a 500 ISE error.
+
+## [0.2.7.1] - 2022-11-18
+### Fixed
 - Updated dependencies to sort out a problem causing Container build to fail.
 
 ## [0.2.7] - 2022-11-17
