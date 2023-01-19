@@ -7,7 +7,7 @@ from os import getenv
 from urllib.parse import unquote
 import urllib3
 import yaml
-from fastapi import APIRouter, status, Request
+from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
 from urllib3.exceptions import MaxRetryError, LocationValueError
 from dns.rdatatype import UnknownRdatatype

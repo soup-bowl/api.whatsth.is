@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Latest
 ### Changed
 - Upgraded dependencies.
+- Removed unnecessary comments on object get/set functions.
 
 ### Fixed
 - Checking for certain WHOIS TLDs (specifically .co.uk) caused a 500 ISE error.

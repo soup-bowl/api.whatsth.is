@@ -16,82 +16,37 @@ class DNSResult():
 
 	@property
 	def address(self) -> str:
-		"""Address property.
-
-		Returns:
-			[str]: Returns the address.
-		"""
 		return self._address
 
 	@property
 	def priority(self) -> int:
-		"""Priority property.
-
-		Returns:
-			[int]: Returns the priority.
-		"""
 		return self._priority
 
 	@property
 	def text(self) -> tuple:
-		"""Text property.
-
-		Returns:
-			[tuple]: Returns the text.
-		"""
 		return self._text
 
 	@property
 	def ttl(self) -> int:
-		"""ttl (time to live) property.
-
-		Returns:
-			[int]: Returns the time to live.
-		"""
 		return self._ttl
 
 	@address.setter
 	def address(self, address: str) -> None:
-		"""Address property.
-
-		Args:
-			address (str): Sets the address.
-		"""
 		self._address = address
 
 	@priority.setter
 	def priority(self, priority: int) -> None:
-		"""Priority property.
-
-		Args:
-			priority (int): Sets the priority.
-		"""
 		self._priority = priority
 
 	@text.setter
 	def text(self, text: tuple) -> None:
-		"""Text property.
-
-		Args:
-			text (tuple): Sets the text.
-		"""
 		self._text = text
 
 	@ttl.setter
 	def ttl(self, ttl: int) -> None:
-		"""ttl (time to live) property.
-
-		Args:
-			ttl (int): Sets the ttl.
-		"""
 		self._ttl = ttl
 
 	def asdict(self) -> dict:
-		"""Converts the Python object into a generic dictionary.
-
-		Returns:
-			[dict]: Generic dictionary representation.
-		"""
 		rtn = {}
 		if len(self.address) > 0:
 			rtn['address'] = self.address
@@ -116,82 +71,37 @@ class DNSResponse():
 
 	@property
 	def success(self) -> bool:
-		"""Success property.
-
-		Returns:
-			[bool]: Returns the success.
-		"""
 		return self._success
 
 	@property
 	def url(self) -> str:
-		"""URL property.
-
-		Returns:
-			[str]: Returns the URL.
-		"""
 		return self._url
 
 	@property
 	def type(self) -> str:
-		"""Type property.
-
-		Returns:
-			[str]: Returns the type.
-		"""
 		return self._type
 
 	@property
 	def records(self) -> [DNSResult]:
-		"""Records property.
-
-		Returns:
-			[DNSResult]: Returns the records collection.
-		"""
 		return self._records
 
 	@success.setter
 	def success(self, success: bool) -> None:
-		"""Success property.
-
-		Args:
-			success (bool): Sets the success.
-		"""
 		self._success = success
 
 	@url.setter
 	def url(self, url: str) -> None:
-		"""URL property.
-
-		Args:
-			url (str): Sets the URL.
-		"""
 		self._url = url
 
 	@type.setter
 	def type(self, look_type: str) -> None:
-		"""Type property.
-
-		Args:
-			look_type (str): Sets the type.
-		"""
 		self._type = look_type
 
 	@records.setter
 	def records(self, records: [DNSResult]) -> None:
-		"""Records property.
-
-		Args:
-			records (DNSResult): Sets the DNS result collection.
-		"""
 		self._records = records
 
 	def asdict(self) -> dict:
-		"""Converts the Python object into a generic dictionary.
-
-		Returns:
-			[dict]: Generic dictionary representation.
-		"""
 		records = []
 		for items in self.records:
 			records.append(items.asdict())
