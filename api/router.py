@@ -18,7 +18,7 @@ from api.inspection.technology.response import APIResponse
 from api.inspection.inspection import Inspection, InvalidWebsiteException
 from api.dns.dnslookup import DNSLookup
 from api.dns.whois import WhoisLookup, WhoisResult
-from api.schemas import InspectionSchema, DNSProbeSchema, \
+from api.schemas import InspectionSchema, DNSProbeAllSchema, \
 	DNSAcceptedSchema, WhoisSchema, InvalidRequestSchema
 
 router = APIRouter()
@@ -86,41 +86,30 @@ async def inspect_site(site_url: str) -> dict:
 
 	return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=reply.asdict())
 
-@router.get("/dns/{protocol}/{site_url:path}", tags=["DNS"], response_model=DNSProbeSchema,
+@router.get("/dns/{site_url:path}", tags=["DNS"], response_model=DNSProbeAllSchema,
 responses={400: {"model": InvalidRequestSchema}})
-async def dns_prober(protocol: str, site_url: str) -> dict:
-	"""This endpoint will run a DNS check on the specified URL, and return the information collected from the lookup.
+async def dns_prober_all(site_url: str):
+	"""This endpoint checks all the common DNS endpoints for records against the input URL.
 	"""
 
-	cache_contents = await main.app.state.rcache.get_value(f"DnsCache-[{protocol}]{site_url}".lower())
+	cache_contents = await main.app.state.rcache.get_value(f"DnsCache-[ALL]{site_url}".lower())
 	if cache_contents is not None:
 		return json.loads(cache_contents)
 
-	success = True
-	message = ''
-
-	try:
-		probelook = DNSLookup().probe(protocol, site_url)
-	except UnknownRdatatype:
-		success = False
-		message = f"The specified RR '{protocol}' is either unsupported or does not exist."
-	except NXDOMAIN:
-		success = False
-		message = "The requested URL does not exist."
-
-	if success is False:
+	probe = DNSLookup().probe_all(site_url)
+	
+	if probe['success'] is False:
 		return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={
-			"success": False, "message": message
+			"success": False, "message": probe['message']
 		})
+	
+	cache_contents = await main.app.state.rcache.set_value(
+		f"DnsCache-[ALL]{site_url}".lower(),
+		json.dumps(probe),
+		1800
+	)
 
-	if probelook.success is True:
-		cache_contents = await main.app.state.rcache.set_value(
-			f"DnsCache-[{protocol}]{site_url}".lower(),
-			json.dumps(probelook.asdict()),
-			1800
-		)
-
-		return probelook.asdict()
+	return probe
 
 @router.get("/dns/protocols", tags=["DNS"], response_model=DNSAcceptedSchema)
 async def dns_probe_option() -> dict:

@@ -133,34 +133,60 @@ class DNSLookup():
 			{ 'type': 'TXT', 'name': 'Text' }
 		]
 
-	def probe(self, protocol:str, url:str) -> DNSResponse:
+	def probe_all(self, url:str) -> DNSResponse:
 		"""
 		Args:
-			protocol (str): DNS Record type to lookup.
 			url (str): Domain to check the records of.
 
 		Returns:
 			[DNSResponse]: The collective data.
 		"""
-		protocol = protocol.upper()
-		respo = DNSResponse()
-		respo.url = parse_url(url).netloc
-		respo.type = protocol
+		domain = parse_url(url).netloc
+		record_types = ['A', 'MX', 'CNAME', 'TXT', 'NS']
+		respo = {
+			'success': True,
+			'message': None,
+			'records': {
+				'A': [],
+				'AAAA': [],
+				'CNAME': [],
+				'MX': [],
+				'TXT': [],
+				'NS': [],
+			}
+		}
 
-		none_found = False
-		try:
-			lookup = dns.resolver.resolve(respo.url, protocol)
-		except NoAnswer:
-			none_found = True
+		for record_type in record_types:
+			try:
+				answers = dns.resolver.query(domain, record_type)
 
-		if not none_found:
-			for data in lookup:
-				segment = self._segment_response(protocol, data)
-				segment.ttl = lookup.ttl
+				for answer in answers:
+					if record_type == 'A' and hasattr(answer, 'address'):
+						respo['records']['A'].append(answer.address)
+					elif record_type == 'AAAA' and hasattr(answer, 'address'):
+						respo['records']['AAAA'].append(answer.address)
+					elif record_type == 'CNAME' and hasattr(answer, 'target'):
+						respo['records']['CNAME'].append(str(answer.target))
+					elif record_type == 'NS' and hasattr(answer, 'target'):
+						respo['records']['NS'].append(str(answer.target))
+					elif record_type == 'MX' and hasattr(answer, 'exchange'):
+						respo['records']['MX'].append({
+							'address': str(answer.exchange),
+							'priority': answer.preference
+						})
+					elif record_type == 'TXT' and hasattr(answer, 'strings'):
+						respo['records']['TXT'].append(answer.strings[0].decode('utf-8'))
 
-				respo.records.append(segment)
-
-		respo.success = True
+			except dns.resolver.NoAnswer:
+				pass
+			except dns.resolver.NXDOMAIN:
+				respo['success'] = False
+				respo['message'] = f"Domain {domain} does not exist"
+				return respo
+			except dns.resolver.NoNameservers:
+				respo['success'] = False
+				respo['message'] = f"No nameservers found for {domain}"
+				return respo
 
 		return respo
 	

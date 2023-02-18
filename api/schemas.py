@@ -29,23 +29,25 @@ class InvalidRequestSchema(BaseModel):
 	message: str = "No URL specified"
 	url: Optional[str]
 
-class DNSProbeRecordSchema(BaseModel):
-	"""Indvidual DNS response schema.
-	"""
+class DNSProbeAllRecordsMXSchema(BaseModel):
+	address: str
+	priority: int
 
-	address: Optional[str]
-	priority: Optional[int]
-	text: Optional[tuple]
-	ttl: Optional[int]
+class DNSProbeAllRecordsSchema(BaseModel):
+	A: List[str]
+	AAAA: List[str]
+	CNAME: List[str]
+	MX: List[DNSProbeAllRecordsMXSchema]
+	TXT: List[str]
+	NS: List[str]
 
-class DNSProbeSchema(BaseModel):
-	"""DNS API schema.
+class DNSProbeAllSchema(BaseModel):
+	"""DNS API schema for all record types.
 	"""
 
 	success: bool = True
-	url: str
-	type: str
-	records: List[DNSProbeRecordSchema]
+	message: Optional[str]
+	records: DNSProbeAllRecordsSchema
 
 class DNSAcceptedItemsSchema(BaseModel):
 	"""DNS record type schema.
