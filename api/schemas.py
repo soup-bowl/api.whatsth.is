@@ -49,20 +49,6 @@ class DNSProbeAllSchema(BaseModel):
 	message: Optional[str]
 	records: DNSProbeAllRecordsSchema
 
-class DNSAcceptedItemsSchema(BaseModel):
-	"""DNS record type schema.
-	"""
-
-	type: str
-	name: str
-
-class DNSAcceptedSchema(BaseModel):
-	"""DNS record type API schema.
-	"""
-
-	success: bool = True
-	records: List[DNSAcceptedItemsSchema]
-
 class WhoisSchema(BaseModel):
 	"""whois lookup schema.
 	"""

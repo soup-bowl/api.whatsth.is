@@ -18,8 +18,7 @@ from api.inspection.technology.response import APIResponse
 from api.inspection.inspection import Inspection, InvalidWebsiteException
 from api.dns.dnslookup import DNSLookup
 from api.dns.whois import WhoisLookup, WhoisResult
-from api.schemas import InspectionSchema, DNSProbeAllSchema, \
-	DNSAcceptedSchema, WhoisSchema, InvalidRequestSchema
+from api.schemas import InspectionSchema, DNSProbeAllSchema, WhoisSchema, InvalidRequestSchema
 
 router = APIRouter()
 
@@ -88,11 +87,11 @@ async def inspect_site(site_url: str) -> dict:
 
 @router.get("/dns/{site_url:path}", tags=["DNS"], response_model=DNSProbeAllSchema,
 responses={400: {"model": InvalidRequestSchema}})
-async def dns_prober_all(site_url: str):
+async def dns_lookup(site_url: str):
 	"""This endpoint checks all the common DNS endpoints for records against the input URL.
 	"""
 
-	cache_contents = await main.app.state.rcache.get_value(f"DnsCache-[ALL]{site_url}".lower())
+	cache_contents = await main.app.state.rcache.get_value(f"DnsCache-{site_url}".lower())
 	if cache_contents is not None:
 		return json.loads(cache_contents)
 
@@ -104,20 +103,12 @@ async def dns_prober_all(site_url: str):
 		})
 	
 	cache_contents = await main.app.state.rcache.set_value(
-		f"DnsCache-[ALL]{site_url}".lower(),
+		f"DnsCache-{site_url}".lower(),
 		json.dumps(probe),
 		1800
 	)
 
 	return probe
-
-@router.get("/dns/protocols", tags=["DNS"], response_model=DNSAcceptedSchema)
-async def dns_probe_option() -> dict:
-	"""Returns a list of supported protocol types that the API will accept.
-	"""
-	return {
-		'records': DNSLookup.supported_protocols()
-	}
 
 @router.get("/whois/{site_url:path}", tags=["DNS"], response_model=WhoisSchema,
 responses={400: {"model": InvalidRequestSchema}})
