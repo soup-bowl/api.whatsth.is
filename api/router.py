@@ -63,7 +63,7 @@ async def inspect_site(site_url: str) -> dict:
 	try:
 		inspector = Inspection(url=reply.url, config=defs)
 		reply.success = True
-		reply.inspection = inspector.get_site_details().asdict()
+		reply.inspection = inspector.get_site_details()
 	except InvalidWebsiteException as error:
 		reply.success = False
 		reply.message = str(error)
@@ -96,12 +96,12 @@ async def dns_lookup(site_url: str):
 		return json.loads(cache_contents)
 
 	probe = DNSLookup().probe_all(site_url)
-	
+
 	if probe['success'] is False:
 		return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={
 			"success": False, "message": probe['message']
 		})
-	
+
 	cache_contents = await main.app.state.rcache.set_value(
 		f"DnsCache-{site_url}".lower(),
 		json.dumps(probe),

@@ -4,13 +4,32 @@
 from typing import Optional, List
 from pydantic import BaseModel
 
+class DetectionTechnologyResponseSchema(BaseModel):
+	"""Responses from the tech inspection.
+	"""
+
+	name: str
+	description: str
+	url: str
+	match_available: int
+	match_on: List[str]
+
+class DetectionTechnologySchema(BaseModel):
+	"""Inspection technology list.
+	"""
+
+	cms: Optional[DetectionTechnologyResponseSchema]
+	frontend: Optional[DetectionTechnologyResponseSchema]
+	javascript: List[DetectionTechnologyResponseSchema]
+	cdn: List[DetectionTechnologyResponseSchema]
+
+
 class DetectionSchema(BaseModel):
 	"""Detection response schema.
 	"""
 
-	name: str
-	technology: str
-	matched_on: list
+	title: Optional[str]
+	technology: DetectionTechnologySchema
 	additional: Optional[dict] = None
 
 class InspectionSchema(BaseModel):

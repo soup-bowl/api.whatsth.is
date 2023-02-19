@@ -3,8 +3,6 @@
 
 from typing import Optional
 
-from api.inspection.inspection import InspectionResult
-
 class APIResponse():
 	"""Inspection interaction functionality.
 	"""
@@ -23,7 +21,7 @@ class APIResponse():
 		return self._message
 
 	@property
-	def inspection(self) -> Optional[InspectionResult]:
+	def inspection(self) -> Optional[object]:
 		return self._inspection
 
 	@property
@@ -39,7 +37,7 @@ class APIResponse():
 		self._message = message
 
 	@inspection.setter
-	def inspection(self, inspection: InspectionResult = None) -> None:
+	def inspection(self, inspection: object = None) -> None:
 		self._inspection = inspection
 
 	@url.setter
