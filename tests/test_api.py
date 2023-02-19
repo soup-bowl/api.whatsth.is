@@ -1,8 +1,9 @@
 """tests
 """
 
-import json
+import yaml
 import unittest
+import urllib3
 from api.inspection.inspection import Inspection
 
 class StatChecks(unittest.TestCase):
@@ -10,7 +11,11 @@ class StatChecks(unittest.TestCase):
 	def setUpClass(self):
 		"""Temp.
 		"""
-		self.config = json.loads('{"cms":{"wordpress":{"body":["/html/head/link[@href=\'//v0.wordpress.com\']"]}}}')
+		def_file = urllib3.PoolManager().request(
+			'GET',
+			'https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml'
+		).data.decode('utf-8')
+		self.config = yaml.safe_load(def_file)
 
 	def test_generic_detections(self):
 		"""Checks the definitions of the checks.
@@ -18,14 +23,8 @@ class StatChecks(unittest.TestCase):
 
 		# WordPress
 		inspector = Inspection(url='https://wordpress.org/', config=self.config).get_site_details()
-		self.assertEqual(inspector.technology, 'WordPress')
+		self.assertEqual(inspector['technology']['cms']['name'], 'WordPress')
 		# Unknown, but exists.
 		inspector = Inspection(url='https://example.com/', config=self.config).get_site_details()
-		self.assertEqual(inspector.technology, 'Unknown')
+		self.assertEqual(inspector['technology']['cms'], None)
 
-	def test_nicename(self):
-		"""Check the nice name generator uses the in-built values, and capitalises unknown ones.
-		"""
-		inspector = Inspection(url='dummy', config=self.config)
-		self.assertEqual(inspector.nicename('wordpress'), 'WordPress')
-		self.assertEqual(inspector.nicename('madeupcms'), 'Madeupcms')
