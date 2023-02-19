@@ -6,8 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Latest
 ### Added
-- Replaced the individual DNS lookup for a all-purpose result.
 - Inspection now collects multiple points, and utilises a much wider information perspective.
+
+## [0.2.9] - 2023-02-18
+### Added
+- Replaced the individual DNS lookup for a all-purpose result.
 
 ## [0.2.8] - 2023-01-25
 ### Changed
