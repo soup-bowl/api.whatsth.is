@@ -67,7 +67,7 @@ class Inspection(BaseInspection):
 						datacoll['match_on'].append(check)
 
 			if len(datacoll['match_on']) > 0:
-				datacoll['name'] = self.nicename(checkpoint)
+				datacoll['name'] = checkpoints[checkpoint]['name']
 				datacoll['description'] = checkpoints[checkpoint]['description']
 				datacoll['url'] = checkpoints[checkpoint]['url']
 				datacoll['match_available'] = (
@@ -84,28 +84,6 @@ class Inspection(BaseInspection):
 			return collection
 		else:
 			return None
-
-
-	def nicename(self, identifier: str) -> str:
-		"""Returns the proper product identifier based on the detection ID.
-
-		Args:
-			identifier (str): The product ID/key from the configuration file.
-
-		Returns:
-			str: The correctly-styled CMS name, or a first letter capitalisation if non-existent.
-		"""
-
-		if identifier == "wordpress":
-			return "WordPress"
-		if identifier == "joomla":
-			return "Joomla!"
-		if identifier == "shopify":
-			return "Shopify"
-		if identifier == "phpbb":
-			return "PHPBB"
-
-		return identifier.capitalize()
 
 class InvalidWebsiteException(Exception):
 	"""Invalid website exception.
