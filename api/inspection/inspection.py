@@ -63,7 +63,7 @@ class Inspection(BaseInspection):
 			if 'body' in checkpoints[checkpoint]:
 				for check in checkpoints[checkpoint]['body']:
 					hits = self.parsed.xpath(check)
-					if len(hits) > 0:
+					if hits is not False and len(hits) > 0:
 						datacoll['match_on'].append(check)
 
 			if len(datacoll['match_on']) > 0:
