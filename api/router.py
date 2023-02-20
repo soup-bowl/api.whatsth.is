@@ -58,7 +58,7 @@ async def inspect_site(site_url: str) -> dict:
 		return json.loads(cache_contents)
 
 	reply = APIResponse()
-	reply.url = site_url if bool(re.search('^https?://.*', site_url)) else 'https://' + site_url
+	reply.url = re.sub(r'^https?:/{0,2}', '', site_url)
 
 	try:
 		inspector = Inspection(url=reply.url, config=defs)
@@ -91,11 +91,13 @@ async def dns_lookup(site_url: str):
 	"""This endpoint checks all the common DNS endpoints for records against the input URL.
 	"""
 
-	cache_contents = await main.app.state.rcache.get_value(f"DnsCache-{site_url}".lower())
+	clean_url = re.sub(r'^https?:/{0,2}([^/]+).*$', r'\1', site_url)
+
+	cache_contents = await main.app.state.rcache.get_value(f"DnsCache-{clean_url}".lower())
 	if cache_contents is not None:
 		return json.loads(cache_contents)
 
-	probe = DNSLookup().probe_all(site_url)
+	probe = DNSLookup().probe_all(clean_url)
 
 	if probe['success'] is False:
 		return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={
@@ -103,7 +105,7 @@ async def dns_lookup(site_url: str):
 		})
 
 	cache_contents = await main.app.state.rcache.set_value(
-		f"DnsCache-{site_url}".lower(),
+		f"DnsCache-{clean_url}".lower(),
 		json.dumps(probe),
 		1800
 	)
@@ -122,18 +124,20 @@ async def whois_lookup(site_url: str) -> dict:
 	and registrar used.
 	"""
 
+	clean_url = re.sub(r'^https?:/{0,2}([^/]+).*$', r'\1', site_url)
+
 	# Check for an existing cached version and return that.
-	cache_contents = await main.app.state.rcache.get_value(f"WhoisCache-{site_url}".lower())
+	cache_contents = await main.app.state.rcache.get_value(f"WhoisCache-{clean_url}".lower())
 	if cache_contents is not None:
 		return json.loads(cache_contents)
 
-	lookup_result = WhoisLookup().lookup(site_url)
+	lookup_result = WhoisLookup().lookup(clean_url)
 	if isinstance(lookup_result, WhoisResult):
 		response = lookup_result.asdict()
 		response['success'] = True
 
 		cache_contents = await main.app.state.rcache.set_value(
-			f"WhoisCache-{site_url}".lower(),
+			f"WhoisCache-{clean_url}".lower(),
 			json.dumps(response),
 			86400
 		)

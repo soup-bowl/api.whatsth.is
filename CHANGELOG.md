@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Inspection now collects multiple points, and utilises a much wider information perspective.
 
+### Fixed
+- Provided protocol stripped from URLs to avoid treating them as new.
+
 ## [0.2.9] - 2023-02-18
 ### Added
 - Replaced the individual DNS lookup for a all-purpose result.
