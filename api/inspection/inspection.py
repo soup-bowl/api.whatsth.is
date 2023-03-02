@@ -33,6 +33,7 @@ class Inspection(BaseInspection):
 				'cms': self.identify_technology('cms'),
 				'frontend': self.identify_technology('frontend'),
 				'javascript': self.identify_technology('javascript', match_all=True),
+				'seo': self.identify_technology('seo', match_all=True),
 				'cdn': self.identify_technology('cdn', match_all=True),
 			},
 			'additional': None

@@ -21,6 +21,7 @@ class DetectionTechnologySchema(BaseModel):
 	cms: Optional[DetectionTechnologyResponseSchema]
 	frontend: Optional[DetectionTechnologyResponseSchema]
 	javascript: List[DetectionTechnologyResponseSchema]
+	seo: List[DetectionTechnologyResponseSchema]
 	cdn: List[DetectionTechnologyResponseSchema]
 
 
