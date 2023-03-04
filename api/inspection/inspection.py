@@ -1,6 +1,7 @@
 """Inspection API interaction library.
 """
 
+import re
 from typing import Any
 import urllib3
 from lxml import html
@@ -59,8 +60,11 @@ class Inspection(BaseInspection):
 				for check in checkpoints[checkpoint]['headers']:
 					key,value = check.split(':', 1)
 					if key in self.headers:
-						if self.headers[key] == value.strip():
+						pattern = re.compile(value.strip(), re.IGNORECASE)
+						match = pattern.search(self.headers[key])
+						if match:
 							datacoll['match_on'].append(check)
+
 			if 'body' in checkpoints[checkpoint]:
 				for check in checkpoints[checkpoint]['body']:
 					hits = self.parsed.xpath(check)
