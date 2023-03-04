@@ -36,6 +36,8 @@ class Inspection(BaseInspection):
 				'javascript': self.identify_technology('javascript', match_all=True),
 				'seo': self.identify_technology('seo', match_all=True),
 				'cdn': self.identify_technology('cdn', match_all=True),
+				'language': self.identify_technology('language', match_all=True),
+				'server': self.identify_technology('server', match_all=True),
 			},
 			'additional': None
 		}

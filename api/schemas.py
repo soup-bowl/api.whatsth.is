@@ -23,6 +23,8 @@ class DetectionTechnologySchema(BaseModel):
 	javascript: List[DetectionTechnologyResponseSchema]
 	seo: List[DetectionTechnologyResponseSchema]
 	cdn: List[DetectionTechnologyResponseSchema]
+	language: List[DetectionTechnologyResponseSchema]
+	server: List[DetectionTechnologyResponseSchema]
 
 
 class DetectionSchema(BaseModel):
