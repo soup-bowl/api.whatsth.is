@@ -1,0 +1,17 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+	"name": "Python 3",
+	"image": "mcr.microsoft.com/devcontainers/python:0-3.11",
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+	},
+	"postCreateCommand": "./.devcontainer/postCreateCommand.sh",
+	"postAttachCommand": "./.devcontainer/postAttachCommand.sh",
+	"forwardPorts": [43594, 6379, 8001],
+	"portsAttributes": {
+		"43594": {
+			"label": "API"
+		}
+	}
+}
