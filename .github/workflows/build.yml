@@ -1,4 +1,4 @@
-name: Container - Edge
+name: Test & Deploy
 
 on:
   push:
