@@ -1,0 +1,22 @@
+# .NET Core Build Output
+bin/
+obj/
+
+# Build artifacts
+*.swp
+*.suo
+*.user
+*.vs/
+*.nupkg
+*.pfx
+*.snk
+
+# NuGet Package Management
+packages/
+project.lock.json
+*.nuget.props
+*.nuget.targets
+
+# Machine Specific
+.DS_Store
+Thumbs.db
