@@ -5,7 +5,7 @@ from os import getenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api import router
+from api import VERSION, router
 from api.redis import init_redis_pool, CacheService
 
 app = FastAPI(
@@ -26,7 +26,7 @@ app = FastAPI(
 		"syntaxHighlight.theme": "monokai"
 	},
 	redoc_url=None,
-	version="0.2.13"
+	version=VERSION
 )
 
 app.add_middleware(
