@@ -3,10 +3,17 @@ name: Per-commit Unit Testing
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    - main
+    paths-ignore:
+    - '.github/**'
+    - '.vscode/**'
+    - '.gitignore'
+    - '.gitpod.yml'
+    - '**.md'
+    - 'LICENSE'
+  release:
+    types:
+    - published
 
 jobs:
   test:
