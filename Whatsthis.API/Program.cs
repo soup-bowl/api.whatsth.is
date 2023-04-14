@@ -61,6 +61,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 WebApplication app = builder.Build();
 
+app.UseCors("AllowAllOrigins");
+
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
@@ -78,8 +80,6 @@ app.Use(async (context, next) =>
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
-app.UseCors("AllowAllOrigins");
 
 app.MapControllers();
 
