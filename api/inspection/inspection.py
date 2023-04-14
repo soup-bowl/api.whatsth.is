@@ -48,8 +48,7 @@ class Inspection(BaseInspection):
 
 		collection = []
 
-		checkpoints = self.config[technology]
-		for checkpoint in checkpoints:
+		for checkpoint in self.config[technology]:
 			datacoll = {
 				'name': None,
 				'description': None,
@@ -58,8 +57,8 @@ class Inspection(BaseInspection):
 				'match_on': []
 			}
 
-			if 'headers' in checkpoints[checkpoint]:
-				for check in checkpoints[checkpoint]['headers']:
+			if 'headers' in checkpoint:
+				for check in checkpoint['headers']:
 					key,value = check.split(':', 1)
 					if key in self.headers:
 						pattern = re.compile(value.strip(), re.IGNORECASE)
@@ -67,19 +66,19 @@ class Inspection(BaseInspection):
 						if match:
 							datacoll['match_on'].append(check)
 
-			if 'body' in checkpoints[checkpoint]:
-				for check in checkpoints[checkpoint]['body']:
+			if 'body' in checkpoint:
+				for check in checkpoint['body']:
 					hits = self.parsed.xpath(check)
 					if hits is not False and len(hits) > 0:
 						datacoll['match_on'].append(check)
 
 			if len(datacoll['match_on']) > 0:
-				datacoll['name'] = checkpoints[checkpoint]['name']
-				datacoll['description'] = checkpoints[checkpoint]['description']
-				datacoll['url'] = checkpoints[checkpoint]['url']
+				datacoll['name'] = checkpoint['name']
+				datacoll['description'] = checkpoint['description']
+				datacoll['url'] = checkpoint['url']
 				datacoll['match_available'] = (
-					len(checkpoints[checkpoint]['body']) if 'body' in checkpoints[checkpoint] else 0 +
-					len(checkpoints[checkpoint]['headers']) if 'headers' in checkpoints[checkpoint] else 0
+					len(checkpoint['body']) if 'body' in checkpoint else 0 +
+					len(checkpoint['headers']) if 'headers' in checkpoint else 0
 				)
 
 				if match_all is False:
