@@ -16,6 +16,7 @@
 			"stopAtEntry": false,
 			"internalConsoleOptions": "neverOpen",
 			"env": {
+				"PATH": "${env:PATH}:/home/gitpod/dotnet",
 				"ASPNETCORE_ENVIRONMENT": "Development",
 				"ASPNETCORE_URLS": "http://localhost:43594"
 			}
