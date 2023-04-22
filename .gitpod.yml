@@ -1,14 +1,1 @@
-image: gitpod/workspace-dotnet:latest
-
-tasks:
-  - name: Restore & Build
-    init: |
-      dotnet dev-certs https
-      dotnet restore
-      dotnet build
-  - name: Run
-    command: dotnet test
-
-vscode:
-  extensions:
-    - muhammad-sammy.csharp
+mainConfiguration: https://github.com/soup-bowl/whatsth.is
