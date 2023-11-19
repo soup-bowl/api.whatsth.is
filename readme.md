@@ -1,6 +1,6 @@
 # What's This? API
 
-[![CodeFactor](https://www.codefactor.io/repository/github/soup-bowl/api.whatsth.is/badge)][cf]
+[![CodeFactor](https://www.codefactor.io/repository/github/whatsth-is/api.whatsth.is/badge)][cf]
 [![Gitpod](https://img.shields.io/badge/open%20in-Gitpod-orange?logo=gitpod&logoColor=white)][gp]
 
 **:warning: in active development, thar be dragons!**
@@ -11,7 +11,7 @@ Counterpart backend API for the [whatsth.is project][fnt]. It currently has the 
 * DNS record inspection at a high level.
 
 Want to quickstart? With **Docker/Podman** installed, Run
-`docker run -p 43594:43594 ghcr.io/soup-bowl/whatsthis-api:latest` to get going immediately.
+`docker run -p 43594:43594 ghcr.io/whatsth-is/whatsthis-api:latest` to get going immediately.
 
 This API has Swagger documentation on the homepage.
 
