@@ -75,8 +75,8 @@ jobs:
       with:
         push: true
         tags: >
-          whatsth-is/whatsthis-api:edge,
-          ghcr.io/soup-bowl/whatsthis-api:edge
+          soupbowl/whatsthis-api:edge,
+          ghcr.io/whatsth-is/whatsthis-api:edge
         platforms: linux/amd64
 
     - name: Build for Production
@@ -85,8 +85,8 @@ jobs:
       with:
         push: true
         tags: >
-          whatsth-is/whatsthis-api:${{ github.event.release.tag_name }},
-          ghcr.io/soup-bowl/whatsthis-api:${{ github.event.release.tag_name }},
-          whatsth-is/whatsthis-api:latest,
-          ghcr.io/soup-bowl/whatsthis-api:latest
+          soupbowl/whatsthis-api:${{ github.event.release.tag_name }},
+          ghcr.io/whatsth-is/whatsthis-api:${{ github.event.release.tag_name }},
+          soupbowl/whatsthis-api:latest,
+          ghcr.io/whatsth-is/whatsthis-api:latest
         platforms: linux/amd64
