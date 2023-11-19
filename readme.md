@@ -55,7 +55,7 @@ This project uses **xUnit** for tests, and can be run by executing:
 dotnet test
 ```
 
-[cf]:  https://www.codefactor.io/repository/github/soup-bowl/api.whatsth.is
-[gp]:  https://gitpod.io/#https://github.com/soup-bowl/whatsth.is
-[fnt]: https://github.com/soup-bowl/whatsth.is
-[def]: https://gist.github.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1#file-definitions-yml
+[cf]:  https://www.codefactor.io/repository/github/whatsth-is/api.whatsth.is
+[gp]:  https://gitpod.io/#https://github.com/whatsth-is/whatsth.is
+[fnt]: https://github.com/whatsth-is/whatsth.is
+[def]: https://gist.github.com/whatsth-is/ca302eb775278a581cd4e7e2ea4122a1#file-definitions-yml
