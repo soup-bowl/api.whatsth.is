@@ -14,7 +14,7 @@ namespace WhatsthisAPI.Service
 
 		public ConfigurationService()
 		{
-			string defDefUrl = "https://gist.githubusercontent.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1/raw/definitions.yml";
+			string defDefUrl = "https://raw.githubusercontent.com/whatsth-is/definitions/main/definitions.yml";
 			string defUrl = Environment.GetEnvironmentVariable("WTAPI_DEFINITION_URL") ?? defDefUrl;
 			HttpClient httpClient = new HttpClient();
 

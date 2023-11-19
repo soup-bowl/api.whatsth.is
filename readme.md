@@ -58,4 +58,4 @@ dotnet test
 [cf]:  https://www.codefactor.io/repository/github/whatsth-is/api.whatsth.is
 [gp]:  https://gitpod.io/#https://github.com/whatsth-is/whatsth.is
 [fnt]: https://github.com/whatsth-is/whatsth.is
-[def]: https://gist.github.com/whatsth-is/ca302eb775278a581cd4e7e2ea4122a1#file-definitions-yml
+[def]: https://github.com/whatsth-is/definitions
