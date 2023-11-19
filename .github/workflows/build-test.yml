@@ -76,9 +76,7 @@ jobs:
         tags: >
           whatsth-is/whatsthis-api:edge,
           ghcr.io/soup-bowl/whatsthis-api:edge
-        platforms: >
-          linux/amd64,
-          linux/arm64
+        platforms: linux/amd64
 
     - name: Build for Production
       if: ${{ github.event_name == 'release' }}
