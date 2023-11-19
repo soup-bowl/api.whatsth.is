@@ -12,7 +12,7 @@ Counterpart backend API for the [whatsth.is project][fnt]. It currently has the 
 
 Want to quickstart? With **Docker/Podman** installed, Run:
 
-```docker run -p 43594:43594 ghcr.io/whatsth-is/api:latest```
+```docker run -p 80:80 ghcr.io/whatsth-is/api:latest```
 
 This API has Swagger documentation on the homepage.
 
