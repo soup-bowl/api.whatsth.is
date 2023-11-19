@@ -10,8 +10,9 @@ Counterpart backend API for the [whatsth.is project][fnt]. It currently has the 
 * Website technology inspection ([follows this definition file][def]).
 * DNS record inspection at a high level.
 
-Want to quickstart? With **Docker/Podman** installed, Run
-`docker run -p 43594:43594 ghcr.io/whatsth-is/whatsthis-api:latest` to get going immediately.
+Want to quickstart? With **Docker/Podman** installed, Run:
+
+```docker run -p 43594:43594 ghcr.io/whatsth-is/whatsthis-api:latest```
 
 This API has Swagger documentation on the homepage.
 
