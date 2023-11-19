@@ -28,12 +28,12 @@ builder.Services.AddSwaggerGen(config =>
 		Contact = new OpenApiContact
 		{
 			Name = "soup-bowl",
-			Url = new Uri("https://soupbowl.dev")
+			Url = new Uri("https://soupbowl.io")
 		},
 		License = new OpenApiLicense
 		{
 			Name = "MIT",
-			Url = new Uri("https://github.com/soup-bowl/api.whatsth.is/blob/main/LICENSE")
+			Url = new Uri("https://github.com/whatsth-is/api.whatsth.is/blob/main/LICENSE")
 		}
 	});
 
