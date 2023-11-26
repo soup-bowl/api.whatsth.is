@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Models;
 using WhatsthisAPI.Service;
 using WhatsthisAPI.Models;
 
-string version = "0.3.0";
+string version = "0.3.1";
 
 IConfigurationRoot configuration = new ConfigurationBuilder()
 	.AddJsonFile("appsettings.json", optional: true)
