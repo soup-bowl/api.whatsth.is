@@ -78,8 +78,9 @@ jobs:
           soupbowl/whatsthis-api:edge,
           ghcr.io/whatsth-is/api:edge
         platforms: >
-          linux/amd64,
-          linux/arm64
+          linux/amd64
+#          linux/arm64 - there's an issue - see:
+# https://github.com/whatsth-is/api.whatsth.is/actions/runs/7850693148/job/21426534238#step:7:360
 
     - name: Build for Production
       if: ${{ github.event_name == 'release' }}
