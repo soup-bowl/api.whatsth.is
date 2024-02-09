@@ -81,6 +81,8 @@ jobs:
           linux/amd64
 #          linux/arm64 - there's an issue - see:
 # https://github.com/whatsth-is/api.whatsth.is/actions/runs/7850693148/job/21426534238#step:7:360
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
     - name: Build for Production
       if: ${{ github.event_name == 'release' }}
