@@ -9,7 +9,7 @@
 			"type": "coreclr",
 			"request": "launch",
 			"preLaunchTask": "build",
-			"program": "${workspaceFolder}/Whatsthis.API/bin/Debug/net7.0/Whatsthis.API.dll",
+			"program": "${workspaceFolder}/Whatsthis.API/bin/Debug/net8.0/Whatsthis.API.dll",
 			"args": [],
 			"cwd": "${workspaceFolder}",
 			"console": "internalConsole",
