@@ -22,7 +22,7 @@ You can over-ride the default API settings using environmental variables.
 
 Environmental Key      | Default                   | Purpose
 -----------------------|---------------------------|--------
-`REDIS_URL`            | *None (required)*         | Caching & storage agent. 
+`REDIS_URL`            | *None*                    | Caching & storage agent. 
 `WTAPI_DEFINITION_URL` | [Latest definitions][def] | Can provide a different YAML or JSON source for the detection definitions.
 
 ## Starting up

@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Models;
 using WhatsthisAPI.Service;
 using WhatsthisAPI.Models;
 
-string version = "0.3.0";
+string version = "0.3.1";
 
 IConfigurationRoot configuration = new ConfigurationBuilder()
 	.AddJsonFile("appsettings.json", optional: true)
@@ -53,11 +53,19 @@ builder.Services.AddCors(options =>
 		});
 });
 
-builder.Services.AddStackExchangeRedisCache(options =>
+string? redisURL = configuration.GetValue<string>("REDIS_URL");
+if (!string.IsNullOrEmpty(redisURL))
 {
-	options.Configuration = configuration.GetValue<string>("REDIS_URL"); ;
-	options.InstanceName = $"wapi{version.Replace(".", string.Empty)}:";
-});
+	builder.Services.AddStackExchangeRedisCache(options =>
+	{
+		options.Configuration = redisURL;
+		options.InstanceName = $"wapi{version.Replace(".", string.Empty)}:";
+	});
+}
+else
+{
+	builder.Services.AddDistributedMemoryCache();
+}
 
 WebApplication app = builder.Build();
 
