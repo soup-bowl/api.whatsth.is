@@ -76,7 +76,7 @@ jobs:
         push: true
         tags: >
           soupbowl/whatsthis-api:edge,
-          ghcr.io/soup-bowl/api:edge
+          ghcr.io/soup-bowl/whatsthis-api:edge
         platforms: >
           linux/amd64
 #          linux/arm64 - there's an issue - see:
@@ -91,7 +91,7 @@ jobs:
         push: true
         tags: >
           soupbowl/whatsthis-api:${{ github.event.release.tag_name }},
-          ghcr.io/soup-bowl/api:${{ github.event.release.tag_name }},
+          ghcr.io/soup-bowl/whatsthis-api:${{ github.event.release.tag_name }},
           soupbowl/whatsthis-api:latest,
-          ghcr.io/soup-bowl/api:latest
+          ghcr.io/soup-bowl/whatsthis-api:latest
         platforms: linux/amd64
