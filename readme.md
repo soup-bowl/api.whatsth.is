@@ -1,6 +1,6 @@
 # What's This? API
 
-[![CodeFactor](https://www.codefactor.io/repository/github/whatsth-is/api.whatsth.is/badge)][cf]
+[![CodeFactor](https://www.codefactor.io/repository/github/soup-bowl/api.whatsth.is/badge)][cf]
 [![Gitpod](https://img.shields.io/badge/open%20in-Gitpod-orange?logo=gitpod&logoColor=white)][gp]
 
 **:warning: in active development, thar be dragons!**
@@ -12,7 +12,7 @@ Counterpart backend API for the [whatsth.is project][fnt]. It currently has the 
 
 Want to quickstart? With **Docker/Podman** installed, Run:
 
-```docker run -p 80:80 ghcr.io/whatsth-is/api:latest```
+```docker run -p 80:80 ghcr.io/soup-bowl/api:latest```
 
 This API has Swagger documentation on the homepage.
 
@@ -56,7 +56,7 @@ This project uses **xUnit** for tests, and can be run by executing:
 dotnet test
 ```
 
-[cf]:  https://www.codefactor.io/repository/github/whatsth-is/api.whatsth.is
-[gp]:  https://gitpod.io/#https://github.com/whatsth-is/whatsth.is
-[fnt]: https://github.com/whatsth-is/whatsth.is
-[def]: https://github.com/whatsth-is/definitions
+[cf]:  https://www.codefactor.io/repository/github/soup-bowl/api.whatsth.is
+[gp]:  https://gitpod.io/#https://github.com/soup-bowl/whatsth.is
+[fnt]: https://github.com/soup-bowl/whatsth.is
+[def]: https://gist.github.com/soup-bowl/ca302eb775278a581cd4e7e2ea4122a1

@@ -53,7 +53,7 @@ jobs:
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
-        username: whatsth-is
+        username: soup-bowl
         password: ${{ secrets.CR_PAT }}
 
     - name: Login to Docker Hub
@@ -76,11 +76,11 @@ jobs:
         push: true
         tags: >
           soupbowl/whatsthis-api:edge,
-          ghcr.io/whatsth-is/api:edge
+          ghcr.io/soup-bowl/api:edge
         platforms: >
           linux/amd64
 #          linux/arm64 - there's an issue - see:
-# https://github.com/whatsth-is/api.whatsth.is/actions/runs/7850693148/job/21426534238#step:7:360
+# https://github.com/soup-bowl/api.whatsth.is/actions/runs/7850693148/job/21426534238#step:7:360
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
@@ -91,7 +91,7 @@ jobs:
         push: true
         tags: >
           soupbowl/whatsthis-api:${{ github.event.release.tag_name }},
-          ghcr.io/whatsth-is/api:${{ github.event.release.tag_name }},
+          ghcr.io/soup-bowl/api:${{ github.event.release.tag_name }},
           soupbowl/whatsthis-api:latest,
-          ghcr.io/whatsth-is/api:latest
+          ghcr.io/soup-bowl/api:latest
         platforms: linux/amd64
