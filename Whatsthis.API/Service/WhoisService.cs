@@ -22,23 +22,24 @@ namespace Whatsthis.API.Service
 			return null;
 		}
 
-		private WhoisData ParseWhoisData(string whois)
+		private static WhoisData ParseWhoisData(string whois)
 		{
-			WhoisData whodata = new WhoisData();
-			whodata.Domain = GetMatch(whois, @"Domain Name:\s+(.+)");
-			whodata.Whois = GetMatch(whois, @"WHOIS Server:\s+(.+)");
-			whodata.Registrar = GetMatch(whois, @"Registrar:\s+(.+)");
-			whodata.Created = ParseDate(GetMatch(whois, @"Creation Date:\s+(.+)"));
-			whodata.Updated = ParseDate(GetMatch(whois, @"Updated Date:\s+(.+)"));
-			whodata.Expires = ParseDate(GetMatch(whois, @"Expir\w+ Date:\s+(.+)"));
-			whodata.NameServers = GetMultiMatch(whois, @"Name Server:\s+(.+?)\n");
+			WhoisData whodata = new()
+			{
+				Domain = GetMatch(whois, @"Domain Name:\s+(.+)"),
+				Whois = GetMatch(whois, @"WHOIS Server:\s+(.+)"),
+				Registrar = GetMatch(whois, @"Registrar:\s+(.+)"),
+				Created = ParseDate(GetMatch(whois, @"Creation Date:\s+(.+)")),
+				Updated = ParseDate(GetMatch(whois, @"Updated Date:\s+(.+)")),
+				Expires = ParseDate(GetMatch(whois, @"Expir\w+ Date:\s+(.+)")),
+				NameServers = GetMultiMatch(whois, @"Name Server:\s+(.+?)\n")
+			};
 
 			return whodata;
 		}
 
-		private DateTime? ParseDate(string input)
+		private static DateTime? ParseDate(string input)
 		{
-			DateTime dateOutput;
 			string[] formats =  {
 				"dd-MMM-yyyy",                // 02-jan-2000
 				"dd-MMMM-yyyy",               // 11-February-2000
@@ -82,7 +83,7 @@ namespace Whatsthis.API.Service
 				"yyyy-MM-dd HH:mm:ss (zzzzz)" // 2017-09-26 11:38:29 (GMT+00:00)
 			};
 
-			if (DateTime.TryParseExact(input, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOutput))
+			if (DateTime.TryParseExact(input, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateOutput))
 			{
 				return dateOutput;
 			}
@@ -92,7 +93,7 @@ namespace Whatsthis.API.Service
 			}
 		}
 
-		private string GetMatch(string input, string pattern)
+		private static string GetMatch(string input, string pattern)
 		{
 			Match match = Regex.Match(input, pattern, RegexOptions.IgnoreCase);
 			if (match.Success)
@@ -105,9 +106,9 @@ namespace Whatsthis.API.Service
 			}
 		}
 
-		private List<string> GetMultiMatch(string input, string pattern)
+		private static List<string> GetMultiMatch(string input, string pattern)
 		{
-			List<string> matchList = new List<string>();
+			List<string> matchList = [];
 			MatchCollection matches = Regex.Matches(input, pattern, RegexOptions.IgnoreCase);
 			foreach (Match match in matches)
 			{

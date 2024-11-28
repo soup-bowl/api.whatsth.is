@@ -5,7 +5,7 @@ namespace Whatsthis.API.Tests.Service
 {
 	public class WhoisServiceTests
 	{
-		private readonly IWhoisService _doctorWho;
+		private readonly WhoisService _doctorWho;
 
 		public WhoisServiceTests()
 		{

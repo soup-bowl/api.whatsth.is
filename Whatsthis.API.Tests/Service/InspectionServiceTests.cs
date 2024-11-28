@@ -5,11 +5,11 @@ namespace Whatsthis.API.Tests.Service
 {
 	public class InspectionServiceTests
 	{
-		private readonly IInspectionService _inspectService;
+		private readonly InspectionService _inspectService;
 
 		public InspectionServiceTests()
 		{
-			InspectionEntity mockDetection = new InspectionEntity()
+			InspectionEntity mockDetection = new()
 			{
 				body = ["//html"],
 				headers = ["content-type: text/html"],

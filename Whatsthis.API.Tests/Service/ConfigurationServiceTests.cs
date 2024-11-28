@@ -5,7 +5,7 @@ namespace Whatsthis.API.Tests.Service
 {
 	public class ConfigurationServiceTests
 	{
-		private readonly IConfigurationService _configService;
+		private readonly ConfigurationService _configService;
 
 		public ConfigurationServiceTests()
 		{

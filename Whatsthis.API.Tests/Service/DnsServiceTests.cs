@@ -5,7 +5,7 @@ namespace Whatsthis.API.Tests.Service
 {
 	public class DnsServiceTests
 	{
-		private readonly IDnsService _dnsService;
+		private readonly DnsService _dnsService;
 
 		public DnsServiceTests()
 		{
