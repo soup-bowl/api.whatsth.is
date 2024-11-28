@@ -17,7 +17,7 @@ namespace Whatsthis.API.Service
 	{
 		private readonly string _url;
 		private readonly InspectionSetup _inspectionDefs;
-		private HtmlDocument _websiteBody = new HtmlDocument();
+		private readonly HtmlDocument _websiteBody = new();
 		private HttpResponseHeaders? _websiteHeaders;
 
 		public InspectionService(string url, InspectionSetup inspectionDefs)
@@ -29,8 +29,10 @@ namespace Whatsthis.API.Service
 
 		public InspectionData Get()
 		{
-			InspectionData parsed = new InspectionData();
-			parsed.URL = _url;
+			InspectionData parsed = new()
+			{
+				URL = _url
+			};
 			parsed.Technology.cms = DetectAll(_inspectionDefs.cms);
 			parsed.Technology.frontend = DetectAll(_inspectionDefs.frontend);
 			parsed.Technology.javascript = DetectAll(_inspectionDefs.javascript);
@@ -44,7 +46,7 @@ namespace Whatsthis.API.Service
 
 		public List<InspectionResultInformation> DetectAll(List<InspectionEntity> entity)
 		{
-			List<InspectionResultInformation> inspectList = new List<InspectionResultInformation>();
+			List<InspectionResultInformation> inspectList = [];
 
 			foreach (InspectionEntity inspection in entity)
 			{
@@ -54,16 +56,16 @@ namespace Whatsthis.API.Service
 
 				if (totalMatch > 0)
 				{
-					List<string> combinedMatches = new List<string>();
-					combinedMatches.AddRange(matchedBody.Item2);
-					combinedMatches.AddRange(matchedHeader.Item2);
+					List<string> combinedMatches = [.. matchedBody.Item2, .. matchedHeader.Item2];
 
-					InspectionResultInformation detection = new InspectionResultInformation();
-					detection.Name = inspection.name;
-					detection.Description = inspection.description;
-					detection.URL = inspection.url;
-					detection.MatchAvailable = combinedMatches.Count();
-					detection.MatchedOn = combinedMatches;
+					InspectionResultInformation detection = new()
+					{
+						Name = inspection.name,
+						Description = inspection.description,
+						URL = inspection.url,
+						MatchAvailable = combinedMatches.Count,
+						MatchedOn = combinedMatches
+					};
 
 					inspectList.Add(detection);
 				}
@@ -103,17 +105,14 @@ namespace Whatsthis.API.Service
 					string headerName = headerParts[0].Trim();
 					string headerValue = headerParts[1].Trim();
 
-					IEnumerable<string>? values;
-					if (_websiteHeaders?.TryGetValues(headerName, out values) ?? false)
+					if (_websiteHeaders?.TryGetValues(headerName, out IEnumerable<string>? values) ?? false)
 					{
-						Regex regex = new Regex(headerValue);
-						foreach (string value in values)
+						Regex regex = new(headerValue);
+						List<string> matches = values.Where(value => regex.IsMatch(value)).ToList();
+						if (matches.Count > 0)
 						{
-							if (regex.IsMatch(value))
-							{
-								hitCounts[headers.IndexOf(header)]++;
-								matchedHeaders.Add(header);
-							}
+							hitCounts[headers.IndexOf(header)] += matches.Count;
+							matchedHeaders.Add(header);
 						}
 					}
 				}
@@ -124,15 +123,13 @@ namespace Whatsthis.API.Service
 
 		private void ParseInputUrl()
 		{
-			using (HttpClient client = new HttpClient())
-			{
-				client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 12.2; rv:97.0) Gecko/20100101 Firefox/97.0");
-				HttpResponseMessage response = client.GetAsync(_url).Result;
-				response.EnsureSuccessStatusCode();
-				string responseContent = response.Content.ReadAsStringAsync().Result;
-				_websiteHeaders = response.Headers;
-				_websiteBody.LoadHtml(responseContent);
-			}
+			using HttpClient client = new();
+			client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 12.2; rv:97.0) Gecko/20100101 Firefox/97.0");
+			HttpResponseMessage response = client.GetAsync(_url).Result;
+			response.EnsureSuccessStatusCode();
+			string responseContent = response.Content.ReadAsStringAsync().Result;
+			_websiteHeaders = response.Headers;
+			_websiteBody.LoadHtml(responseContent);
 		}
 	}
 }
