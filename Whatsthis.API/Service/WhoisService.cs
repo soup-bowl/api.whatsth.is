@@ -95,7 +95,7 @@ namespace Whatsthis.API.Service
 
 		private static string GetMatch(string input, string pattern)
 		{
-			Match match = Regex.Match(input, pattern, RegexOptions.IgnoreCase);
+			Match match = Regex.Match(input, pattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
 			if (match.Success)
 			{
 				return match.Groups[1].Value.Replace("\r", "").Replace("\n", "").Trim();
@@ -109,7 +109,7 @@ namespace Whatsthis.API.Service
 		private static List<string> GetMultiMatch(string input, string pattern)
 		{
 			List<string> matchList = [];
-			MatchCollection matches = Regex.Matches(input, pattern, RegexOptions.IgnoreCase);
+			MatchCollection matches = Regex.Matches(input, pattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
 			foreach (Match match in matches)
 			{
 				string matchItemContent = match.Groups[1].Value.Trim();

@@ -107,7 +107,7 @@ namespace Whatsthis.API.Service
 
 					if (_websiteHeaders?.TryGetValues(headerName, out IEnumerable<string>? values) ?? false)
 					{
-						Regex regex = new(headerValue);
+						Regex regex = new(headerValue, RegexOptions.None, TimeSpan.FromMilliseconds(100));
 						List<string> matches = values.Where(value => regex.IsMatch(value)).ToList();
 						if (matches.Count > 0)
 						{
