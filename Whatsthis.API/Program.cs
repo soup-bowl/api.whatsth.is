@@ -1,7 +1,7 @@
 using System.Reflection;
 using Microsoft.OpenApi.Models;
-using WhatsthisAPI.Service;
-using WhatsthisAPI.Models;
+using Whatsthis.API.Service;
+using Whatsthis.API.Models;
 
 string version = "0.3.1";
 

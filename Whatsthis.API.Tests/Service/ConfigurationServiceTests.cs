@@ -1,27 +1,30 @@
-using WhatsthisAPI.Models;
-using WhatsthisAPI.Service;
+using Whatsthis.API.Models;
+using Whatsthis.API.Service;
 
-public class ConfigurationServiceTests
+namespace Whatsthis.API.Tests.Service
 {
-	private readonly IConfigurationService _configService;
-
-	public ConfigurationServiceTests()
+	public class ConfigurationServiceTests
 	{
-		_configService = new ConfigurationService();
-	}
+		private readonly IConfigurationService _configService;
 
-	[Fact]
-	public void TestInspectionDefinitions()
-	{
-		InspectionSetup inspectionDefinitions = _configService.InspectionDefinitions;
+		public ConfigurationServiceTests()
+		{
+			_configService = new ConfigurationService();
+		}
 
-		Assert.NotNull(inspectionDefinitions);
-		Assert.NotEmpty(inspectionDefinitions.cms);
-		Assert.NotEmpty(inspectionDefinitions.frontend);
-		Assert.NotEmpty(inspectionDefinitions.javascript);
-		Assert.NotEmpty(inspectionDefinitions.seo);
-		Assert.NotEmpty(inspectionDefinitions.cdn);
-		Assert.NotEmpty(inspectionDefinitions.language);
-		Assert.NotEmpty(inspectionDefinitions.server);
+		[Fact]
+		public void TestInspectionDefinitions()
+		{
+			InspectionSetup inspectionDefinitions = _configService.InspectionDefinitions;
+
+			Assert.NotNull(inspectionDefinitions);
+			Assert.NotEmpty(inspectionDefinitions.cms);
+			Assert.NotEmpty(inspectionDefinitions.frontend);
+			Assert.NotEmpty(inspectionDefinitions.javascript);
+			Assert.NotEmpty(inspectionDefinitions.seo);
+			Assert.NotEmpty(inspectionDefinitions.cdn);
+			Assert.NotEmpty(inspectionDefinitions.language);
+			Assert.NotEmpty(inspectionDefinitions.server);
+		}
 	}
 }

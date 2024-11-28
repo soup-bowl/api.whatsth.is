@@ -1,7 +1,7 @@
-using WhatsthisAPI.Models;
-using WhatsthisAPI.Service;
+using Whatsthis.API.Models;
+using Whatsthis.API.Service;
 
-namespace WhatsthisAPI.Tests
+namespace Whatsthis.API.Tests.Service
 {
 	public class DnsServiceTests
 	{
@@ -26,7 +26,7 @@ namespace WhatsthisAPI.Tests
 			Assert.NotEmpty(dnsData.NS);
 			Assert.NotEmpty(dnsData.TXT);
 
-			DnsMailData firstMxResult = dnsData.MX.First();
+			DnsMailData firstMxResult = dnsData.MX[0];
 			Assert.Equal("example.com.", firstMxResult.Address);
 			Assert.Equal(0, firstMxResult.Priority);
 		}

@@ -1,7 +1,7 @@
 using YamlDotNet.Serialization;
-using WhatsthisAPI.Models;
+using Whatsthis.API.Models;
 
-namespace WhatsthisAPI.Service
+namespace Whatsthis.API.Service
 {
 	public interface IConfigurationService
 	{

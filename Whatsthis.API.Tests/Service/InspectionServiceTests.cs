@@ -1,7 +1,7 @@
-using WhatsthisAPI.Models;
-using WhatsthisAPI.Service;
+using Whatsthis.API.Models;
+using Whatsthis.API.Service;
 
-namespace WhatsthisAPI.Tests
+namespace Whatsthis.API.Tests.Service
 {
 	public class InspectionServiceTests
 	{
@@ -11,25 +11,24 @@ namespace WhatsthisAPI.Tests
 		{
 			InspectionEntity mockDetection = new InspectionEntity()
 			{
-				body = new List<string> { "//html" },
-				headers = new List<string> { "content-type: text/html" },
+				body = ["//html"],
+				headers = ["content-type: text/html"],
 				name = "Test",
 				description = "Test Description",
 				url = "https://www.example.com/test"
 			};
 
-			List<InspectionEntity> mockList = new List<InspectionEntity>();
-			mockList.Add(mockDetection);
+			List<InspectionEntity> mockList = [mockDetection];
 
 			_inspectService = new InspectionService("https://www.example.com", new InspectionSetup
 			{
 				cms = mockList,
-				frontend = new List<InspectionEntity>(),
-				javascript = new List<InspectionEntity>(),
-				seo = new List<InspectionEntity>(),
-				cdn = new List<InspectionEntity>(),
-				language = new List<InspectionEntity>(),
-				server = new List<InspectionEntity>()
+				frontend = [],
+				javascript = [],
+				seo = [],
+				cdn = [],
+				language = [],
+				server = []
 			});
 		}
 
@@ -37,8 +36,6 @@ namespace WhatsthisAPI.Tests
 		public void Get_Should_Return_InspectionData()
 		{
 			InspectionData result = _inspectService.Get();
-
-			//Console.WriteLine(JsonConvert.SerializeObject(result));
 
 			Assert.NotNull(result);
 			Assert.Equal("https://www.example.com", result.URL);

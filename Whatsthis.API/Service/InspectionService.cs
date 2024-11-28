@@ -1,9 +1,9 @@
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
-using WhatsthisAPI.Models;
+using Whatsthis.API.Models;
 
-namespace WhatsthisAPI.Service
+namespace Whatsthis.API.Service
 {
 	public interface IInspectionService
 	{

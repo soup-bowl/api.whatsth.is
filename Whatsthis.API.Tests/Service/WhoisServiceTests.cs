@@ -1,7 +1,7 @@
-using WhatsthisAPI.Models;
-using WhatsthisAPI.Service;
+using Whatsthis.API.Models;
+using Whatsthis.API.Service;
 
-namespace WhatsthisAPI.Tests
+namespace Whatsthis.API.Tests.Service
 {
 	public class WhoisServiceTests
 	{
@@ -17,7 +17,7 @@ namespace WhatsthisAPI.Tests
 		{
 			string url = "google.com";
 
-			WhoisData result = _doctorWho.Get(url);
+			WhoisData? result = _doctorWho.Get(url);
 
 			Assert.IsType<WhoisData>(result);
 			Assert.Equal("google.com", result.Domain);

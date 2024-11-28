@@ -1,4 +1,4 @@
-namespace WhatsthisAPI.Models
+namespace Whatsthis.API.Models
 {
 	public class InspectionData
 	{

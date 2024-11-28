@@ -1,8 +1,8 @@
-using WhatsthisAPI.Models;
+using Whatsthis.API.Models;
 using DnsClient;
 using DnsClient.Protocol;
 
-namespace WhatsthisAPI.Service
+namespace Whatsthis.API.Service
 {
 	public interface IDnsService
 	{

@@ -1,9 +1,9 @@
 using System.Text.RegularExpressions;
 using System.Globalization;
-using WhatsthisAPI.Models;
+using Whatsthis.API.Models;
 using Whois.NET;
 
-namespace WhatsthisAPI.Service
+namespace Whatsthis.API.Service
 {
 	public interface IWhoisService
 	{

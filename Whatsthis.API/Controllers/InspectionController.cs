@@ -2,24 +2,19 @@ using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
-using WhatsthisAPI.Models;
-using WhatsthisAPI.Service;
+using Whatsthis.API.Models;
+using Whatsthis.API.Service;
 using Newtonsoft.Json;
+using Whatsthis.API.Utilities;
 
-namespace WhatsthisAPI.Controllers
+namespace Whatsthis.API.Controllers
 {
 	[ApiController]
 	[Route("[controller]")]
-	public class InspectController : ControllerBase
+	public class InspectController(IDistributedCache cache, IConfigurationService configService) : ControllerBase
 	{
-		private readonly IDistributedCache _cache;
-		private readonly IConfigurationService _configService;
-
-		public InspectController(IDistributedCache cache, IConfigurationService configService)
-		{
-			_cache = cache;
-			_configService = configService;
-		}
+		private readonly IDistributedCache _cache = cache;
+		private readonly IConfigurationService _configService = configService;
 
 		/// <summary>
 		/// Inspect Site
@@ -39,7 +34,7 @@ namespace WhatsthisAPI.Controllers
 		public async Task<ActionResult<string>> Inspect(string url)
 		{
 			string decodedUrl = WebUtility.UrlDecode(url);
-			string cleanUrl = Regex.Replace(decodedUrl, @"^(?!https?://)(\S+)$", "https://$1");
+			string cleanUrl = UrlHelper.CleanUrlAlternative(decodedUrl);
 			string key = $"inspection-{cleanUrl}";
 
 			try
@@ -51,7 +46,7 @@ namespace WhatsthisAPI.Controllers
 					return new JsonResult(result);
 				}
 
-				IInspectionService inspection = new InspectionService(cleanUrl, _configService.InspectionDefinitions);
+				InspectionService inspection = new(cleanUrl, _configService.InspectionDefinitions);
 				InspectionData dnsResult = inspection.Get();
 
 				DistributedCacheEntryOptions cacheOptions = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
