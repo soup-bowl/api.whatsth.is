@@ -10,7 +10,7 @@ using Whatsthis.API.Utilities;
 namespace Whatsthis.API.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("/")]
 	public class DomainController(IDistributedCache cache) : ControllerBase
 	{
 		private readonly IDistributedCache _cache = cache;
@@ -27,7 +27,7 @@ namespace Whatsthis.API.Controllers
         /// protection, the contact-level information is no longer useful. Instead this provides info such as
         /// registration and expiration dates, and registrar used.
         /// </remarks>
-        [HttpGet("/whois/{url}")]
+        [HttpGet("whois/{url}")]
 		[ProducesResponseType(typeof(WhoisData), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(string), StatusCodes.Status503ServiceUnavailable)]
 		public async Task<ActionResult<string>> WhoisLookup(string url)
@@ -68,7 +68,7 @@ namespace Whatsthis.API.Controllers
 		/// <remarks>
 		/// This endpoint checks all the common DNS endpoints for records against the input URL.
 		/// </remarks>
-		[HttpGet("/dns/{url}")]
+		[HttpGet("dns/{url}")]
 		[ProducesResponseType(typeof(DnsData), StatusCodes.Status200OK)]
 		public async Task<ActionResult<string>> DomainLookup(string url)
 		{

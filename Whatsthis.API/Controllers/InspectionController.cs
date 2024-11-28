@@ -10,7 +10,7 @@ using Whatsthis.API.Utilities;
 namespace Whatsthis.API.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("/inspect")]
 	public class InspectController(IDistributedCache cache, IConfigurationService configService) : ControllerBase
 	{
 		private readonly IDistributedCache _cache = cache;
@@ -28,7 +28,7 @@ namespace Whatsthis.API.Controllers
 		/// This is request-intensive, and results in a slow repsonse currently. To counter this, a caching engine is
 		/// used to serve repeat requests with the same data.
 		/// </remarks>
-		[HttpGet("/inspect/{url}")]
+		[HttpGet("{url}")]
 		[ProducesResponseType(typeof(InspectionData), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(string), StatusCodes.Status503ServiceUnavailable)]
 		public async Task<ActionResult<string>> Inspect(string url)
