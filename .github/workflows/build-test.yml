@@ -78,7 +78,7 @@ jobs:
           soupbowl/whatsthis-api:edge,
           ghcr.io/soup-bowl/whatsthis-api:edge
         platforms: >
-          linux/amd64
+          linux/amd64,
           linux/arm64
         cache-from: type=gha
         cache-to: type=gha,mode=max
@@ -94,7 +94,7 @@ jobs:
           soupbowl/whatsthis-api:latest,
           ghcr.io/soup-bowl/whatsthis-api:latest
         platforms: >
-          linux/amd64
+          linux/amd64,
           linux/arm64
         cache-from: type=gha
         cache-to: type=gha,mode=max
