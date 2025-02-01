@@ -79,8 +79,7 @@ jobs:
           ghcr.io/soup-bowl/whatsthis-api:edge
         platforms: >
           linux/amd64
-#          linux/arm64 - there's an issue - see:
-# https://github.com/soup-bowl/api.whatsth.is/actions/runs/7850693148/job/21426534238#step:7:360
+          linux/arm64
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
@@ -94,4 +93,8 @@ jobs:
           ghcr.io/soup-bowl/whatsthis-api:${{ github.event.release.tag_name }},
           soupbowl/whatsthis-api:latest,
           ghcr.io/soup-bowl/whatsthis-api:latest
-        platforms: linux/amd64
+        platforms: >
+          linux/amd64
+          linux/arm64
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
